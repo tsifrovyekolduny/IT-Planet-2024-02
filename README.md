@@ -13,7 +13,11 @@ test - слияние всех веток develop
 Снизу пример папки уровня:
 
 Level1
+
 файл_сцены
+
 /Scripts
+
 /Prefabs
+
 /Materials
