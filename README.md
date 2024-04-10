@@ -7,3 +7,13 @@ develop/level1 - разработка 1 уровня
 feature/level1-boss - фича для 1 уровня
 
 test - слияние всех веток develop
+
+# Как создавать уровни
+
+Снизу пример папки уровня:
+
+Level1
+файл_сцены
+/Scripts
+/Prefabs
+/Materials
