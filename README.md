@@ -3,5 +3,7 @@
 
 # Как называть ветки
 develop/level1 - разработка 1 уровня
+
 feature/level1-boss - фича для 1 уровня
+
 test - слияние всех веток develop
