@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 
 public class Node
 {
@@ -180,6 +180,7 @@ public class LabManager : MonoBehaviour
     public GameObject SectionSpawnPoint;
     public GameObject Plane;
     public GameObject Player;
+    private GameObject _player;
 
     [SerializeField]
     private Node _currentNode;
@@ -189,11 +190,6 @@ public class LabManager : MonoBehaviour
     Node GetRandomNode(int reverseNodeIndex, ref List<int> allWays)
     {
         int startIndex = 0;
-
-        //if (allWays.Count - 1 > NodesCount / 2)
-        //{
-        //    startIndex = NodesCount / 2;
-        //}
 
         int randomIndex = Random.Range(startIndex, allWays.Count - 1);
         Node randomNode = Nodes.GetNode(allWays[randomIndex]);
@@ -214,13 +210,11 @@ public class LabManager : MonoBehaviour
         allWays.RemoveAt(allWays.Count - 1);
         allWays.RemoveAt(0);
 
-        // int counterToCorrectNode = 0;
         int reverseNodeIndex = NodesCount - 1;
 
         while (reverseNodeIndex >= 0)
         {
             Node startNode;
-            // bool needToMakeCorrectNode = counterToCorrectNode == 0 || reverseNodeIndex == 0;
 
             if (reverseNodeIndex == 1)
             {
@@ -300,20 +294,39 @@ public class LabManager : MonoBehaviour
         {
             Nodes.AddNode(nodeIndex);
         }
-
+        _currentNode = Nodes.GetNode(0);
         Debug.Log("Nodes initialized:\\n" + Nodes.ToString());
         InitDestionations();
         InitObstacles();
         Debug.Log("Destinations initialized:\\n" + Nodes.ToString());
-        DrawPlayer();
+        DrawPlayer(SectionSpawnPoint.transform.position);
         DrawAll();
     }
 
-    void DrawPlayer()
+    void DrawPlayer(Vector3 spawnPoint)
     {
-        Instantiate(Player, SectionSpawnPoint.transform.position, Quaternion.identity);
+        _player = Instantiate(Player, spawnPoint, Quaternion.identity);
+        _player.GetComponent<LabirynthPlayerScript>().HoleEnteredEvent.AddListener(MovePlayerToNode);
     }
     // Update is called once per frame
+    
+    public void MovePlayerToNode(string nodeName)
+    {
+        Regex regex = new Regex(@"\d*");
+        var matches = regex.Matches(nodeName);
+        Node startNode = Nodes.GetNode(int.Parse(matches[0].Value));
+        Node endNode = Nodes.GetNode(int.Parse(matches[2].Value));
+
+        Destroy(_player);
+
+        GameObject endNodeGameObject = GameObject.Find(endNode.ToString());
+        Vector3 newPosition = new Vector3(endNodeGameObject.transform.position.x,
+            endNodeGameObject.transform.position.y,
+            SectionSpawnPoint.transform.position.z);
+
+        DrawPlayer(newPosition);
+        _currentNode = endNode;
+    }
     void Update()
     {
 

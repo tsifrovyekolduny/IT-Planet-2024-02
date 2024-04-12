@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LabirynthPlayerScript : MonoBehaviour
 {
+    public UnityEvent<string> HoleEnteredEvent; 
     public float Speed = 10f;
+    bool _directionToHole = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -12,24 +15,26 @@ public class LabirynthPlayerScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    IEnumerator MoveSelfToPoint(Vector3 point)
-    {   
-        Vector3 newPosition = new Vector3(point.x, transform.position.y, transform.position.z);
+    IEnumerator MoveSelfToPoint(RaycastHit hit)
+    {
+        float counter = 0;
+        Vector3 newPosition = new Vector3(hit.point.x, transform.position.y, transform.position.z);
 
-        //Substract the time of arrival with the current time to know how long the object has to be in movement
-        float duration = Speed - Time.time;
-        //Calculate the distance
-        float distance = Vector3.Distance(transform.position, newPosition);
-        //And the speed
-        float speed = distance / duration;
-
-
-        while(transform.position.x != newPosition.x)
+        while (counter < Speed)
         {
-            transform.position = Vector3.MoveTowards(transform.position, newPosition, speed * Time.deltaTime);
+            counter += Time.deltaTime;
+            Vector3 currentPos = transform.position;
+
+            float time = Vector3.Distance(currentPos, hit.point) / (Speed - counter) * Time.deltaTime;
+
+            transform.position = Vector3.MoveTowards(currentPos, newPosition, time);
+
             yield return null;
         }
-        yield break;
+        if (_directionToHole)
+        {
+            HoleEnteredEvent.Invoke(hit.transform.name);
+        }
     }
 
     void MakeTransition()
@@ -49,11 +54,12 @@ public class LabirynthPlayerScript : MonoBehaviour
                 if(hittedObject.tag == "Section" || hittedObject.tag == "Hole")
                 {
                     StopAllCoroutines();
-                    StartCoroutine("MoveSelfToPoint", hit.point);
+                    StartCoroutine(MoveSelfToPoint(hit));
+                    _directionToHole = false;
                 }
-                if(hittedObject.tag == "Hole")
+                if (hittedObject.tag == "Hole")
                 {
-                    MakeTransition();
+                    _directionToHole = true;
                 }
             }
         }
