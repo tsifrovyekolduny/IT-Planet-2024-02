@@ -179,6 +179,7 @@ public class LabManager : MonoBehaviour
     public GameObject Section;
     public GameObject SectionSpawnPoint;
     public GameObject Plane;
+    public GameObject Player;
 
     [SerializeField]
     private Node _currentNode;
@@ -284,7 +285,9 @@ public class LabManager : MonoBehaviour
                 Node node = section[nodeIndex];
 
                 GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
-                Instantiate(nodePrefab, newNodePosition, Quaternion.identity).transform.parent = newSection.transform;
+                GameObject createdNode = Instantiate(nodePrefab, newNodePosition, Quaternion.identity);
+                createdNode.transform.parent = newSection.transform;
+                createdNode.name = node.ToString();
             }
         }
     }
@@ -302,9 +305,14 @@ public class LabManager : MonoBehaviour
         InitDestionations();
         InitObstacles();
         Debug.Log("Destinations initialized:\\n" + Nodes.ToString());
+        DrawPlayer();
         DrawAll();
     }
 
+    void DrawPlayer()
+    {
+        Instantiate(Player, SectionSpawnPoint.transform.position, Quaternion.identity);
+    }
     // Update is called once per frame
     void Update()
     {
