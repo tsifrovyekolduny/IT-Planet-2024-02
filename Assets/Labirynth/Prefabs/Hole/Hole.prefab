@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2281397364521542350}
   - component: {fileID: 2564632281059340004}
   - component: {fileID: 1615109244021459656}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hole
   m_TagString: Hole
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

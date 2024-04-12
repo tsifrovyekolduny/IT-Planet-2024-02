@@ -152,7 +152,7 @@ public class NodesCollection
         }
     }
 
-    public List<Node> GetSectionOfNodes(Node currentNode)
+    public List<Node> GetSubSection(Node currentNode)
     {
         List<Node> section = new List<Node>();
         int startIndex = 0;
@@ -285,8 +285,7 @@ public class LabManager : MonoBehaviour
             }
         }
     }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         Nodes = new NodesCollection(RowCapacity);
@@ -295,20 +294,25 @@ public class LabManager : MonoBehaviour
             Nodes.AddNode(nodeIndex);
         }
         _currentNode = Nodes.GetNode(0);
-        Debug.Log("Nodes initialized:\\n" + Nodes.ToString());
+        
         InitDestionations();
+        Debug.Log("Nodes initialized:\\n" + Nodes.ToString());
+
         InitObstacles();
         Debug.Log("Destinations initialized:\\n" + Nodes.ToString());
+
         DrawPlayer(SectionSpawnPoint.transform.position);
         DrawAll();
     }
 
     void DrawPlayer(Vector3 spawnPoint)
     {
+        float halfOfHeight = Player.GetComponent<BoxCollider>().bounds.size.y;
+        spawnPoint = new Vector3(spawnPoint.x, spawnPoint.y + halfOfHeight, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
+        
         _player.GetComponent<LabirynthPlayerScript>().HoleEnteredEvent.AddListener(MovePlayerToNode);
-    }
-    // Update is called once per frame
+    }    
     
     public void MovePlayerToNode(string nodeName)
     {
