@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 public class CameraMove : MonoBehaviour
 {
+    public int hp = 3;
     public float speed = 1.0f;
     public float pushForce;
     public float time;
@@ -20,11 +21,34 @@ public class CameraMove : MonoBehaviour
         time = Time.deltaTime;
     }
 
+    void TakeDamage()
+    {
+        hp -= 1;
+        Debug.Log(hp);
+        if (hp == 0)
+        {
+            foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
+            {
+                Destroy(o);
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Damage") {
+            TakeDamage();
+        }
+    }
+
     void OnTriggerEnter(Collider otherObject)
 
     {
-
-        BackToSpawn();
+        if (otherObject.tag == "ResetLevel")
+        {
+            BackToSpawn();
+        }
+        
 
     }
 
