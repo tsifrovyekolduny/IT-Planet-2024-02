@@ -258,8 +258,11 @@ public class LabManager : MonoBehaviour
 
         Vector3 planeSize = Plane.GetComponent<MeshRenderer>().localBounds.size;
 
-        float sectionOffset = planeSize.x / sections.Count;
-        float nodeOffset = planeSize.z / RowCapacity;
+        float xSize = planeSize.x * Plane.transform.localScale.x;
+        float zSize = planeSize.z * Plane.transform.localScale.z;
+
+        float sectionOffset = zSize / sections.Count;
+        float nodeOffset = xSize / RowCapacity;
 
         for (int sectionIndex = 0; sectionIndex < sections.Count; ++sectionIndex)
         {
@@ -268,14 +271,15 @@ public class LabManager : MonoBehaviour
             float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
             var newSectionPosition = new Vector3(Plane.transform.position.x, currentHeight, Plane.transform.position.z);
             GameObject newSection = Instantiate(Section, newSectionPosition, Quaternion.identity, Plane.transform);
-
-            newSection.name += sectionIndex;
+            newSection.transform.localScale = new Vector3(xSize / 2, newSection.transform.localScale.y, newSection.transform.localScale.z);
 
             Vector3 sectionSize = newSection.GetComponent<MeshRenderer>().localBounds.size;
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
                 float currentNodeOffset = nodeOffset * nodeIndex;
-                var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset, currentHeight + (sectionSize.y / 2), Plane.transform.position.z);
+                var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset, 
+                    currentHeight + (sectionSize.y / 2), 
+                    Plane.transform.position.z);
                 Node node = section[nodeIndex];
 
                 GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
@@ -329,6 +333,7 @@ public class LabManager : MonoBehaviour
             SectionSpawnPoint.transform.position.z);
 
         DrawPlayer(newPosition);
+        Nodes.GetSubSection(_currentNode);
         _currentNode = endNode;
     }
     void Update()
