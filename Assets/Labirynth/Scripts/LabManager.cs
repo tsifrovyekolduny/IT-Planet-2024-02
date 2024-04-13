@@ -95,6 +95,7 @@ public class NodesCollection
         int indexOfNode = _nodes.IndexOf(GetNode(behindNodeIndex + 1));
         _nodes.Insert(indexOfNode, new Node());
     }
+
     public void AddNode(int index)
     {
         Node newNode = new Node();
@@ -315,7 +316,7 @@ public class LabManager : MonoBehaviour
     {
         var sections = Nodes.Sections;
 
-        Vector3 planeSize = Plane.GetComponent<MeshRenderer>().localBounds.size;
+        Vector3 planeSize = GetBoundsOf(Plane.transform).size;
 
         float xSize = planeSize.x * Plane.transform.localScale.x;
         float zSize = planeSize.z * Plane.transform.localScale.z;
@@ -332,18 +333,20 @@ public class LabManager : MonoBehaviour
             GameObject newSection = Instantiate(Section, newSectionPosition, Quaternion.identity, Plane.transform);
             newSection.transform.localScale = new Vector3(xSize / 2, newSection.transform.localScale.y, newSection.transform.localScale.z);
 
-            Vector3 sectionSize = newSection.GetComponent<MeshRenderer>().localBounds.size;
+            Vector3 sectionSize = GetBoundsOf(newSection.transform).size;
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
                 float currentNodeOffset = nodeOffset * nodeIndex;
                 var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
-                    currentHeight + (sectionSize.y / 2),
+                    currentHeight,
                     Plane.transform.position.z);
                 Node node = section[nodeIndex];
 
                 GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
                 GameObject createdNode = Instantiate(nodePrefab, newNodePosition, Quaternion.identity);
+                
                 createdNode.transform.parent = newSection.transform;
+                PlaceOn(createdNode.transform, newSection.transform, true);
                 createdNode.name = node.ToString();
             }
         }
@@ -369,7 +372,7 @@ public class LabManager : MonoBehaviour
         InitBestOption(Nodes.GetNode(NodesCount - 1));
 
         DrawAll();
-        DrawPlayer(SectionSpawnPoint.transform.position);
+        DrawPlayer(GetNodeInScene(Nodes.GetNode(0)).transform.position);
     }
 
     void InitBestOption(Node destinationNode)
@@ -393,18 +396,53 @@ public class LabManager : MonoBehaviour
         }
 
     }
-    void DrawPlayer(Vector3 spawnPoint)
+
+    GameObject GetNodeInScene(string name)
     {
-        float halfOfHeight = Player.GetComponent<BoxCollider>().bounds.size.y;
-        spawnPoint = new Vector3(spawnPoint.x, spawnPoint.y + halfOfHeight, spawnPoint.z);
+        return GameObject.Find(name);
+    }
+
+    GameObject GetNodeInScene(Node node)
+    {
+        return GameObject.Find(node.ToString());
+    }
+
+    Bounds GetBoundsOf(Transform gmObj)
+    {
+        return gmObj.GetComponent<MeshRenderer>().localBounds;
+    }
+
+    void PlaceOn(Transform child, Transform platform, bool onTop)
+    {
+        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2;        
+
+        child.Translate(0f, halfHeightOfPlatform, 0f);        
+    }
+
+    void DrawPlayer(Vector3 spawnPoint)
+    {        
+        float widthOfNode = GetNodeInScene(_currentNode).GetComponent<MeshRenderer>().localBounds.size.x;
+        
+        Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
 
-        int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
-        Node rightNode = _bestOptionDict[indexOfSubSection];
-        GameObject rightNodeGameObject = GameObject.Find(rightNode.ToString());
+        if(_currentNode != Nodes.GetNode(NodesCount - 1))
+        {
+            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
+            Node rightNode = _bestOptionDict[indexOfSubSection];
+            GameObject rightNodeGameObject = GetNodeInScene(rightNode);
 
-        _player.GetComponent<LabirynthPlayerScript>().RightNode = rightNodeGameObject;
-        _player.GetComponent<LabirynthPlayerScript>().HoleEnteredEvent.AddListener(MovePlayerToNode);
+            var playerScipt = _player.GetComponent<LabirynthPlayerScript>();
+
+            playerScipt.RightNode = rightNodeGameObject;
+            playerScipt.HoleEnteredEvent.AddListener(MovePlayerToNode);
+            StartCoroutine(playerScipt.MoveSelf(spawnPointWithOffset));
+        }
+        else
+        {
+            // win
+        }
+        
     }
 
     public void MovePlayerToNode(string nodeName)
@@ -418,7 +456,7 @@ public class LabManager : MonoBehaviour
 
         Destroy(_player);
 
-        GameObject endNodeGameObject = GameObject.Find(endNode.ToString());
+        GameObject endNodeGameObject = GetNodeInScene(endNode);
         Vector3 newPosition = new Vector3(endNodeGameObject.transform.position.x,
             endNodeGameObject.transform.position.y,
             SectionSpawnPoint.transform.position.z);

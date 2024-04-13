@@ -41,7 +41,7 @@ public class LabirynthPlayerScript : MonoBehaviour
         return false;
     }
 
-    private void TurnToDirection(Vector3 destination)
+    public void TurnToDirection(Vector3 destination)
     {        
         if (transform.position.x < destination.x)
         {
@@ -56,7 +56,7 @@ public class LabirynthPlayerScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    IEnumerator MoveSelfToPoint(Vector3 point, string nameOfDestinationGameObject = "")
+    public IEnumerator MoveSelf(Vector3 point, string nameOfDestinationGameObject = "")
     {
         float counter = 0;
         Vector3 newPosition = new Vector3(point.x, transform.position.y, transform.position.z);
@@ -97,7 +97,7 @@ public class LabirynthPlayerScript : MonoBehaviour
                     {
                         StopAllCoroutines();                        
 
-                        StartCoroutine(MoveSelfToPoint(hit.point, hit.transform.gameObject.name));
+                        StartCoroutine(MoveSelf(hit.point, hit.transform.gameObject.name));
                     }
                     
 
