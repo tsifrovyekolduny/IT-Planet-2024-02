@@ -7,7 +7,21 @@ using System.Text.RegularExpressions;
 public class Node
 {
     public int Index = -1;
-    public Node Destination;
+    public Node _destination;
+    public Node Destination
+    {
+        get
+        {
+            return _destination;
+        }
+        set
+        {
+            value.Parent = this;
+            _destination = value;
+        }
+    }
+    public Node Parent;
+
     public bool IsBlocked
     {
         get
@@ -105,27 +119,6 @@ public class NodesCollection
         return outputLine;
     }
 
-    int GetExtremeIndexOfSection(int indexOfNode, bool forward)
-    {
-        int addValue = forward ? 1 : -1;
-        int sectionIndex = indexOfNode / _rowCapacity;
-
-        int sectionStartIndex = (indexOfNode / _rowCapacity) * _rowCapacity;
-        int sectionEndIndex = sectionStartIndex + (_rowCapacity - 1);
-
-
-        int currentIndexOfNode = indexOfNode + addValue;
-        Node node = _nodes[currentIndexOfNode];
-        while (!node.IsBlocked &&
-            currentIndexOfNode > sectionStartIndex &&
-            currentIndexOfNode < sectionEndIndex)
-        {
-            currentIndexOfNode += addValue;
-            node = _nodes[currentIndexOfNode];
-        }
-        return currentIndexOfNode + (-1 * addValue);
-    }
-
     public List<List<Node>> Sections
     {
         get
@@ -152,18 +145,149 @@ public class NodesCollection
         }
     }
 
+    public int IndexOfSubSection(List<Node> nodeSubSection)
+    {
+        var allSubSections = SubSections;
+        for (int indexOfSubSection = 0; indexOfSubSection < allSubSections.Count; ++indexOfSubSection)
+        {
+            var subSection = allSubSections[indexOfSubSection];
+            if (nodeSubSection.Count == subSection.Count)
+            {
+                for (int indexOfNode = 0; indexOfNode < nodeSubSection.Count; ++indexOfNode)
+                {
+                    if (nodeSubSection[indexOfNode] != subSection[indexOfNode])
+                    {
+                        break;
+                    }
+
+                    if (indexOfNode == nodeSubSection.Count - 1)
+                    {
+                        return indexOfSubSection;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int IndexOfSubSection(Node node)
+    {
+        var nodeSubSection = GetSubSection(node);
+        return IndexOfSubSection(nodeSubSection);
+    }
+
+    public List<List<Node>> SubSections
+    {
+        get
+        {
+            List<List<Node>> subSections = new List<List<Node>>();
+
+            foreach (var section in Sections)
+            {
+                List<Node> subSection = new List<Node>();
+
+                foreach (Node node in section)
+                {
+                    if (!node.IsBlocked)
+                    {
+                        subSection.Add(node);
+                    }
+                    else
+                    {
+                        if (subSection.Count > 0)
+                        {
+                            subSections.Add(subSection);
+                        }
+                        subSection = new List<Node>();
+                    }
+                }
+                if (subSection.Count > 0)
+                {
+                    subSections.Add(subSection);
+                }
+            }
+
+            return subSections;
+        }
+    }
+
+    public void InitDestionations(int nodesCount)
+    {
+        List<int> allWays = GetAllWays();
+        allWays.RemoveAt(allWays.Count - 1);
+        allWays.RemoveAt(0);
+
+        int reverseNodeIndex = nodesCount - 1;
+
+        while (reverseNodeIndex >= 0)
+        {
+            Node startNode;
+
+            if (reverseNodeIndex == 1)
+            {
+                Node rootNode = GetNode(0);
+                rootNode.Destination = GetNode(1);
+                break;
+            }
+            else
+            {
+                startNode = GetRandomNode(reverseNodeIndex, ref allWays);
+                startNode.Destination = GetNode(reverseNodeIndex);
+            }
+
+            --reverseNodeIndex;
+        }
+    }
+
+    Node GetRandomNode(int reverseNodeIndex, ref List<int> allWays)
+    {
+        int startIndex = 0;
+        int randomIndex = 0;
+
+        Node randomNode;
+        Node endNode = GetNode(reverseNodeIndex);
+        randomNode = endNode;
+
+        while (endNode == randomNode)
+        {
+            randomIndex = Random.Range(startIndex, allWays.Count - 1);
+            randomNode = GetNode(allWays[randomIndex]);
+
+            if (allWays.Count == 1 && randomNode == endNode)
+            {
+                randomNode = GetNode(Count / 2);
+                break;
+            }
+        }
+
+        allWays.RemoveAt(randomIndex);
+
+        return randomNode;
+    }
+
+    public void InitObstacles(int nodesCount)
+    {
+        int countOfObstacles = nodesCount / 3;
+        List<int> usedIndexes = new List<int>();
+        while (countOfObstacles > 0)
+        {
+            int randomIndex = Random.Range(1, nodesCount - 1);
+            if (usedIndexes.Contains(randomIndex))
+            {
+                continue;
+            }
+
+            usedIndexes.Add(randomIndex);
+            AddObstacleInFrontOf(randomIndex);
+            --countOfObstacles;
+        }
+        AddObstacleInFrontOf(0);
+        AddObstacleInFrontOf(nodesCount - 2);
+    }
     public List<Node> GetSubSection(Node currentNode)
     {
-        List<Node> section = new List<Node>();
-        int startIndex = 0;
-        int endIndex = _rowCapacity - 1;
-
-        int indexOfNode = _nodes.IndexOf(currentNode);
-
-        startIndex = GetExtremeIndexOfSection(indexOfNode, true);
-        endIndex = GetExtremeIndexOfSection(indexOfNode, false);
-
-        return _nodes.Skip(startIndex).Take(endIndex - startIndex).ToList();
+        return SubSections.First(nodes => nodes.Contains(currentNode));
     }
 }
 
@@ -182,75 +306,10 @@ public class LabManager : MonoBehaviour
     public GameObject Player;
     private GameObject _player;
 
+    private Dictionary<int, Node> _bestOptionDict;
+
     [SerializeField]
     private Node _currentNode;
-    [SerializeField]
-    private List<Node> _correctWay;
-
-    Node GetRandomNode(int reverseNodeIndex, ref List<int> allWays)
-    {
-        int startIndex = 0;
-
-        int randomIndex = Random.Range(startIndex, allWays.Count - 1);
-        Node randomNode = Nodes.GetNode(allWays[randomIndex]);
-        allWays.RemoveAt(randomIndex);
-
-        return randomNode;
-    }
-
-    Node FindDestinationNode(int reverseNodeIndex)
-    {
-        return Nodes.GetNode(reverseNodeIndex);
-    }
-
-    void InitDestionations()
-    {
-        _correctWay = new List<Node>();
-        List<int> allWays = Nodes.GetAllWays();
-        allWays.RemoveAt(allWays.Count - 1);
-        allWays.RemoveAt(0);
-
-        int reverseNodeIndex = NodesCount - 1;
-
-        while (reverseNodeIndex >= 0)
-        {
-            Node startNode;
-
-            if (reverseNodeIndex == 1)
-            {
-                Node rootNode = Nodes.GetNode(0);
-                rootNode.Destination = Nodes.GetNode(1);
-                break;
-            }
-            else
-            {
-                startNode = GetRandomNode(reverseNodeIndex, ref allWays);
-                startNode.Destination = FindDestinationNode(reverseNodeIndex);
-            }
-
-            --reverseNodeIndex;
-        }
-    }
-
-    void InitObstacles()
-    {
-        int countOfObstacles = NodesCount / 3;
-        List<int> usedIndexes = new List<int>();
-        while (countOfObstacles > 0)
-        {
-            int randomIndex = Random.Range(1, NodesCount - 1);
-            if (usedIndexes.Contains(randomIndex))
-            {
-                continue;
-            }
-
-            usedIndexes.Add(randomIndex);
-            Nodes.AddObstacleInFrontOf(randomIndex);
-            --countOfObstacles;
-        }
-        Nodes.AddObstacleInFrontOf(0);
-        Nodes.AddObstacleInFrontOf(NodesCount - 2);
-    }
 
     void DrawAll()
     {
@@ -277,8 +336,8 @@ public class LabManager : MonoBehaviour
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
                 float currentNodeOffset = nodeOffset * nodeIndex;
-                var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset, 
-                    currentHeight + (sectionSize.y / 2), 
+                var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
+                    currentHeight + (sectionSize.y / 2),
                     Plane.transform.position.z);
                 Node node = section[nodeIndex];
 
@@ -289,7 +348,7 @@ public class LabManager : MonoBehaviour
             }
         }
     }
-    
+
     void Start()
     {
         Nodes = new NodesCollection(RowCapacity);
@@ -298,32 +357,64 @@ public class LabManager : MonoBehaviour
             Nodes.AddNode(nodeIndex);
         }
         _currentNode = Nodes.GetNode(0);
-        
-        InitDestionations();
+
+
+        Nodes.InitDestionations(NodesCount);
         Debug.Log("Nodes initialized:\\n" + Nodes.ToString());
 
-        InitObstacles();
+        Nodes.InitObstacles(NodesCount);
         Debug.Log("Destinations initialized:\\n" + Nodes.ToString());
 
-        DrawPlayer(SectionSpawnPoint.transform.position);
+        _bestOptionDict = new Dictionary<int, Node>();
+        InitBestOption(Nodes.GetNode(NodesCount - 1));
+
         DrawAll();
+        DrawPlayer(SectionSpawnPoint.transform.position);
     }
 
+    void InitBestOption(Node destinationNode)
+    {
+        if(destinationNode == Nodes.GetNode(0))
+        {
+            return;
+        }
+        Node startNode = destinationNode.Parent;
+        var subSection = Nodes.GetSubSection(startNode);
+        int indexOfStartNode = Nodes.IndexOfSubSection(subSection);
+        if (_bestOptionDict.ContainsKey(indexOfStartNode))
+        {
+            return;
+        }
+        _bestOptionDict.Add(indexOfStartNode, startNode);
+
+        foreach (Node node in subSection)
+        {
+            InitBestOption(node);
+        }
+
+    }
     void DrawPlayer(Vector3 spawnPoint)
     {
         float halfOfHeight = Player.GetComponent<BoxCollider>().bounds.size.y;
         spawnPoint = new Vector3(spawnPoint.x, spawnPoint.y + halfOfHeight, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
-        
+
+        int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
+        Node rightNode = _bestOptionDict[indexOfSubSection];
+        GameObject rightNodeGameObject = GameObject.Find(rightNode.ToString());
+
+        _player.GetComponent<LabirynthPlayerScript>().RightNode = rightNodeGameObject;
         _player.GetComponent<LabirynthPlayerScript>().HoleEnteredEvent.AddListener(MovePlayerToNode);
-    }    
-    
+    }
+
     public void MovePlayerToNode(string nodeName)
     {
         Regex regex = new Regex(@"\d*");
         var matches = regex.Matches(nodeName);
         Node startNode = Nodes.GetNode(int.Parse(matches[0].Value));
         Node endNode = Nodes.GetNode(int.Parse(matches[2].Value));
+
+        _currentNode = endNode;
 
         Destroy(_player);
 
@@ -333,8 +424,6 @@ public class LabManager : MonoBehaviour
             SectionSpawnPoint.transform.position.z);
 
         DrawPlayer(newPosition);
-        Nodes.GetSubSection(_currentNode);
-        _currentNode = endNode;
     }
     void Update()
     {

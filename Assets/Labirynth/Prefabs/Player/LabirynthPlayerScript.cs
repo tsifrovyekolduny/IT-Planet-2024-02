@@ -7,6 +7,7 @@ public class LabirynthPlayerScript : MonoBehaviour
 {
     public UnityEvent<string> HoleEnteredEvent;
     public float Speed = 10f;
+    public GameObject RightNode;
     // public List<Node> SubSection;
     // public Node EasiestNode;
 
@@ -76,6 +77,8 @@ public class LabirynthPlayerScript : MonoBehaviour
         {
             HoleEnteredEvent.Invoke(nameOfDestinationGameObject);
         }
+
+        TurnToDirection(RightNode.transform.position);
     }
 
     void Update()
