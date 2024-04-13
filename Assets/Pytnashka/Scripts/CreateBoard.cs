@@ -7,8 +7,6 @@ public class CreateBoard : MonoBehaviour
 {
     public GameObject [] chips = new GameObject[16];
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
-    public float split_x = 1.1f;
-    public float split_z = 1.1f;
     void Start()
     {
         GenerateBoard();
@@ -43,7 +41,7 @@ public class CreateBoard : MonoBehaviour
             {
                 if (Global.board[row,col] != 0)
                 {
-                    Vector3 coardinate = new Vector3(board_position.x + row * split_x, board_position.y, board_position.z + col * split_z);
+                    Vector3 coardinate = new Vector3(board_position.x + row * GlobalVars.x_offset, board_position.y, board_position.z + col * GlobalVars.z_offset);
                     int chip = Global.board[row, col] - 1;
                     var obj = Instantiate(chips[chip], coardinate, transform.rotation);
                     obj.name = chips[chip].name;

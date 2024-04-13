@@ -90,7 +90,8 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position + 1, col_position] == 0) 
             { 
-                empty_position = new Vector3(transform.position.x + 1.5f, 0, transform.position.z); 
+                
+                empty_position = new Vector3(transform.position.x + GlobalVars.x_offset, 0, transform.position.z); 
                 Global.board[row_position, col_position] = 0;
                 Global.board[row_position + 1,col_position] = number_chip;
                 PlaySound();
@@ -103,7 +104,7 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position - 1, col_position] == 0)
             { 
-                empty_position = new Vector3(transform.position.x - 1.5f, 0, transform.position.z);
+                empty_position = new Vector3(transform.position.x - GlobalVars.x_offset, 0, transform.position.z);
                 Global.board[row_position, col_position] = 0; 
                 Global.board[row_position - 1, col_position] = number_chip;
                 PlaySound();
@@ -116,7 +117,7 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position, col_position + 1] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z + 1.5f); 
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z + GlobalVars.z_offset); 
                 Global.board[row_position, col_position] = 0; 
                 Global.board[row_position, col_position + 1] = number_chip;
                 PlaySound();
@@ -129,7 +130,7 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position, col_position - 1] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z - 1.5f);
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z - GlobalVars.z_offset);
                 Global.board[row_position, col_position] = 0;
                 Global.board[row_position, col_position - 1] = number_chip;
                 PlaySound();
