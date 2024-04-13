@@ -13,5 +13,6 @@ public class Cell : MonoBehaviour
     private void OnMouseDown()
     {
         main.SetGreen(id);
+        main.SetRed();
     }
 }
