@@ -3,28 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour
-{    
-    [SerializeField]
-    private bool _isOpened = false;
+{   
     public float OpenAngle = -120f;
     public bool OpenedOnStart = false;
-    public float OpeningSpeed = 100f;
-
-    public void Update()
-    {
-        if (_isOpened)
-        {
-            OpenDoor();
-        }
-        else
-        {
-            CloseDoor();
-        }
-    }
+    public float OpeningSpeed = 100f;    
 
     public void Awake()
-    {
-        OpenDoor();
+    {        
         if (OpenedOnStart)
         {
             SetToHingeJointTarget(OpenAngle, true);

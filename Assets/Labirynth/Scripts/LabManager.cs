@@ -329,24 +329,28 @@ public class LabManager : MonoBehaviour
             var section = sections[sectionIndex];
 
             float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
-            var newSectionPosition = new Vector3(Plane.transform.position.x, currentHeight, Plane.transform.position.z);
+            var newSectionPosition = new Vector3(Plane.transform.position.x,
+                currentHeight, 
+                Plane.transform.position.z - 0.2f);
             GameObject newSection = Instantiate(Section, newSectionPosition, Quaternion.identity, Plane.transform);
             newSection.transform.localScale = new Vector3(xSize / 2, newSection.transform.localScale.y, newSection.transform.localScale.z);
 
             Vector3 sectionSize = GetBoundsOf(newSection.transform).size;
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
+                Node node = section[nodeIndex];
+                GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
+
                 float currentNodeOffset = nodeOffset * nodeIndex;
                 var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
-                    currentHeight,
+                    currentHeight + PlaceOn(nodePrefab.transform, newSection.transform),
                     Plane.transform.position.z);
-                Node node = section[nodeIndex];
 
-                GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
-                GameObject createdNode = Instantiate(nodePrefab, newNodePosition, Quaternion.identity);
-                
+
+
+                GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
+
                 createdNode.transform.parent = newSection.transform;
-                PlaceOn(createdNode.transform, newSection.transform, true);
                 createdNode.name = node.ToString();
             }
         }
@@ -372,12 +376,13 @@ public class LabManager : MonoBehaviour
         InitBestOption(Nodes.GetNode(NodesCount - 1));
 
         DrawAll();
-        DrawPlayer(GetNodeInScene(Nodes.GetNode(0)).transform.position);
+        GameObject firstNodeObject = GetNodeInScene(Nodes.GetNode(0));
+        DrawPlayer(firstNodeObject.transform.position);
     }
 
     void InitBestOption(Node destinationNode)
     {
-        if(destinationNode == Nodes.GetNode(0))
+        if (destinationNode == Nodes.GetNode(0))
         {
             return;
         }
@@ -409,24 +414,35 @@ public class LabManager : MonoBehaviour
 
     Bounds GetBoundsOf(Transform gmObj)
     {
-        return gmObj.GetComponent<MeshRenderer>().localBounds;
+        MeshRenderer meshR;
+        meshR = gmObj.GetComponent<MeshRenderer>();
+        Debug.Log($"{gmObj.name} {meshR.ToString()}");
+        if (meshR == null)
+        {
+            List<MeshRenderer> meshs = new List<MeshRenderer>();
+            gmObj.GetComponentsInChildrenRecursively<MeshRenderer>(meshs);
+            meshR = meshs[0];
+            Debug.Log($"No meshR in this parent! First meshR of children: {meshR.ToString()}");
+        }
+        return meshR.localBounds;
     }
 
-    void PlaceOn(Transform child, Transform platform, bool onTop)
+    float PlaceOn(Transform child, Transform platform)
     {
-        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2;        
+        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2;
 
-        child.Translate(0f, halfHeightOfPlatform, 0f);        
+        return halfHeightOfPlatform;
     }
 
     void DrawPlayer(Vector3 spawnPoint)
-    {        
-        float widthOfNode = GetNodeInScene(_currentNode).GetComponent<MeshRenderer>().localBounds.size.x;
-        
+    {
+        Transform thisNode = GetNodeInScene(_currentNode).transform;
+        float widthOfNode = GetBoundsOf(thisNode).size.x;
+
         Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
 
-        if(_currentNode != Nodes.GetNode(NodesCount - 1))
+        if (_currentNode != Nodes.GetNode(NodesCount - 1))
         {
             int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
             Node rightNode = _bestOptionDict[indexOfSubSection];
@@ -442,7 +458,7 @@ public class LabManager : MonoBehaviour
         {
             // win
         }
-        
+
     }
 
     public void MovePlayerToNode(string nodeName)
@@ -466,5 +482,28 @@ public class LabManager : MonoBehaviour
     void Update()
     {
 
+    }
+}
+
+public static class Extension
+{
+    public static List<T> GetComponentsInChildrenRecursively<T>(this Transform _transform, List<T> _componentList)
+    {
+        foreach (Transform t in _transform)
+        {
+            T[] components = t.GetComponents<T>();
+
+            foreach (T component in components)
+            {
+                if (component != null)
+                {
+                    _componentList.Add(component);
+                }
+            }
+
+            GetComponentsInChildrenRecursively<T>(t, _componentList);
+        }
+
+        return _componentList;
     }
 }
