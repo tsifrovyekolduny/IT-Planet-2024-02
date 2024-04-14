@@ -124,11 +124,30 @@ public class Main : MonoBehaviour
     }
 
     public IEnumerator SpawnObjects(float time)
-    {
+    {        
+        float commonY = EnemySpawnpoint.transform.position.y;
+
+        float enemyZ = EnemySpawnpoint.transform.position.z;
+        float playerZ = PlayerSpawnpoint.transform.position.z;
+
+        float enemyX = EnemySpawnpoint.transform.position.x;
+        float playerX = PlayerSpawnpoint.transform.position.x;
+        float shift = 1.5f;
+
         for (int objectIndex = 0;  objectIndex < _greenPlayer.Length; ++objectIndex)
         {
-            _redPlayer[objectIndex] = Instantiate(_redObject, EnemySpawnpoint.transform.position, Quaternion.identity);
-            _greenPlayer[objectIndex] = Instantiate(_greenObject, PlayerSpawnpoint.transform.position, Quaternion.identity);
+            
+
+            Vector3 newEnemyPosition = new Vector3(UnityEngine.Random.Range(enemyX - shift, enemyX + shift), 
+                                                    commonY,
+                                                    UnityEngine.Random.Range(enemyZ - shift, enemyZ + shift));
+
+            Vector3 newPlayerPosition = new Vector3(UnityEngine.Random.Range(playerX - shift, playerX + shift),
+                                                    commonY,
+                                                    UnityEngine.Random.Range(playerZ - shift, playerZ + shift));
+
+            _redPlayer[objectIndex] = Instantiate(_redObject, newEnemyPosition, _redObject.transform.rotation);
+            _greenPlayer[objectIndex] = Instantiate(_greenObject, newPlayerPosition, _greenObject.transform.rotation);
 
             if (CheckFinishCondition() != 0)
             {
@@ -153,7 +172,7 @@ public class Main : MonoBehaviour
 
         currentCollider.enabled = false;
 
-        _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+        _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(90f, 0f, 0f);
         _greenPlayer[_greenNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_greenPlayer[_greenNumber].gameObject, currentCollider.transform.position));
@@ -175,7 +194,7 @@ public class Main : MonoBehaviour
 
         _map[id % 10, id / 10] = -1;
 
-        _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+        _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         _redPlayer[_redNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_redPlayer[_redNumber].gameObject, currentCollider.transform.position));
