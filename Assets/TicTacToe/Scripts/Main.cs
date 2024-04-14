@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    private PlayerObject[] _greenPlayer = new PlayerObject[50];
-    private PlayerObject[] _redPlayer = new PlayerObject[50];
+    private GameObject[] _greenPlayer = new GameObject[50];
+    private GameObject[] _redPlayer = new GameObject[50];
 
     private int[,] _map = new int[10, 10];
 
@@ -24,12 +24,12 @@ public class Main : MonoBehaviour
 
     public int LineSizeToWin = 5;
 
-    /*public void CheckFinishCondition()
+    public int CheckFinishCondition()
     {
         // X row
-        for (int coordinateX = 0; coordinateX < _map.Length - LineSizeToWin; ++coordinateX)
+        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateX)
         {
-            for (int coordinateY = 0; coordinateY < _map.Length; ++coordinateY)
+            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length); ++coordinateY)
             {
                 int controlSumm = 0;
                 for (int addition = 0; addition < LineSizeToWin; ++addition) 
@@ -41,20 +41,20 @@ public class Main : MonoBehaviour
                 {
                     //победа
                     Debug.Log("good result");
-                    return;
+                    return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
-                    return;
+                    return -1;
                 }
             }
         }
         // Y row
-        for (int coordinateX = 0; coordinateX < _map.Length; ++coordinateX)
+        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length); ++coordinateX)
         {
-            for (int coordinateY = 0; coordinateY < _map.Length - LineSizeToWin; ++coordinateY)
+            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateY)
             {
                 int controlSumm = 0;
                 for (int addition = 0; addition < LineSizeToWin; ++addition)
@@ -66,20 +66,20 @@ public class Main : MonoBehaviour
                 {
                     //победа
                     Debug.Log("good result");
-                    return;
+                    return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
-                    return;
+                    return -1;
                 }
             }
         }
         // diagonal
-        for (int coordinateX = 0; coordinateX < _map.Length - LineSizeToWin; ++coordinateX)
+        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateX)
         {
-            for (int coordinateY = 0; coordinateY < _map.Length - LineSizeToWin; ++coordinateY)
+            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateY)
             {
                 int controlSumm = 0;
                 for (int addition = 0; addition < LineSizeToWin; ++addition)
@@ -91,18 +91,19 @@ public class Main : MonoBehaviour
                 {
                     //победа
                     Debug.Log("good result");
-                    return;
+                    return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
-                    return;
+                    return -1;
                 }
             }
         }
+
+        return 0;
     }
-    */
 
     public IEnumerator MoveObject(GameObject currentObject, Vector3 position)
     {
@@ -126,8 +127,14 @@ public class Main : MonoBehaviour
     {
         for (int objectIndex = 0;  objectIndex < _greenPlayer.Length; ++objectIndex)
         {
-            _redPlayer[objectIndex] = Instantiate(_redObject, EnemySpawnpoint.transform.position, Quaternion.identity).GetComponent<PlayerObject>();
-            _greenPlayer[objectIndex] = Instantiate(_greenObject, PlayerSpawnpoint.transform.position, Quaternion.identity).GetComponent<PlayerObject>();
+            _redPlayer[objectIndex] = Instantiate(_redObject, EnemySpawnpoint.transform.position, Quaternion.identity);
+            _greenPlayer[objectIndex] = Instantiate(_greenObject, PlayerSpawnpoint.transform.position, Quaternion.identity);
+
+            if (CheckFinishCondition() != 0)
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(time);
         }
         yield break;
@@ -146,14 +153,14 @@ public class Main : MonoBehaviour
 
         currentCollider.enabled = false;
 
-        _greenPlayer[_greenNumber].GetComponent<Transform>().rotation = Quaternion.Euler(-90f, 0f, 0f);
+        _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
         _greenPlayer[_greenNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_greenPlayer[_greenNumber].gameObject, currentCollider.transform.position));
 
         ++_greenNumber;
 
-        //CheckFinishCondition();
+        CheckFinishCondition();
     }
     public void SetRed()
     {
@@ -168,7 +175,7 @@ public class Main : MonoBehaviour
 
         _map[id % 10, id / 10] = -1;
 
-        _redPlayer[_redNumber].GetComponent<Transform>().rotation = Quaternion.Euler(-90f, 0f, 0f);
+        _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
         _redPlayer[_redNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_redPlayer[_redNumber].gameObject, currentCollider.transform.position));
@@ -177,6 +184,6 @@ public class Main : MonoBehaviour
 
         ++_redNumber;
 
-        //CheckFinishCondition();
+        CheckFinishCondition();
     }
 }

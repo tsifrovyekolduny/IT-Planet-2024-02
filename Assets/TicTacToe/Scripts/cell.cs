@@ -12,7 +12,14 @@ public class Cell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        main.SetGreen(id);
-        main.SetRed();
+        if (main.CheckFinishCondition() == 0)
+        {
+            main.SetGreen(id);
+        }
+
+        if (main.CheckFinishCondition() == 0)
+        {
+            main.SetRed();
+        }
     }
 }
