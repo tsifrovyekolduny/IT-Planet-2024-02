@@ -10,10 +10,17 @@ public class Door : MonoBehaviour
     public bool OpenedOnStart = false;
     public float OpeningSpeed = 100f;
 
-    //public void Update()
-    //{
-    //    OpenDoor();
-    //}
+    public void Update()
+    {
+        if (_isOpened)
+        {
+            OpenDoor();
+        }
+        else
+        {
+            CloseDoor();
+        }
+    }
 
     public void Awake()
     {
@@ -36,7 +43,7 @@ public class Door : MonoBehaviour
 
     private void SetToHingeJointTarget(float targetPosition, bool fast = false)
     {
-        HingeJoint hingeJoint = transform.GetChild(1).GetComponent<HingeJoint>();
+        HingeJoint hingeJoint = transform.GetChild(0).GetChild(1).GetComponent<HingeJoint>();
         JointSpring jointSpring = hingeJoint.spring;
         if (fast)
         {
