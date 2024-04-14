@@ -42,7 +42,6 @@ public class CameraMove : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider otherObject)
-
     {
         if (otherObject.tag == "ResetLevel")
         {
