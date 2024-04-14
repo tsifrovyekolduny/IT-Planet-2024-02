@@ -7,11 +7,8 @@ public class LabirynthPlayerScript : MonoBehaviour
 {
     public UnityEvent<string> HoleEnteredEvent;
     public float Speed = 10f;
-    public GameObject RightNode;
-    // public List<Node> SubSection;
-    // public Node EasiestNode;
-
-    Vector3 _destination;
+    public GameObject RightNode;    
+    
     bool _directionToHole = false;
     [SerializeField]
     int direction = 1;
@@ -22,13 +19,11 @@ public class LabirynthPlayerScript : MonoBehaviour
 
     }
 
-    bool IsObstacleOnWay(Vector3 destination)
-    {
-        // RaycastHit hit;
+    static bool IsObstacleOnWay(Transform player, Vector3 destination)
+    {        
+        float distance = Mathf.Abs((destination - player.transform.position).x);
 
-        float distance = Mathf.Abs((destination - transform.position).x);
-
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.right, distance);
+        RaycastHit[] hits = Physics.RaycastAll(player.transform.position, player.transform.right, distance);
         foreach(var hit in hits)
         {
             Debug.Log("hitted: " + hit.transform.gameObject.name);
@@ -93,13 +88,12 @@ public class LabirynthPlayerScript : MonoBehaviour
                 if (hittedObject.tag == "Section" || hittedObject.tag == "Hole")
                 {
                     TurnToDirection(hit.point);
-                    if (!IsObstacleOnWay(hit.point))
+                    if (!IsObstacleOnWay(transform, hit.point))
                     {
                         StopAllCoroutines();                        
 
                         StartCoroutine(MoveSelf(hit.point, hit.transform.gameObject.name));
-                    }
-                    
+                    }                    
 
                     _directionToHole = false;
                 }

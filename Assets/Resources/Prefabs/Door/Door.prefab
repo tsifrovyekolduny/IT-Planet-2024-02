@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2895402968315383703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.115, y: 0.029, z: -0.0071}
+  m_LocalPosition: {x: -0.004, y: 0.029, z: -0.0071}
   m_LocalScale: {x: 0.09, y: 0.1979785, z: 0.04948807}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -155,7 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OpenAngle: -120
   OpenedOnStart: 0
-  OpeningSpeed: 100
+  OpeningSpeed: 30
+  CanBeFocusable: 0
 --- !u!65 &-604033780720757804
 BoxCollider:
   m_ObjectHideFlags: 0

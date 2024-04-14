@@ -434,6 +434,14 @@ public class LabManager : MonoBehaviour
         return halfHeightOfPlatform;
     }
 
+    void ChangeFocusableForNodesIn(List<Node> subSection, bool focusable)
+    {
+        foreach(Node node in subSection)
+        {
+            GetNodeInScene(node).GetComponent<Door>().CanBeFocusable = focusable;
+        }
+    }
+
     void DrawPlayer(Vector3 spawnPoint)
     {
         Transform thisNode = GetNodeInScene(_currentNode).transform;
@@ -444,9 +452,11 @@ public class LabManager : MonoBehaviour
 
         if (_currentNode != Nodes.GetNode(NodesCount - 1))
         {
-            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
+            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);            
             Node rightNode = _bestOptionDict[indexOfSubSection];
             GameObject rightNodeGameObject = GetNodeInScene(rightNode);
+
+            ChangeFocusableForNodesIn(Nodes.GetSubSection(_currentNode), true);
 
             var playerScipt = _player.GetComponent<LabirynthPlayerScript>();
 
@@ -467,6 +477,9 @@ public class LabManager : MonoBehaviour
         var matches = regex.Matches(nodeName);
         Node startNode = Nodes.GetNode(int.Parse(matches[0].Value));
         Node endNode = Nodes.GetNode(int.Parse(matches[2].Value));
+
+        GetNodeInScene(startNode).GetComponent<Door>().CloseDoor();
+        ChangeFocusableForNodesIn(Nodes.GetSubSection(startNode), false);
 
         _currentNode = endNode;
 
