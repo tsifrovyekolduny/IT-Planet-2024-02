@@ -299,6 +299,7 @@ public class LabManager : MonoBehaviour
     public NodesCollection Nodes;
     public int PeriodicityOfCorrectNode = 10;
 
+    public LabTrackingPlayer camera;
     public GameObject Wall;
     public GameObject Hole;
     public GameObject Section;
@@ -449,6 +450,7 @@ public class LabManager : MonoBehaviour
 
         Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
+        camera.Player = _player.transform;
 
         if (_currentNode != Nodes.GetNode(NodesCount - 1))
         {

@@ -155,6 +155,7 @@ MonoBehaviour:
   NodesCount: 50
   RowCapacity: 10
   PeriodicityOfCorrectNode: 10
+  camera: {fileID: 2132991819}
   Wall: {fileID: 5610241755134622303, guid: 17435bac42e29ea4bb2d40ff7f96386e, type: 3}
   Hole: {fileID: 1968636306}
   Section: {fileID: 4464779713495560656, guid: 8fb1c26687a93324bad54993d6c2d034, type: 3}
@@ -542,6 +543,7 @@ GameObject:
   - component: {fileID: 2132991818}
   - component: {fileID: 2132991817}
   - component: {fileID: 2132991816}
+  - component: {fileID: 2132991819}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -623,6 +625,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2132991819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132991815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2820f79181fcaa499bc7ce5039cdfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 0}
+  Speed: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
