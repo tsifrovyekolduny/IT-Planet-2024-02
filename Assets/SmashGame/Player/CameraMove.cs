@@ -14,7 +14,7 @@ public class CameraMove : MonoBehaviour
     Vector3 startPosition;
     public GameObject shootingPoint;
     public GameObject Bullet;
-    public GameObject bulletScript;
+    public Camera CutSceneCamera;
     void Start()
     {
         startPosition = transform.position;
@@ -24,12 +24,15 @@ public class CameraMove : MonoBehaviour
     void TakeDamage()
     {
         hp -= 1;
-        Debug.Log(hp);
         if (hp == 0)
         {
             foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
             {
-                Destroy(o);
+                if (o.name != "CutSceneCamera")
+                {
+                    Destroy(o);
+                }
+                
             }
         }
     }
@@ -37,7 +40,10 @@ public class CameraMove : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Damage") {
-            TakeDamage();
+            bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
+            if (!isDamaged) {
+                TakeDamage();
+            }
         }
     }
 
@@ -70,7 +76,7 @@ public class CameraMove : MonoBehaviour
                 GameObject bullet = Instantiate(Bullet, shootingPoint.transform.position, transform.rotation);
                 Vector3 dir = ray.origin - hit.point;
                 dir.Normalize();
-                bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.Impulse);
+                bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
             }
         }
     }

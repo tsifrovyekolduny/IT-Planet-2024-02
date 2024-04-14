@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 5133410246026569149}
   - component: {fileID: 3552387761582834435}
   - component: {fileID: 2760362276937373897}
+  - component: {fileID: 455924380885527530}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Damage
@@ -347,6 +348,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightSource: {fileID: 7535046476491372242}
   platform: {fileID: 98557661886365408}
+--- !u!114 &455924380885527530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2754916097098968156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384a2c3d9ca446d4bba891daa9ac91c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDamaged: 0
 --- !u!1 &4202168696795876888
 GameObject:
   m_ObjectHideFlags: 0
