@@ -17,7 +17,7 @@ public class PlatformScript : MonoBehaviour
     {
         lightSourceTriggered = false;
         _lightIntencity = 2;
-        platform.GetComponent<MeshRenderer>().enabled = false;
+        
         ResetPlatform();
     }
 
@@ -30,8 +30,10 @@ public class PlatformScript : MonoBehaviour
             _lightIntencity += 0.0035f;
         }
     }
+
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         if (other.tag == "StartPlatform")
         {
             ShowPlatform();
@@ -42,27 +44,13 @@ public class PlatformScript : MonoBehaviour
 
     void ResetPlatform()
     {
-        var all = new List<GameObject>();
-        all.AddRange(GameObject.FindGameObjectsWithTag("InvinsibleToVisible").ToList());
-        all.AddRange(GameObject.FindGameObjectsWithTag("Damage").ToList());
-        Debug.Log(all);
-        foreach (GameObject obj in all)
-        {
-            obj.GetComponent<MeshRenderer>().enabled = false;
-            
-        }
-    }
+        platform.GetComponent<MeshRenderer>().enabled = false;
+        transform.GetComponent<MeshRenderer>().enabled = false;        
+    }    
 
     void ShowPlatform()
     {
-        var all = new List<GameObject>();
-        all.AddRange(GameObject.FindGameObjectsWithTag("InvinsibleToVisible").ToList());
-        all.AddRange(GameObject.FindGameObjectsWithTag("Damage").ToList());
-        Debug.Log(all);
-        foreach (GameObject obj in all)
-        {
-            obj.GetComponent<MeshRenderer>().enabled = true;
-
-        }
+        platform.GetComponent<MeshRenderer>().enabled = true;
+        transform.GetComponent<MeshRenderer>().enabled = true;
     }
 }
