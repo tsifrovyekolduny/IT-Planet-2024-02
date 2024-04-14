@@ -79,10 +79,14 @@ public class MoveChip : MonoBehaviour
                 count++;
                 if (count == 16)
                 {
-                    ui_completed.GetComponent<Text>().enabled = true;
+                    Completed();
                 }
             }
         }
+    }
+    public void Completed()
+    {
+        ui_completed.GetComponent<Text>().enabled = true;
     }
     void CalculateDirection()
     {

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class CreateBoard : MonoBehaviour
 {
-    public GameObject [] chips = new GameObject[16];
+    public GameObject[] chips = new GameObject[16];
+
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
     void Start()
     {
@@ -35,6 +37,7 @@ public class CreateBoard : MonoBehaviour
     }
     void ShowBoard()
     {
+        GlobalVars.chips = chips;
         for (int row = 0; row < 4; row++)
         {
             for (int col = 0; col < 4; col++)
