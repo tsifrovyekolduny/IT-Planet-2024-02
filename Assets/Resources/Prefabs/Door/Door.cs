@@ -12,6 +12,8 @@ public class Door : MonoBehaviour
     private bool _focused;
     private bool _hovered = false;
     public bool isOpenable = true;
+    public bool fourthDoor = false;
+    public bool finalDoor = false;
     public Animator AnimatorDoor;
     public AnimationClip AnimationClipDoor;
 
@@ -25,12 +27,18 @@ public class Door : MonoBehaviour
         {
             SetToHingeJointTarget(OpenAngle, true);
         }
+        
     }
 
     public void OnMouseOver()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable)
+        if (fourthDoor && GameManager.Instance.GetNumberOfCompletedLevels() > 0)
         {
+            isOpenable = true;
+        }
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
+        {
+          
             OpenDoor();
             
             if (!_hovered)
@@ -48,7 +56,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable)
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
             if (CanBeFocusable)
             {

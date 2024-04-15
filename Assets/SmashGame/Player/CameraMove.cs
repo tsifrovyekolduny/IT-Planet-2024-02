@@ -30,19 +30,13 @@ public class CameraMove : MonoBehaviour
         hp -= 1;
         if (hp == 0)
         {
-            foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
-            {
-                if (o.name != "CutSceneCamera")
-                {
-                    Destroy(o);
-                }
-                
-            }
+            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(hp=0);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Damage") {
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
@@ -53,12 +47,13 @@ public class CameraMove : MonoBehaviour
 
     void OnTriggerEnter(Collider otherObject)
     {
+
         if (otherObject.tag == "ResetLevel")
         {
             BackToSpawn();
         }
         if (otherObject.tag == "Endingzone") {
-            SceneManager.LoadScene("Ending");
+            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted();
         }
         
 
@@ -66,8 +61,7 @@ public class CameraMove : MonoBehaviour
 
     void BackToSpawn()
     {
-        //first.GetComponent<PlatformScript>().
-        
+
         transform.position = startPosition;
     }
 

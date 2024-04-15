@@ -241,6 +241,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: isOpenable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: AnimatorDoor
       value: 
       objectReference: {fileID: 1882576207}
@@ -309,6 +313,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+--- !u!114 &137942610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+  m_PrefabInstance: {fileID: 137942609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd3c259970655643a5ac716a4f5c540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &252533814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1437,6 +1452,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
+      propertyPath: FourthDoor
+      value: 
+      objectReference: {fileID: 137942610}
     - target: {fileID: 4447094059308535203, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -1848,4 +1867,5 @@ SceneRoots:
   - {fileID: 944654994}
   - {fileID: 1285943791}
   - {fileID: 252533815}
-
+  - {fileID: 137942609}
+  - {fileID: 1346022246}

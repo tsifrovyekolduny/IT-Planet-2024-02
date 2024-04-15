@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public bool isFinishAvalable = false;
+    public Door FourthDoor;
     [System.Serializable]
     public struct LevelsComleted
     {
@@ -75,19 +76,21 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLevel(string name)
     {
-        if (name == "Maze")
+        Debug.Log(name);
+
+        if (name == "LabLevel")
         {
             CompletedLevels.Maze = true;
         }
-        if (name == "TicTacToe")
+        if (name == "TicTacToeLevel")
         {
             CompletedLevels.TicTacToe = true;
         }
-        if (name == "TagGame")
+        if (name == "Game")
         {
             CompletedLevels.TagGame = true;
         }
-        isFinishAvalable = true;
+        FourthDoor.isOpenable = true;
         SceneManager.LoadScene("HubScene");
     }
 

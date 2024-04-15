@@ -25,6 +25,11 @@ public class ChangeSceneScript : MonoBehaviour
         GameManager.Instance.PickLevel("Game");
     }
 
+    public void ChangeToSmash()
+    {
+        GameManager.Instance.PickLevel("SmashGame");
+    }
+
     // Update is called once per frame
     void Update()
     {

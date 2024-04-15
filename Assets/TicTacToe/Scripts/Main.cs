@@ -68,7 +68,6 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
                     GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
