@@ -13,7 +13,7 @@ public class PlatformScript : MonoBehaviour
     bool lightSourceTriggered;
     private float _lightIntencity;
 
-    void Awake()
+    void Start()
     {
         lightSourceTriggered = false;
         _lightIntencity = 2;
@@ -33,7 +33,6 @@ public class PlatformScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (other.tag == "StartPlatform")
         {
             ShowPlatform();
@@ -44,13 +43,11 @@ public class PlatformScript : MonoBehaviour
 
     void ResetPlatform()
     {
-        platform.GetComponent<MeshRenderer>().enabled = false;
-        transform.GetComponent<MeshRenderer>().enabled = false;        
+        platform.GetComponent<MeshRenderer>().enabled = false;        
     }    
 
     void ShowPlatform()
     {
         platform.GetComponent<MeshRenderer>().enabled = true;
-        transform.GetComponent<MeshRenderer>().enabled = true;
     }
 }

@@ -74,7 +74,9 @@ public class CameraMove : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject bullet = Instantiate(Bullet, shootingPoint.transform.position, transform.rotation);
-                Vector3 dir = ray.origin - hit.point;
+                Vector3 testVector = shootingPoint.transform.position;
+                Debug.DrawLine(shootingPoint.transform.position, hit.point);
+                Vector3 dir = shootingPoint.transform.position - hit.point;
                 dir.Normalize();
                 bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
             }

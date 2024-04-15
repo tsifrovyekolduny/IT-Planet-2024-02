@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
@@ -40,13 +41,13 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
-                    Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }
@@ -66,12 +67,14 @@ public class Main : MonoBehaviour
                 {
                     //победа
                     Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }
@@ -90,13 +93,14 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }

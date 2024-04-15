@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 public class Node
 {
@@ -463,7 +464,7 @@ public class LabManager : MonoBehaviour
         }
         else
         {
-            // win
+            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
         }
 
     }
