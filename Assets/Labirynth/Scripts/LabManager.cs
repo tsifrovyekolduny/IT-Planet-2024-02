@@ -401,11 +401,6 @@ public class LabManager : MonoBehaviour
 
     }
 
-    GameObject GetNodeInScene(string name)
-    {
-        return GameObject.Find(name);
-    }
-
     GameObject GetNodeInScene(Node node)
     {
         return GameObject.Find(node.ToString());
@@ -444,7 +439,7 @@ public class LabManager : MonoBehaviour
     {
         Transform thisNode = GetNodeInScene(_currentNode).transform;        
         float widthOfNode = thisNode.localScale.x;
-        float depthOfNode = thisNode.localScale.z * 2;
+        float depthOfNode = thisNode.localScale.z * 4;
 
         Vector3 spawnPoint = new Vector3(thisNode.position.x, thisNode.position.y, thisNode.position.z - depthOfNode);
         Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);

@@ -25,11 +25,23 @@ public class Door : MonoBehaviour
         OpenDoor();
     }
 
+    void UnFocusOtherDoors()
+    {
+
+    }
+
     public void OnMouseDown()
     {
         if (CanBeFocusable)
         {
             _focused = true;
+            foreach (Door door in GameObject.FindObjectsOfType<Door>())
+            {
+                if(door != this)
+                {
+                    door.CloseDoor();
+                }
+            }
             if (AnimatorDoor != null)
             {
                 AnimatorDoor.Play(AnimationClipDoor.name);
