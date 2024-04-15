@@ -157,6 +157,11 @@ MonoBehaviour:
   OpenedOnStart: 0
   OpeningSpeed: 30
   CanBeFocusable: 0
+  AnimatorDoor: {fileID: 0}
+  AnimationClipDoor: {fileID: 0}
+  _openSoundClip: {fileID: 8300000, guid: 7a1cc8fd3f73625429d3d7abdda5e464, type: 3}
+  _closeSoundClip: {fileID: 8300000, guid: f49a57e10b67c5445af6bc70455a3570, type: 3}
+  _enterSoundClip: {fileID: 8300000, guid: cd208ef89466d0d46b3aaa0c936c9178, type: 3}
 --- !u!65 &-604033780720757804
 BoxCollider:
   m_ObjectHideFlags: 0

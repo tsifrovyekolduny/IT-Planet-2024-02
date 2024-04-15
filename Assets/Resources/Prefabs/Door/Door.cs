@@ -9,8 +9,13 @@ public class Door : MonoBehaviour
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
     private bool _focused;
+    private bool _hovered = false;
     public Animator AnimatorDoor;
     public AnimationClip AnimationClipDoor;
+
+    [SerializeField] private AudioClip _openSoundClip;
+    [SerializeField] private AudioClip _closeSoundClip;
+    [SerializeField] private AudioClip _enterSoundClip;
 
     public void Awake()
     {
@@ -23,6 +28,13 @@ public class Door : MonoBehaviour
     public void OnMouseOver()
     {
         OpenDoor();
+
+        // звук
+        if (!_hovered)
+        {
+            SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+            _hovered = true;
+        }
     }
 
     public void OnMouseDown()
@@ -33,6 +45,9 @@ public class Door : MonoBehaviour
             if (AnimatorDoor != null)
             {
                 AnimatorDoor.Play(AnimationClipDoor.name);
+
+                // звук
+                SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
             }
             
         }        
@@ -43,6 +58,10 @@ public class Door : MonoBehaviour
         if (!_focused)
         {
             CloseDoor();
+
+            // звук
+            SoundManager.Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
+            _hovered = false;
         }
 
     }
