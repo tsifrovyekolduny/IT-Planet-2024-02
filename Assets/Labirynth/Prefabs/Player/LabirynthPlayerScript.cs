@@ -53,17 +53,11 @@ public class LabirynthPlayerScript : MonoBehaviour
     // Update is called once per frame
     public IEnumerator MoveSelf(Vector3 point, string nameOfDestinationGameObject = "")
     {
-        float counter = 0;
         Vector3 newPosition = new Vector3(point.x, transform.position.y, transform.position.z);
 
-        while (counter < Speed)
+        while(transform.position.x != point.x)
         {
-            counter += Time.deltaTime;
-            Vector3 currentPos = transform.position;
-
-            float time = Vector3.Distance(currentPos, point) / (Speed - counter) * Time.deltaTime;
-
-            transform.position = Vector3.MoveTowards(currentPos, newPosition, time);
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, Speed * Time.deltaTime);
 
             yield return null;
         }
@@ -73,7 +67,10 @@ public class LabirynthPlayerScript : MonoBehaviour
             HoleEnteredEvent.Invoke(nameOfDestinationGameObject);
         }
 
-        TurnToDirection(RightNode.transform.position);
+        if(RightNode != null)
+        {
+            TurnToDirection(RightNode.transform.position);
+        }
     }
 
     void Update()
