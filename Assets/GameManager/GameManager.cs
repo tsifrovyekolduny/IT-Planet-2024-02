@@ -39,13 +39,13 @@ public class GameManager : MonoBehaviour
 
     private void InitializeManager()
     {
-        
+        CompletedLevels = new LevelsComleted(false, false, false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        CompletedLevels = new LevelsComleted(false, false, false);
+        
     }
 
     public void CompleteLevel(string name)
