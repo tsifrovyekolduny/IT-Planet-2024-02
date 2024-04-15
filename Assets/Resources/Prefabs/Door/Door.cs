@@ -32,7 +32,7 @@ public class Door : MonoBehaviour
         // звук
         if (!_hovered)
         {
-            SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+            SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
             _hovered = true;
         }
     }
@@ -59,10 +59,11 @@ public class Door : MonoBehaviour
                 AnimatorDoor.Play(AnimationClipDoor.name);
 
                 // звук
-                SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+                SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+
+                DestroyImmediate(GameObject.Find("MusicManager"));
             }
-            
-        }        
+        }       
     }
 
     public void OnMouseExit()
@@ -72,7 +73,7 @@ public class Door : MonoBehaviour
             CloseDoor();
 
             // звук
-            SoundManager.Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
+            SoundManager.s_Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
             _hovered = false;
         }
 
