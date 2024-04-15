@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
@@ -30,11 +31,14 @@ public class MoveChip : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!can_move)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            FindOnBoard();
-            CalculateDirection();
-        }
+            if (!can_move)
+            {
+                FindOnBoard();
+                CalculateDirection();
+            }
+        }        
     }
 
     void PlaySound()

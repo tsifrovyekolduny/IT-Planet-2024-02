@@ -16,13 +16,31 @@ public class GameManager : MonoBehaviour
 
         public LevelsComleted(bool maze, bool ticTacToe, bool tagGame)
         {
-            Maze = maze;
+            Maze = maze;    
             TicTacToe = ticTacToe;
             TagGame = tagGame;
         }
      }
     LevelsComleted CompletedLevels;
 
+    public int GetNumberOfCompletedLevels()
+    {
+        int counter = 0;
+        if (CompletedLevels.Maze)
+        {
+            ++counter;
+        }
+        if (CompletedLevels.TicTacToe)
+        {
+            ++counter;
+        }
+        if (CompletedLevels.TagGame)
+        {
+            ++counter;
+        }
+
+        return counter;
+    }
 
     void Awake()
     {
