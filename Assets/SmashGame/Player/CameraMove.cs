@@ -8,17 +8,21 @@ using UnityEngine.UIElements;
 public class CameraMove : MonoBehaviour
 {
     public int hp = 3;
+    public GameObject first, second, third, fourth;
+    public GameObject[] prefabs;
     public float speed = 1.0f;
     public float pushForce;
     public float time;
     Vector3 startPosition;
     public GameObject shootingPoint;
     public GameObject Bullet;
+    public GameObject[] respawns;
     public Camera CutSceneCamera;
     void Start()
     {
         startPosition = transform.position;
         time = Time.deltaTime;
+        respawns = GameObject.FindGameObjectsWithTag("PrefabObstacles");
     }
 
     void TakeDamage()
@@ -59,6 +63,11 @@ public class CameraMove : MonoBehaviour
 
     void BackToSpawn()
     {
+        
+        foreach (GameObject spawnPoint in respawns)
+        {
+
+        }   
         transform.position = startPosition;
     }
 

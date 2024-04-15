@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance = null;
+    public static GameManager Instance;
+    public bool isFinishAvalable = false;
     [System.Serializable]
     public struct LevelsComleted
     {
@@ -15,15 +16,33 @@ public class GameManager : MonoBehaviour
 
         public LevelsComleted(bool maze, bool ticTacToe, bool tagGame)
         {
-            Maze = maze;
+            Maze = maze;    
             TicTacToe = ticTacToe;
             TagGame = tagGame;
         }
      }
     LevelsComleted CompletedLevels;
 
+    public int GetNumberOfCompletedLevels()
+    {
+        int counter = 0;
+        if (CompletedLevels.Maze)
+        {
+            ++counter;
+        }
+        if (CompletedLevels.TicTacToe)
+        {
+            ++counter;
+        }
+        if (CompletedLevels.TagGame)
+        {
+            ++counter;
+        }
 
-    void Start()
+        return counter;
+    }
+
+    void Awake()
     {
         if (Instance == null)
         {
@@ -40,6 +59,12 @@ public class GameManager : MonoBehaviour
     private void InitializeManager()
     {
         CompletedLevels = new LevelsComleted(false, false, false);
+        isFinishAvalable = false;
+    }
+
+    public bool IsFinishAvalable()
+    {
+        return isFinishAvalable;
     }
 
     // Update is called once per frame
@@ -62,6 +87,7 @@ public class GameManager : MonoBehaviour
         {
             CompletedLevels.TagGame = true;
         }
+        isFinishAvalable = true;
         SceneManager.LoadScene("HubScene");
     }
 

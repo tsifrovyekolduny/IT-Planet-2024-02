@@ -298,7 +298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_Name
-      value: Door (3)
+      value: FourthDoor
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_IsActive
@@ -1101,7 +1101,7 @@ GameObject:
   - component: {fileID: 1346022244}
   - component: {fileID: 1346022243}
   m_Layer: 0
-  m_Name: Sphere (3)
+  m_Name: FourthDoorFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1186,8 +1186,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1346022242}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -353.85452, y: -1.832242, z: -182.90546}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -353.85452, y: -1.832241, z: -182.90546}
   m_LocalScale: {x: 1.9970943, y: 0.019970942, z: 1.9970943}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1838,15 +1838,14 @@ SceneRoots:
   - {fileID: 533153650}
   - {fileID: 110972188}
   - {fileID: 1040478843}
-  - {fileID: 1346022246}
   - {fileID: 2141180593}
   - {fileID: 521373178}
   - {fileID: 458186957}
   - {fileID: 1349339107}
-  - {fileID: 137942609}
   - {fileID: 1801375973}
   - {fileID: 941892736}
   - {fileID: 1817620883}
   - {fileID: 944654994}
   - {fileID: 1285943791}
   - {fileID: 252533815}
+

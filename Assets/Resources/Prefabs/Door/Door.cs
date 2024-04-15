@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Door : MonoBehaviour
 {
@@ -27,14 +28,20 @@ public class Door : MonoBehaviour
 
     public void OnMouseOver()
     {
-        OpenDoor();
-
-        // çâóê
-        if (!_hovered)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
-            _hovered = true;
+
+            OpenDoor();
+
+            // Ã§Ã¢Ã³Ãª
+            if (!_hovered)
+            {
+                SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+                _hovered = true;
+            }
+
         }
+        
     }
 
     void UnFocusOtherDoors()
@@ -44,37 +51,43 @@ public class Door : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if (CanBeFocusable)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            _focused = true;
-            foreach (Door door in GameObject.FindObjectsOfType<Door>())
+            if (CanBeFocusable)
             {
-                if(door != this)
+                _focused = true;
+                foreach (Door door in GameObject.FindObjectsOfType<Door>())
                 {
-                    door.CloseDoor();
+                    if (door != this)
+                    {
+                        door.CloseDoor();
+                    }
                 }
-            }
-            if (AnimatorDoor != null)
-            {
-                AnimatorDoor.Play(AnimationClipDoor.name);
+                if (AnimatorDoor != null)
+                {
+                    AnimatorDoor.Play(AnimationClipDoor.name);
 
-                // çâóê
+                    // Ã§Ã¢Ã³Ãª
+                    SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+                }
+
+
+                // Ã§Ã¢Ã³Ãª
                 SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
             }
         }       
+
     }
 
     public void OnMouseExit()
     {
-        if (!_focused)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            CloseDoor();
-
-            // çâóê
-            SoundManager.s_Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
-            _hovered = false;
+            if (!_focused)
+            {
+                CloseDoor();
         }
 
     }
