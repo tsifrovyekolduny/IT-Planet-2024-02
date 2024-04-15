@@ -37,9 +37,7 @@ public class Door : MonoBehaviour
                 SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
                 _hovered = true;
             }
-
-        }
-        
+        }        
     }
 
     void UnFocusOtherDoors()

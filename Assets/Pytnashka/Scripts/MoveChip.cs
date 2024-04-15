@@ -14,7 +14,7 @@ public class MoveChip : MonoBehaviour
     private Vector3 empty_position = new Vector3(0,0,0);
 
     [SerializeField] private AudioClip _moveSound;
-
+    [SerializeField]
     private bool can_move;
     void Start()
     {
@@ -33,14 +33,13 @@ public class MoveChip : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
+        
             if (!can_move)
             {
                 FindOnBoard();
                 CalculateDirection();
             }
-        }        
+                
     }
 
     void PlaySound()
