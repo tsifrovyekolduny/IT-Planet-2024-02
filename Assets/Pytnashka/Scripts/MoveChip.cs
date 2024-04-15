@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
 {
@@ -10,16 +11,14 @@ public class MoveChip : MonoBehaviour
     private int col_position;
     private int speed;
     private Vector3 empty_position = new Vector3(0,0,0);
-    private GameObject ui_motion;
-    private GameObject ui_completed;
 
     private bool can_move;
     void Start()
     {
         speed = 2;
         number_chip = int.Parse(gameObject.name);
-        ui_motion = GameObject.Find("Motion");
-        ui_completed = GameObject.Find("Completed");
+        // ui_motion = GameObject.Find("Motion");
+        // ui_completed = GameObject.Find("Completed");
     }
     void Update()
     {
@@ -41,12 +40,8 @@ public class MoveChip : MonoBehaviour
     void PlaySound()
     {
         GetComponent<AudioSource>().Play();
-    }
-    void MotionCountPlus()
-    {
-        Global.count++;
-        ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.count.ToString();
-    }
+    }    
+
     void MoveChipOnBoard()
     {
         if (transform.position != empty_position)
@@ -55,8 +50,7 @@ public class MoveChip : MonoBehaviour
         }
         else
         {
-            can_move = false;
-            MotionCountPlus();
+            can_move = false;     
             CheckOnComplete();
         }
     }
@@ -86,7 +80,7 @@ public class MoveChip : MonoBehaviour
     }
     public void Completed()
     {
-        ui_completed.GetComponent<Text>().enabled = true;
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
     }
     void CalculateDirection()
     {
