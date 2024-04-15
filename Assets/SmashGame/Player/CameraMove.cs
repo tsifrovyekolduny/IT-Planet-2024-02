@@ -9,7 +9,6 @@ public class CameraMove : MonoBehaviour
 {
     public int hp = 3;
     public GameObject first, second, third, fourth;
-    public GameObject[] prefabs;
     public float speed = 1.0f;
     public float pushForce;
     public float time;
@@ -22,7 +21,6 @@ public class CameraMove : MonoBehaviour
     {
         startPosition = transform.position;
         time = Time.deltaTime;
-        respawns = GameObject.FindGameObjectsWithTag("PrefabObstacles");
     }
 
     void TakeDamage()
@@ -63,11 +61,8 @@ public class CameraMove : MonoBehaviour
 
     void BackToSpawn()
     {
+        first.GetComponent<PlatformScript>().
         
-        foreach (GameObject spawnPoint in respawns)
-        {
-
-        }   
         transform.position = startPosition;
     }
 

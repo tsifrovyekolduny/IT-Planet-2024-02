@@ -19,10 +19,12 @@ public class FourthDoor : MonoBehaviour
             door.gameObject.GetComponent<GameObject>().SetActive(false);
         }
     }
+    
+
 
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 }

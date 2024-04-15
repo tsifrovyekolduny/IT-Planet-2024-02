@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Experimental.GlobalIllumination;
 using static UnityEditor.PlayerSettings;
 
@@ -12,12 +13,16 @@ public class PlatformScript : MonoBehaviour
     public GameObject platform;
     bool lightSourceTriggered;
     private float _lightIntencity;
+    public GameObject spawnPoint;
+    public GameObject[] prefabs;
+    private int randomNumber;
+    public GameObject obstacle;
 
     void Start()
     {
         lightSourceTriggered = false;
         _lightIntencity = 2;
-        
+
         ResetPlatform();
     }
 
@@ -41,13 +46,16 @@ public class PlatformScript : MonoBehaviour
         }
     }
 
-    void ResetPlatform()
+    public void ResetPlatform()
     {
+
         platform.GetComponent<MeshRenderer>().enabled = false;        
     }    
 
-    void ShowPlatform()
+    public void ShowPlatform()
     {
+        GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
+        Instantiate(prefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
         platform.GetComponent<MeshRenderer>().enabled = true;
     }
 }

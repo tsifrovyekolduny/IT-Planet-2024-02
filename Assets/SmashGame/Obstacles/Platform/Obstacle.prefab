@@ -121,6 +121,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightSource: {fileID: 7535046476491372242}
   platform: {fileID: 8479766096577632644}
+  spawnPoint: {fileID: 7779091431920448389}
+  prefabs:
+  - {fileID: 574040957508782781, guid: 6194a2f51edac0f438a58c24111b636f, type: 3}
+  - {fileID: 5757763271755072534, guid: 26b649efc21aaa549ab4ee37f7820683, type: 3}
+  obstacle: {fileID: 0}
 --- !u!54 &6061611255220445986
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -302,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 7779091431920448389}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.06, y: 0.09, z: 0.12}
+  m_LocalPosition: {x: 0.28, y: 0.98, z: -0.82}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

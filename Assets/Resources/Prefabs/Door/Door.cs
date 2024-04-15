@@ -11,6 +11,7 @@ public class Door : MonoBehaviour
     public bool CanBeFocusable;
     private bool _focused;
     private bool _hovered = false;
+    public bool isOpenable = true;
     public Animator AnimatorDoor;
     public AnimationClip AnimationClipDoor;
 
@@ -28,7 +29,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseOver()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable)
         {
             OpenDoor();
 
@@ -49,7 +50,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable)
         {
             if (CanBeFocusable)
             {
