@@ -299,8 +299,8 @@ public class LabManager : MonoBehaviour
     public NodesCollection Nodes;
     public int PeriodicityOfCorrectNode = 10;
 
-    public LabTrackingPlayer camera;
-    public GameObject Wall;
+    public LabTrackingPlayer Camera;
+    public List<GameObject> Walls;
     public GameObject Hole;
     public GameObject Section;
     public GameObject SectionSpawnPoint;
@@ -331,8 +331,8 @@ public class LabManager : MonoBehaviour
 
             float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
             var newSectionPosition = new Vector3(Plane.transform.position.x,
-                currentHeight, 
-                Plane.transform.position.z - 0.2f);
+                currentHeight,
+                Plane.transform.position.z - 0.5f);
             GameObject newSection = Instantiate(Section, newSectionPosition, Quaternion.identity, Plane.transform);
             newSection.transform.localScale = new Vector3(xSize / 2, newSection.transform.localScale.y, newSection.transform.localScale.z);
 
@@ -340,14 +340,12 @@ public class LabManager : MonoBehaviour
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
                 Node node = section[nodeIndex];
-                GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
+                GameObject nodePrefab = node.IsBlocked ? Walls[Random.Range(0, Walls.Count)] : Hole;
 
                 float currentNodeOffset = nodeOffset * nodeIndex;
                 var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
                     currentHeight + PlaceOn(nodePrefab.transform, newSection.transform),
-                    Plane.transform.position.z);
-
-
+                    newSection.transform.position.z);
 
                 GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
 
@@ -378,7 +376,7 @@ public class LabManager : MonoBehaviour
 
         DrawAll();
         GameObject firstNodeObject = GetNodeInScene(Nodes.GetNode(0));
-        DrawPlayer(firstNodeObject.transform.position);
+        DrawPlayer();
     }
 
     void InitBestOption(Node destinationNode)
@@ -417,7 +415,6 @@ public class LabManager : MonoBehaviour
     {
         MeshRenderer meshR;
         meshR = gmObj.GetComponent<MeshRenderer>();
-        Debug.Log($"{gmObj.name} {meshR.ToString()}");
         if (meshR == null)
         {
             List<MeshRenderer> meshs = new List<MeshRenderer>();
@@ -430,31 +427,33 @@ public class LabManager : MonoBehaviour
 
     float PlaceOn(Transform child, Transform platform)
     {
-        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2;
+        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2 - 0.03f;
 
         return halfHeightOfPlatform;
     }
 
     void ChangeFocusableForNodesIn(List<Node> subSection, bool focusable)
     {
-        foreach(Node node in subSection)
+        foreach (Node node in subSection)
         {
             GetNodeInScene(node).GetComponent<Door>().CanBeFocusable = focusable;
         }
     }
 
-    void DrawPlayer(Vector3 spawnPoint)
+    void DrawPlayer()
     {
-        Transform thisNode = GetNodeInScene(_currentNode).transform;
-        float widthOfNode = GetBoundsOf(thisNode).size.x;
+        Transform thisNode = GetNodeInScene(_currentNode).transform;        
+        float widthOfNode = thisNode.localScale.x;
+        float depthOfNode = thisNode.localScale.z * 2;
 
+        Vector3 spawnPoint = new Vector3(thisNode.position.x, thisNode.position.y, thisNode.position.z - depthOfNode);
         Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
-        camera.Player = _player.transform;
+        Camera.Player = _player.transform;
 
         if (_currentNode != Nodes.GetNode(NodesCount - 1))
         {
-            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);            
+            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
             Node rightNode = _bestOptionDict[indexOfSubSection];
             GameObject rightNodeGameObject = GetNodeInScene(rightNode);
 
@@ -487,12 +486,9 @@ public class LabManager : MonoBehaviour
 
         Destroy(_player);
 
-        GameObject endNodeGameObject = GetNodeInScene(endNode);
-        Vector3 newPosition = new Vector3(endNodeGameObject.transform.position.x,
-            endNodeGameObject.transform.position.y,
-            SectionSpawnPoint.transform.position.z);
+        GameObject endNodeGameObject = GetNodeInScene(endNode);        
 
-        DrawPlayer(newPosition);
+        DrawPlayer();
     }
     void Update()
     {
