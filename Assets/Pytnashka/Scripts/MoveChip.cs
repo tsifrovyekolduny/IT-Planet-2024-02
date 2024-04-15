@@ -13,10 +13,12 @@ public class MoveChip : MonoBehaviour
     private int speed;
     private Vector3 empty_position = new Vector3(0,0,0);
 
+    [SerializeField] private AudioClip _moveSound;
+
     private bool can_move;
     void Start()
     {
-        speed = 2;
+        speed = 4;
         number_chip = int.Parse(gameObject.name);
         // ui_motion = GameObject.Find("Motion");
         // ui_completed = GameObject.Find("Completed");
@@ -43,7 +45,7 @@ public class MoveChip : MonoBehaviour
 
     void PlaySound()
     {
-        GetComponent<AudioSource>().Play();
+        SoundManager.s_Instance.PlayAudioClip(_moveSound, transform, 1f);
     }    
 
     void MoveChipOnBoard()
