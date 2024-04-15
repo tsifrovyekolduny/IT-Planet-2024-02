@@ -9,6 +9,8 @@ public class Door : MonoBehaviour
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
     private bool _focused;
+    public Animator AnimatorDoor;
+    public AnimationClip AnimationClipDoor;
 
     public void Awake()
     {
@@ -28,6 +30,11 @@ public class Door : MonoBehaviour
         if (CanBeFocusable)
         {
             _focused = true;
+            if (AnimatorDoor != null)
+            {
+                AnimatorDoor.Play(AnimationClipDoor.name);
+            }
+            
         }        
     }
 
