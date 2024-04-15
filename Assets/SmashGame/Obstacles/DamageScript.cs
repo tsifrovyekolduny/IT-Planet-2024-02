@@ -15,7 +15,6 @@ public class DamageScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(isDamaged);
         if (collision.gameObject.tag == "Bullet") {
             isDamaged = true;
             foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
@@ -23,11 +22,13 @@ public class DamageScript : MonoBehaviour
                 child.AddComponent<Rigidbody>(); 
                 child.AddComponent<MeshCollider>().convex = true;
                 MeshRenderer renderer = child.GetComponent<MeshRenderer>();
-                if (renderer != null)
+                if (renderer != null && brokenStateMaterial != null)
                 {
                     renderer.material = brokenStateMaterial;
                 }
+                Destroy(child.gameObject, 5);
             }
+            Destroy(gameObject, 5);
         }
     }
 

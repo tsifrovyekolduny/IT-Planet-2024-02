@@ -7,6 +7,12 @@ TagManager:
   - Hole
   - Section
   - Wall
+  - ResetLevel
+  - InvinsibleToVisible
+  - Damage
+  - Bullet
+  - StartPlatform
+  - Obstacles
   layers:
   - Default
   - TransparentFX
