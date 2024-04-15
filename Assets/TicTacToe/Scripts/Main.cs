@@ -10,8 +10,10 @@ public class Main : MonoBehaviour
 
     private int[,] _map = new int[10, 10];
 
-    [SerializeField]private GameObject _greenObject;
-    [SerializeField]private GameObject _redObject;
+    [SerializeField] private GameObject _greenObject;
+    [SerializeField] private GameObject _redObject;
+
+    [SerializeField] private AudioClip[] _glassFallSound;
 
     public GameObject PlayerSpawnpoint;
     public GameObject EnemySpawnpoint;
@@ -125,6 +127,8 @@ public class Main : MonoBehaviour
 
             yield return null;
         }
+
+        SoundManager.s_Instance.PlayAudioClip(_glassFallSound, transform, 1f);
     }
 
     public IEnumerator SpawnObjects(float time)
