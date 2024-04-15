@@ -30,13 +30,11 @@ public class Door : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-
             OpenDoor();
-
-            // çâóê
+            
             if (!_hovered)
             {
-                SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+                SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
                 _hovered = true;
             }
 
@@ -66,13 +64,9 @@ public class Door : MonoBehaviour
                 if (AnimatorDoor != null)
                 {
                     AnimatorDoor.Play(AnimationClipDoor.name);
-
-                    // çâóê
-                    SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
                 }
 
-
-                // çâóê
+                
                 SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
@@ -88,6 +82,7 @@ public class Door : MonoBehaviour
             if (!_focused)
             {
                 CloseDoor();
+            }
         }
 
     }
