@@ -4,6 +4,7 @@ using UnityEditor.PackageManager;
 using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class CameraMove : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class CameraMove : MonoBehaviour
     public GameObject Bullet;
     public GameObject[] respawns;
     public Camera CutSceneCamera;
+    
     void Start()
     {
         startPosition = transform.position;
@@ -55,13 +57,16 @@ public class CameraMove : MonoBehaviour
         {
             BackToSpawn();
         }
+        if (otherObject.tag == "Endingzone") {
+            SceneManager.LoadScene("Ending");
+        }
         
 
     }
 
     void BackToSpawn()
     {
-        first.GetComponent<PlatformScript>().
+        //first.GetComponent<PlatformScript>().
         
         transform.position = startPosition;
     }
