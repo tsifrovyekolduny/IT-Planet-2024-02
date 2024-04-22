@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Experimental.GlobalIllumination;
-using static UnityEditor.PlayerSettings;
+
 
 public class PlatformScript : MonoBehaviour
 {

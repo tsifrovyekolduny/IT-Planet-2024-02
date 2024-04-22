@@ -241,6 +241,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: fourthDoor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: isOpenable
       value: 0
       objectReference: {fileID: 0}

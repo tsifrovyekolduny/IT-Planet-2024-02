@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.SceneManagement;
 
 public class CameraMove : MonoBehaviour
 {
@@ -36,7 +30,6 @@ public class CameraMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Damage") {
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
@@ -61,15 +54,23 @@ public class CameraMove : MonoBehaviour
 
     void BackToSpawn()
     {
-
+        first.GetComponent<PlatformScript>().ResetPlatform();
+        second.GetComponent<PlatformScript>().ResetPlatform();
+        third.GetComponent<PlatformScript>().ResetPlatform();
+        fourth.GetComponent<PlatformScript>().ResetPlatform();
         transform.position = startPosition;
     }
 
 
 
-    void Update()
+    void FixedUpdate()
     {
         gameObject.transform.Translate(Vector3.forward * speed * time);
+        
+    }
+
+    private void Update()
+    {
         if (Input.GetMouseButtonUp(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
