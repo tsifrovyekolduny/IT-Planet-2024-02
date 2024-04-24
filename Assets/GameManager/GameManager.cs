@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
             TagGame = tagGame;
         }
      }
-    LevelsComleted CompletedLevels;
+    public LevelsComleted CompletedLevels;
 
     public int GetNumberOfCompletedLevels()
     {
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CompleteLevel(string name)
+    public void CompleteLevel(string name, float timeAfterEnd = 10f)
     {
         Debug.Log(name);
 
@@ -91,6 +91,11 @@ public class GameManager : MonoBehaviour
             CompletedLevels.TagGame = true;
         }
         FourthDoor.isOpenable = true;
+        Invoke("BackToHub", timeAfterEnd);
+    }
+
+    void BackToHub()
+    {
         SceneManager.LoadScene("HubScene");
     }
 
