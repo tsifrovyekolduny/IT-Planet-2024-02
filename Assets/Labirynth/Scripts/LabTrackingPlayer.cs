@@ -5,22 +5,49 @@ using UnityEngine;
 public class LabTrackingPlayer : MonoBehaviour
 {
     public Transform Player;
+    public Transform Heart;
+
+    private bool rightMouseButtonOnHold = false;
+
     Vector3 _startPosition;
     public float Speed = 10f;
     [Range(0f, 1f)]
-    public float lerpShift = 0.1f;
+    public float lerpShiftX = 0.1f;
+    [Range(0f, 1f)]
+    public float lerpShiftY = 0.1f;
     void Start()
     {
         _startPosition = transform.position;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        if(Player != null)
+        if (Input.GetMouseButtonDown(1))
         {
-            float lerpedX = Mathf.Lerp(_startPosition.x, Player.position.x, lerpShift);
-            float lerpedY = Mathf.Lerp(_startPosition.y, Player.position.y, lerpShift);
+            rightMouseButtonOnHold = true;
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            rightMouseButtonOnHold = false;
+        }
+
+        if (Player != null)
+        {
+            Transform trackingObject;
+
+            if (rightMouseButtonOnHold)
+            {
+                trackingObject = Heart;
+            }
+            else
+            {
+                trackingObject = Player;
+            }
+
+            float lerpedX = Mathf.Lerp(_startPosition.x, trackingObject.position.x, lerpShiftX);
+            float lerpedY = Mathf.Lerp(_startPosition.y, trackingObject.position.y, lerpShiftY);
 
             Vector3 lerpedPosition = new Vector3(lerpedX,  lerpedY, transform.position.z);
 

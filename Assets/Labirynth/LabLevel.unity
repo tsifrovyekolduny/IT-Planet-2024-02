@@ -279,7 +279,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1510953487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-
 --- !u!1 &1408371753
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +522,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -604033780720757804, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.3065732
+      objectReference: {fileID: 0}
+    - target: {fileID: -604033780720757804, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: m_Center.x
+      value: -0.047301807
+      objectReference: {fileID: 0}
     - target: {fileID: 5483919615852281613, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.61600304
@@ -698,4 +705,4 @@ SceneRoots:
   - {fileID: 1510953487}
   - {fileID: 1542031684}
   - {fileID: 1408371755}
-
+  - {fileID: 526733944}
