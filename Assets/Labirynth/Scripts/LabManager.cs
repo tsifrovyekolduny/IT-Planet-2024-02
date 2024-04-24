@@ -300,6 +300,8 @@ public class LabManager : MonoBehaviour
     public NodesCollection Nodes;
     public int PeriodicityOfCorrectNode = 10;
 
+    public float TimeAfterEnd = 30f;
+
     public LabTrackingPlayer Camera;
     public List<GameObject> Walls;
     public GameObject Hole;
@@ -490,7 +492,7 @@ public class LabManager : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
+            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, TimeAfterEnd);
         }
 
     }
