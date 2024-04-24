@@ -7,6 +7,15 @@ TagManager:
   - Hole
   - Section
   - Wall
+  - ResetLevel
+  - InvinsibleToVisible
+  - Damage
+  - Bullet
+  - StartPlatform
+  - Obstacles
+  - PrefabObstacles
+  - Endingzone
+  - ForFinal
   layers:
   - Default
   - TransparentFX

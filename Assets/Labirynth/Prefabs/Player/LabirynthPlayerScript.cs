@@ -2,112 +2,110 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class LabirynthPlayerScript : MonoBehaviour
 {
     public UnityEvent<string> HoleEnteredEvent;
     public float Speed = 10f;
     public GameObject RightNode;
-    // public List<Node> SubSection;
-    // public Node EasiestNode;
+    private Animator _animator;
 
-    Vector3 _destination;
     bool _directionToHole = false;
     [SerializeField]
-    int direction = 1;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-
+        _animator = GetComponent<Animator>();
     }
 
-    bool IsObstacleOnWay(Vector3 destination)
+    static bool IsObstacleOnWay(Transform player, Vector3 destination)
     {
-        // RaycastHit hit;
+        float distance = Mathf.Abs((destination - player.transform.position).x);
 
-        float distance = Mathf.Abs((destination - transform.position).x);
-
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.right, distance);
-        foreach(var hit in hits)
+        RaycastHit[] hits = Physics.RaycastAll(player.transform.position, player.transform.right, distance);
+        foreach (var hit in hits)
         {
             Debug.Log("hitted: " + hit.transform.gameObject.name);
-            if(hit.transform.tag == "Wall")
+            if (hit.transform.tag == "Wall")
             {
                 return true;
             }
-        }            
+        }
 
         return false;
     }
 
     public void TurnToDirection(Vector3 destination)
-    {        
+    {
         if (transform.position.x < destination.x)
         {
-            //direction = 1;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
-            //direction = -1;
         }
     }
 
-    // Update is called once per frame
+    public void StateWalkAnimation(bool value)
+    {
+        _animator.SetBool("IsMoving", value);
+    }
+
     public IEnumerator MoveSelf(Vector3 point, string nameOfDestinationGameObject = "")
     {
-        float counter = 0;
+        StateWalkAnimation(true);
         Vector3 newPosition = new Vector3(point.x, transform.position.y, transform.position.z);
 
-        while (counter < Speed)
+        while (transform.position.x != point.x)
         {
-            counter += Time.deltaTime;
-            Vector3 currentPos = transform.position;
-
-            float time = Vector3.Distance(currentPos, point) / (Speed - counter) * Time.deltaTime;
-
-            transform.position = Vector3.MoveTowards(currentPos, newPosition, time);
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, Speed * Time.deltaTime);
 
             yield return null;
         }
 
+        StateWalkAnimation(false);
         if (_directionToHole && nameOfDestinationGameObject != "")
         {
             HoleEnteredEvent.Invoke(nameOfDestinationGameObject);
         }
-
-        TurnToDirection(RightNode.transform.position);
+        if (RightNode != null)
+        {
+            TurnToDirection(RightNode.transform.position);
+        }
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100f))
+            if (Input.GetMouseButtonDown(0))
             {
-                Transform hittedObject = hit.transform;
-                if (hittedObject.tag == "Section" || hittedObject.tag == "Hole")
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 100f))
                 {
-                    TurnToDirection(hit.point);
-                    if (!IsObstacleOnWay(hit.point))
+                    Transform hittedObject = hit.transform;
+                    if (hittedObject.tag == "Section" || hittedObject.tag == "Hole")
                     {
-                        StopAllCoroutines();                        
+                        TurnToDirection(hit.point);
+                        if (!IsObstacleOnWay(transform, hit.point))
+                        {
+                            StopAllCoroutines();
 
-                        StartCoroutine(MoveSelf(hit.point, hit.transform.gameObject.name));
+                            StartCoroutine(MoveSelf(hit.point, hit.transform.gameObject.name));
+                        }
+
+                        _directionToHole = false;
                     }
-                    
-
-                    _directionToHole = false;
-                }
-                if (hittedObject.tag == "Hole")
-                {
-                    _directionToHole = true;                    
+                    if (hittedObject.tag == "Hole")
+                    {
+                        _directionToHole = true;
+                    }
                 }
             }
-        }
+        }        
     }
 }

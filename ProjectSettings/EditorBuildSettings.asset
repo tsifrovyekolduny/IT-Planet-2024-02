@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Pytnashka/Start.unity
+    guid: 6939e45b1bb8d934d93883f1fbe1ec17
+  - enabled: 1
+    path: Assets/Hub/HubScene.unity
+    guid: f036d2de03c854547a8ebb96f9a2a47f
+  - enabled: 1
+    path: Assets/Labirynth/LabLevel.unity
+    guid: b4ef6297a99c8ac40b629ee284ddec28
+  - enabled: 1
+    path: Assets/TicTacToe/Scenes/TicTacToeLevel.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Pytnashka/Game.unity
+    guid: dd5c3b00210e8b847a459ec389e22234
+  - enabled: 1
+    path: Assets/SmashGame/SmashGame.unity
+    guid: b957e914384d8cf45b3af9e2a91516ad
   m_configObjects: {}
