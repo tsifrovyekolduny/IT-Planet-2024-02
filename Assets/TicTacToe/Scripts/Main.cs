@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class Main : MonoBehaviour
 
     private int[,] _map = new int[10, 10];
 
-    [SerializeField]private GameObject _greenObject;
-    [SerializeField]private GameObject _redObject;
+    [SerializeField] private GameObject _greenObject;
+    [SerializeField] private GameObject _redObject;
+
+    [SerializeField] private AudioClip[] _glassFallSound;
 
     public GameObject PlayerSpawnpoint;
     public GameObject EnemySpawnpoint;
@@ -40,13 +43,13 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
-                    Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }
@@ -65,13 +68,14 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }
@@ -90,13 +94,14 @@ public class Main : MonoBehaviour
                 if (controlSumm == 5)
                 {
                     //победа
-                    Debug.Log("good result");
+                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
                     return 1;
                 }
                 else if (controlSumm == -5)
                 {
                     //слив
                     Debug.Log("bad result");
+                    GameManager.Instance.CompleteLevel("");
                     return -1;
                 }
             }
@@ -121,6 +126,8 @@ public class Main : MonoBehaviour
 
             yield return null;
         }
+
+        SoundManager.s_Instance.PlayAudioClip(_glassFallSound, transform, 1f);
     }
 
     public IEnumerator SpawnObjects(float time)

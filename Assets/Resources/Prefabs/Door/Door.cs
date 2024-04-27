@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Door : MonoBehaviour
 {
@@ -9,8 +10,16 @@ public class Door : MonoBehaviour
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
     private bool _focused;
+    private bool _hovered = false;
+    public bool isOpenable = true;
+    public bool fourthDoor = false;
+    public bool finalDoor = false;
     public Animator AnimatorDoor;
     public AnimationClip AnimationClipDoor;
+
+    [SerializeField] private AudioClip _openSoundClip;
+    [SerializeField] private AudioClip _closeSoundClip;
+    [SerializeField] private AudioClip _enterSoundClip;
 
     public void Awake()
     {
@@ -18,31 +27,69 @@ public class Door : MonoBehaviour
         {
             SetToHingeJointTarget(OpenAngle, true);
         }
+        
     }
 
     public void OnMouseOver()
     {
-        OpenDoor();
+        if (fourthDoor && GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        {
+            isOpenable = true;
+        }
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
+        {
+          
+            OpenDoor();
+            
+            if (!_hovered)
+            {
+                SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+                _hovered = true;
+            }
+        }        
+    }
+
+    void UnFocusOtherDoors()
+    {
+
     }
 
     public void OnMouseDown()
     {
-        if (CanBeFocusable)
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
-            _focused = true;
-            if (AnimatorDoor != null)
+            if (CanBeFocusable)
             {
-                AnimatorDoor.Play(AnimationClipDoor.name);
+                _focused = true;
+                foreach (Door door in GameObject.FindObjectsOfType<Door>())
+                {
+                    if (door != this)
+                    {
+                        door.CloseDoor();
+                    }
+                }
+                if (AnimatorDoor != null)
+                {
+                    AnimatorDoor.Play(AnimationClipDoor.name);
+                }
+
+                
+                SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+
+                DestroyImmediate(GameObject.Find("MusicManager"));
             }
-            
-        }        
+        }       
+
     }
 
     public void OnMouseExit()
     {
-        if (!_focused)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            CloseDoor();
+            if (!_focused)
+            {
+                CloseDoor();
+            }
         }
 
     }

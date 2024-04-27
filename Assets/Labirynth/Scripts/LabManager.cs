@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 public class Node
 {
@@ -299,13 +300,16 @@ public class LabManager : MonoBehaviour
     public NodesCollection Nodes;
     public int PeriodicityOfCorrectNode = 10;
 
-    public LabTrackingPlayer camera;
-    public GameObject Wall;
+    public float TimeAfterEnd = 30f;
+
+    public LabTrackingPlayer Camera;
+    public List<GameObject> Walls;
     public GameObject Hole;
     public GameObject Section;
     public GameObject SectionSpawnPoint;
     public GameObject Plane;
     public GameObject Player;
+    public GameObject Heart;
     private GameObject _player;
 
     private Dictionary<int, Node> _bestOptionDict;
@@ -313,7 +317,7 @@ public class LabManager : MonoBehaviour
     [SerializeField]
     private Node _currentNode;
 
-    void DrawAll()
+    void PlaceAll()
     {
         var sections = Nodes.Sections;
 
@@ -330,31 +334,35 @@ public class LabManager : MonoBehaviour
             var section = sections[sectionIndex];
 
             float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
-            var newSectionPosition = new Vector3(Plane.transform.position.x,
-                currentHeight, 
-                Plane.transform.position.z - 0.2f);
-            GameObject newSection = Instantiate(Section, newSectionPosition, Quaternion.identity, Plane.transform);
-            newSection.transform.localScale = new Vector3(xSize / 2, newSection.transform.localScale.y, newSection.transform.localScale.z);
+            var placedSectionPosition = new Vector3(Plane.transform.position.x,
+                currentHeight,
+                Plane.transform.position.z - 0.5f);
+            GameObject placedSection = Instantiate(Section, placedSectionPosition, Quaternion.identity);
+            placedSection.name = $"Section {sectionIndex}";
+            placedSection.transform.parent = Plane.transform;
 
-            Vector3 sectionSize = GetBoundsOf(newSection.transform).size;
-            for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
-            {
-                Node node = section[nodeIndex];
-                GameObject nodePrefab = node.IsBlocked ? Wall : Hole;
+            PlaceNodesAndObstacles(section, placedSection, nodeOffset, currentHeight);
 
-                float currentNodeOffset = nodeOffset * nodeIndex;
-                var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
-                    currentHeight + PlaceOn(nodePrefab.transform, newSection.transform),
-                    Plane.transform.position.z);
-
-
-
-                GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
-
-                createdNode.transform.parent = newSection.transform;
-                createdNode.name = node.ToString();
-            }
         }
+    }
+
+    void PlaceNodesAndObstacles(List<Node> section, GameObject placedSection, float nodeOffset, float currentHeight)
+    {
+        for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
+        {
+            Node node = section[nodeIndex];
+            GameObject nodePrefab = node.IsBlocked ? Walls[Random.Range(0, Walls.Count)] : Hole;
+
+            float currentNodeOffset = nodeOffset * nodeIndex;
+            var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
+                currentHeight + PlaceOn(nodePrefab.transform, placedSection.transform),
+                placedSection.transform.position.z);
+
+            GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
+
+            createdNode.transform.parent = placedSection.transform;
+            createdNode.name = node.ToString();
+        }        
     }
 
     void Start()
@@ -376,9 +384,10 @@ public class LabManager : MonoBehaviour
         _bestOptionDict = new Dictionary<int, Node>();
         InitBestOption(Nodes.GetNode(NodesCount - 1));
 
-        DrawAll();
+        PlaceAll();
+        PlaceHeart();
         GameObject firstNodeObject = GetNodeInScene(Nodes.GetNode(0));
-        DrawPlayer(firstNodeObject.transform.position);
+        PlacePlayer();
     }
 
     void InitBestOption(Node destinationNode)
@@ -403,11 +412,6 @@ public class LabManager : MonoBehaviour
 
     }
 
-    GameObject GetNodeInScene(string name)
-    {
-        return GameObject.Find(name);
-    }
-
     GameObject GetNodeInScene(Node node)
     {
         return GameObject.Find(node.ToString());
@@ -417,7 +421,6 @@ public class LabManager : MonoBehaviour
     {
         MeshRenderer meshR;
         meshR = gmObj.GetComponent<MeshRenderer>();
-        Debug.Log($"{gmObj.name} {meshR.ToString()}");
         if (meshR == null)
         {
             List<MeshRenderer> meshs = new List<MeshRenderer>();
@@ -430,31 +433,52 @@ public class LabManager : MonoBehaviour
 
     float PlaceOn(Transform child, Transform platform)
     {
-        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2;
+        float halfHeightOfPlatform = (GetBoundsOf(platform).size.y + platform.localScale.y) / 2 - 0.03f;
 
         return halfHeightOfPlatform;
     }
 
     void ChangeFocusableForNodesIn(List<Node> subSection, bool focusable)
     {
-        foreach(Node node in subSection)
+        foreach (Node node in subSection)
         {
             GetNodeInScene(node).GetComponent<Door>().CanBeFocusable = focusable;
         }
     }
 
-    void DrawPlayer(Vector3 spawnPoint)
+    void PlaceHeart()
+    {
+        int indexOfLastSection = Nodes.Sections.Count() - 1;
+        int indexOfPreLastSection = indexOfLastSection - 1;
+        GameObject lastPlacedSection = GameObject.Find($"Section {indexOfLastSection}");
+        GameObject preLastPlacedSection = GameObject.Find($"Section {indexOfPreLastSection}");
+        Transform lastNode = preLastPlacedSection.transform.GetChild(preLastPlacedSection.transform.childCount - 1);
+
+        float x = lastNode.position.x;
+        float y = lastPlacedSection.transform.position.y + PlaceOn(Heart.transform, lastPlacedSection.transform);
+        float z = lastPlacedSection.transform.position.z;
+        Vector3 newPosition = new Vector3(x, y, z);
+
+        Transform newHeart = Instantiate(Heart, newPosition, Quaternion.identity).transform;
+
+        Camera.Heart = newHeart;
+    }
+
+    void PlacePlayer()
     {
         Transform thisNode = GetNodeInScene(_currentNode).transform;
-        float widthOfNode = GetBoundsOf(thisNode).size.x;
+        float widthOfNode = thisNode.localScale.x;
+        float depthOfNode = thisNode.localScale.z / 2;
 
+
+        Vector3 spawnPoint = new Vector3(thisNode.position.x, thisNode.position.y, thisNode.position.z - depthOfNode);
         Vector3 spawnPointWithOffset = new Vector3(spawnPoint.x + widthOfNode, spawnPoint.y, spawnPoint.z);
         _player = Instantiate(Player, spawnPoint, Quaternion.identity);
-        camera.Player = _player.transform;
+        Camera.Player = _player.transform;
 
         if (_currentNode != Nodes.GetNode(NodesCount - 1))
         {
-            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);            
+            int indexOfSubSection = Nodes.IndexOfSubSection(_currentNode);
             Node rightNode = _bestOptionDict[indexOfSubSection];
             GameObject rightNodeGameObject = GetNodeInScene(rightNode);
 
@@ -468,7 +492,7 @@ public class LabManager : MonoBehaviour
         }
         else
         {
-            // win
+            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, TimeAfterEnd);
         }
 
     }
@@ -488,11 +512,8 @@ public class LabManager : MonoBehaviour
         Destroy(_player);
 
         GameObject endNodeGameObject = GetNodeInScene(endNode);
-        Vector3 newPosition = new Vector3(endNodeGameObject.transform.position.x,
-            endNodeGameObject.transform.position.y,
-            SectionSpawnPoint.transform.position.z);
 
-        DrawPlayer(newPosition);
+        PlacePlayer();
     }
     void Update()
     {

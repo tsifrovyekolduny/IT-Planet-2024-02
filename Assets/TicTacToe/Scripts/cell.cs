@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Cell : MonoBehaviour
 {
@@ -12,14 +13,19 @@ public class Cell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (main.CheckFinishCondition() == 0)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            main.SetGreen(id);
+            if (main.CheckFinishCondition() == 0)
+            {
+                main.SetGreen(id);
+            }
+
+            if (main.CheckFinishCondition() == 0)
+            {
+                main.SetRed();
+            }
         }
 
-        if (main.CheckFinishCondition() == 0)
-        {
-            main.SetRed();
-        }
+        
     }
 }
