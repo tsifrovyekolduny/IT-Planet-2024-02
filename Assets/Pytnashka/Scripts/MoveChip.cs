@@ -9,7 +9,10 @@ public class MoveChip : MonoBehaviour
     private int row_position;
     private int col_position;
     private int speed;
-    private Vector3 empty_position = new Vector3(0,0,0);
+    private Vector3 empty_position = new Vector3(0, 0, 0);
+    private Vector3 old_position = new Vector3(-10, -10, -10);
+    int new_row, new_col;
+
     private GameObject ui_motion;
     private GameObject ui_completed;
 
@@ -29,7 +32,12 @@ public class MoveChip : MonoBehaviour
         }
     }
 
+    Vector3 input_vector;
     void OnMouseDown()
+    {
+        //Input.mousePosition.x;
+    }
+    void OnMouseUp()
     {
         if (!can_move)
         {
@@ -51,7 +59,12 @@ public class MoveChip : MonoBehaviour
     {
         if (transform.position != empty_position)
         {
+            Global.board[row_position, col_position] = 0;
+            Global.board[new_row, new_col] = number_chip;
+            row_position = new_row;
+            col_position = new_col;
             transform.position = Vector3.MoveTowards(transform.position, empty_position, speed * Time.deltaTime);
+
         }
         else
         {
@@ -68,14 +81,14 @@ public class MoveChip : MonoBehaviour
         {
             for (int col = 0; col < 4; col++)
             {
-                if (Global.board[row,col] == count)
-                    {
+                if (Global.board[row, col] == count)
+                {
                     Debug.Log(count);
-                    }
-                    else
-                    {
-                        return;
-                    }
+                }
+                else
+                {
+                    return;
+                }
                 count++;
                 if (count == 16)
                 {
@@ -92,14 +105,20 @@ public class MoveChip : MonoBehaviour
     {
         try
         {
-            if (Global.board[row_position + 1, col_position] == 0) 
-            { 
-                
-                empty_position = new Vector3(transform.position.x + GlobalVars.x_offset, 0, transform.position.z); 
-                Global.board[row_position, col_position] = 0;
-                Global.board[row_position + 1,col_position] = number_chip;
+            if (Global.board[row_position, col_position - 1] == 0)
+            {
+
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z - GlobalVars.z_offset);
+                new_row = row_position;
+                new_col = col_position - 1;
                 PlaySound();
                 can_move = true;
+                if (empty_position != old_position)
+                {
+                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                    return;
+                }
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
@@ -107,12 +126,18 @@ public class MoveChip : MonoBehaviour
         try
         {
             if (Global.board[row_position - 1, col_position] == 0)
-            { 
+            {
                 empty_position = new Vector3(transform.position.x - GlobalVars.x_offset, 0, transform.position.z);
-                Global.board[row_position, col_position] = 0; 
-                Global.board[row_position - 1, col_position] = number_chip;
+                new_row = row_position - 1;
+                new_col = col_position;
                 PlaySound();
                 can_move = true;
+                if (empty_position != old_position)
+                {
+                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                    return;
+                }
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
@@ -121,35 +146,50 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position, col_position + 1] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z + GlobalVars.z_offset); 
-                Global.board[row_position, col_position] = 0; 
-                Global.board[row_position, col_position + 1] = number_chip;
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z + GlobalVars.z_offset);
+                new_row = row_position;
+                new_col = col_position + 1;
                 PlaySound();
                 can_move = true;
+                if (empty_position != old_position)
+                {
+                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                    return;
+                }
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
 
+
         try
         {
-            if (Global.board[row_position, col_position - 1] == 0)
+            if (Global.board[row_position + 1, col_position] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z - GlobalVars.z_offset);
-                Global.board[row_position, col_position] = 0;
-                Global.board[row_position, col_position - 1] = number_chip;
+
+                empty_position = new Vector3(transform.position.x + GlobalVars.x_offset, 0, transform.position.z);
+                new_row = row_position + 1;
+                new_col = col_position;
                 PlaySound();
                 can_move = true;
+                if (empty_position != old_position)
+                {
+                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                    return;
+                }
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
+
     }
     void FindOnBoard()
     {
-        for (int row = 0; row < 4; row++)
+        for (int row = 0; row < Global.x_size; row++)
         {
-            for (int col = 0; col < 4; col++)
+            for (int col = 0; col < Global.y_size; col++)
             {
-                if (Global.board[row,col] == number_chip)
+                if (Global.board[row, col] == number_chip)
                 {
                     row_position = row;
                     col_position = col;

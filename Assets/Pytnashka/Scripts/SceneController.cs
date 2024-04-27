@@ -32,4 +32,13 @@ public class SceneController : MonoBehaviour
     {
         Application.Quit();
     }
+
+    //public void Rotate()
+    //{
+    //    foreach (var ship in GlobalVars.chips)
+    //    {
+    //        float x = ship.transform.rotation.x;
+    //        ship.transform.rotation = new Vector3(x, 0, 0);
+    //    }
+    //}
 }
