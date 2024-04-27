@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    public int hp = 3;
+    int hp;
     public GameObject first, second, third, fourth;
     public float speed = 1.0f;
     public float pushForce;
@@ -17,6 +17,7 @@ public class CameraMove : MonoBehaviour
     {
         startPosition = transform.position;
         time = Time.deltaTime;
+        hp = GameManager.Instance.GetNumberOfCompletedLevels();
     }
 
     void TakeDamage()
@@ -57,7 +58,8 @@ public class CameraMove : MonoBehaviour
         first.GetComponent<PlatformScript>().ResetPlatform();
         second.GetComponent<PlatformScript>().ResetPlatform();
         third.GetComponent<PlatformScript>().ResetPlatform();
-        fourth.GetComponent<PlatformScript>().ResetPlatform();
+        //fourth.GetComponent<PlatformScript>().ResetPlatform();
+
         transform.position = startPosition;
     }
 
