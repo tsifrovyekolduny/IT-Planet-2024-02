@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4928375195051911107}
-  - component: {fileID: -2676885950685128727}
   m_Layer: 0
   m_Name: TrashAndBottles
   m_TagString: PrefabObstacles
@@ -37,20 +36,6 @@ Transform:
   - {fileID: 4658946387466297913}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2676885950685128727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5757763271755072534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 384a2c3d9ca446d4bba891daa9ac91c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDamaged: 0
-  brokenStateMaterial: {fileID: 0}
 --- !u!1001 &1513272812502431521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +207,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 770e9b4d8ba3c9b4fab538b762243581, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 770e9b4d8ba3c9b4fab538b762243581, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 770e9b4d8ba3c9b4fab538b762243581, type: 3}
       propertyPath: m_Materials.Array.data[0]

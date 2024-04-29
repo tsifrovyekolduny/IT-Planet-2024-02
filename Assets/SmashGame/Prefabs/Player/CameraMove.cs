@@ -23,14 +23,15 @@ public class CameraMove : MonoBehaviour
     void TakeDamage()
     {
         hp -= 1;
-        if (hp == 0)
+        if (hp <= 0)
         {
-            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(hp=0);
+            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(hp);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Damage") {
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
@@ -42,10 +43,7 @@ public class CameraMove : MonoBehaviour
     void OnTriggerEnter(Collider otherObject)
     {
 
-        if (otherObject.tag == "ResetLevel")
-        {
-            BackToSpawn();
-        }
+
         if (otherObject.tag == "Endingzone") {
             CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted();
         }
@@ -53,15 +51,6 @@ public class CameraMove : MonoBehaviour
 
     }
 
-    void BackToSpawn()
-    {
-        first.GetComponent<PlatformScript>().ResetPlatform();
-        second.GetComponent<PlatformScript>().ResetPlatform();
-        third.GetComponent<PlatformScript>().ResetPlatform();
-        //fourth.GetComponent<PlatformScript>().ResetPlatform();
-
-        transform.position = startPosition;
-    }
 
 
 
@@ -73,7 +62,7 @@ public class CameraMove : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

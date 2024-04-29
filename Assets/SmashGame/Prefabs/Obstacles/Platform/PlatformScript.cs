@@ -28,6 +28,7 @@ public class PlatformScript : MonoBehaviour
         {
             _lightIntencity += 0.0035f;
         }
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -42,14 +43,13 @@ public class PlatformScript : MonoBehaviour
 
     public void ResetPlatform()
     {
-
+        GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
+        Instantiate(prefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
         platform.GetComponent<MeshRenderer>().enabled = false;        
     }    
 
     public void ShowPlatform()
     {
-        GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
-        Instantiate(prefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
         platform.GetComponent<MeshRenderer>().enabled = true;
     }
 }
