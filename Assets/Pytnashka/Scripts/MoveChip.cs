@@ -1,10 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
 {
+    enum PreferredMove
+    {
+        Up,Down,Left,Right, None
+    };
+    private PreferredMove preferredMove;
     private int number_chip;
     private int row_position;
     private int col_position;
@@ -17,6 +23,11 @@ public class MoveChip : MonoBehaviour
     private GameObject ui_completed;
 
     private bool can_move;
+
+    private Vector3 initialMousePos;
+    private Vector3 finalMousePos;
+    private Vector3 mouseDelta;
+
     void Start()
     {
         speed = 2;
@@ -35,12 +46,13 @@ public class MoveChip : MonoBehaviour
     Vector3 input_vector;
     void OnMouseDown()
     {
-        //Input.mousePosition.x;
+        initialMousePos = Input.mousePosition;
     }
     void OnMouseUp()
     {
         if (!can_move)
         {
+            finalMousePos = Input.mousePosition;
             FindOnBoard();
             CalculateDirection();
         }
@@ -53,22 +65,21 @@ public class MoveChip : MonoBehaviour
     void MotionCountPlus()
     {
         Global.count++;
-        ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.count.ToString();
+        //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.count.ToString();
     }
     void MoveChipOnBoard()
     {
         if (transform.position != empty_position)
         {
-            Global.board[row_position, col_position] = 0;
-            Global.board[new_row, new_col] = number_chip;
-            row_position = new_row;
-            col_position = new_col;
             transform.position = Vector3.MoveTowards(transform.position, empty_position, speed * Time.deltaTime);
-
         }
         else
         {
+            Global.board[row_position, col_position] = 0;
+            Global.board[new_row, new_col] = number_chip;
             can_move = false;
+            row_position = new_row;
+            col_position = new_col;
             MotionCountPlus();
             CheckOnComplete();
         }
@@ -76,12 +87,12 @@ public class MoveChip : MonoBehaviour
     void CheckOnComplete()
     {
         int count = 1;
-
+        int maxAcceptCount = 16 - Global.countEraceBlocks + 1;
         for (int row = 0; row < 4; row++)
         {
             for (int col = 0; col < 4; col++)
             {
-                if (Global.board[row, col] == count)
+                if (Global.board[row + Global.x_offset, col + Global.y_offset] == count)
                 {
                     Debug.Log(count);
                 }
@@ -90,7 +101,7 @@ public class MoveChip : MonoBehaviour
                     return;
                 }
                 count++;
-                if (count == 16)
+                if (maxAcceptCount == count)
                 {
                     Completed();
                 }
@@ -105,6 +116,46 @@ public class MoveChip : MonoBehaviour
     {
         try
         {
+            // Вычисляем предпочтительное
+            mouseDelta = finalMousePos - initialMousePos;
+           if(Math.Abs(mouseDelta.x) > Math.Abs(mouseDelta.y))
+            {
+                if (Math.Abs(mouseDelta.x) < 10)
+                {
+                    preferredMove = PreferredMove.None;
+                }
+                else
+                {
+                    if (mouseDelta.x > 0)
+                    {
+                        preferredMove = PreferredMove.Right;
+                    }
+                    else
+                    {
+                        preferredMove = PreferredMove.Left;
+                    }
+                }
+            }
+            else
+            {
+                if (Math.Abs(mouseDelta.y) < 10)
+                {
+                    preferredMove = PreferredMove.None;
+                }
+                else
+                {
+                    if (mouseDelta.y > 0)
+                    {
+                        preferredMove = PreferredMove.Up;
+                    }
+                    else
+                    {
+                        preferredMove = PreferredMove.Down;
+                    }
+                }
+            }
+
+            //left
             if (Global.board[row_position, col_position - 1] == 0)
             {
 
@@ -113,16 +164,22 @@ public class MoveChip : MonoBehaviour
                 new_col = col_position - 1;
                 PlaySound();
                 can_move = true;
-                if (empty_position != old_position)
+                //if (empty_position != old_position)
+                //{
+                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                //    return;
+                //}
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                if (preferredMove == PreferredMove.Left)
                 {
-                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
                     return;
                 }
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
 
+
+        //up
         try
         {
             if (Global.board[row_position - 1, col_position] == 0)
@@ -132,16 +189,23 @@ public class MoveChip : MonoBehaviour
                 new_col = col_position;
                 PlaySound();
                 can_move = true;
-                if (empty_position != old_position)
+                //if (empty_position != old_position)
+                //{
+                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                //    return;
+                //}
+                
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
+
+                if (preferredMove == PreferredMove.Up)
                 {
-                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
                     return;
                 }
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
 
+        //right
         try
         {
             if (Global.board[row_position, col_position + 1] == 0)
@@ -151,17 +215,22 @@ public class MoveChip : MonoBehaviour
                 new_col = col_position + 1;
                 PlaySound();
                 can_move = true;
-                if (empty_position != old_position)
+                //if (empty_position != old_position)
+                //{
+                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                //    return;
+                //}
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
+
+                if (preferredMove == PreferredMove.Right)
                 {
-                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
                     return;
                 }
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }
 
-
+        //down
         try
         {
             if (Global.board[row_position + 1, col_position] == 0)
@@ -172,12 +241,17 @@ public class MoveChip : MonoBehaviour
                 new_col = col_position;
                 PlaySound();
                 can_move = true;
-                if (empty_position != old_position)
+                //if (empty_position != old_position)
+                //{
+                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
+                //    return;
+                //}
+                old_position = new Vector3(transform.position.x, 0, transform.position.z);
+
+                if (preferredMove == PreferredMove.Down)
                 {
-                    old_position = new Vector3(transform.position.x, 0, transform.position.z);
                     return;
                 }
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
         catch { }

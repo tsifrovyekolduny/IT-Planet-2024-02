@@ -22,7 +22,8 @@ public class CreateBoard : MonoBehaviour
     }
     void GenerateBoard()
     {
-        for (int i = 0; i < 13; i++)
+        int maxCountBlocks = 16 - Global.countEraceBlocks;
+        for (int i = 0; i <= maxCountBlocks; i++)
         {
             bool cancel = false;
             do
