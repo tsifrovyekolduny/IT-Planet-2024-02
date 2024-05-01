@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    int hp;
-    public GameObject first, second, third, fourth;
+    private int hp;
+    private bool canTakeDamage;
+    private Vector3 dir;
+    private Ray ray;
+    private RaycastHit hit;
     public float speed = 1.0f;
     public float pushForce;
     public float time;
-    Vector3 startPosition;
     public GameObject shootingPoint;
     public GameObject Bullet;
     public GameObject[] respawns;
@@ -15,7 +17,7 @@ public class CameraMove : MonoBehaviour
     
     void Start()
     {
-        startPosition = transform.position;
+        canTakeDamage = false;
         time = Time.deltaTime;
         hp = GameManager.Instance.GetNumberOfCompletedLevels();
     }
@@ -64,14 +66,11 @@ public class CameraMove : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject bullet = Instantiate(Bullet, shootingPoint.transform.position, transform.rotation);
-                Vector3 testVector = shootingPoint.transform.position;
-                Debug.DrawLine(shootingPoint.transform.position, hit.point);
-                Vector3 dir = shootingPoint.transform.position - hit.point;
+                dir = shootingPoint.transform.position - hit.point;
                 dir.Normalize();
                 bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
             }

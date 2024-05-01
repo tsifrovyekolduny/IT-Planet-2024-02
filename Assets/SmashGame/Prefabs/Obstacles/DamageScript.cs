@@ -9,7 +9,7 @@ public class DamageScript : MonoBehaviour
     public Material brokenStateMaterial;
     private BoxCollider _boxCollider;
     private Rigidbody _rb;
-    // Start is called before the first frame update
+
     void Start()
     {
         isDamaged = false;
@@ -24,7 +24,7 @@ public class DamageScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Bullet" && _rb.isKinematic != true)
+        if (collision.gameObject.tag == "Bullet" && _rb.isKinematic == false)
         {
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
@@ -49,14 +49,12 @@ public class DamageScript : MonoBehaviour
             }
         }
     }
-    void OnTriggerEnter(Collider other)
+
+    private void OnBecameVisible()
     {
-        if (other.tag == "StartPlatform")
+        if (_rb != null)
         {
-            if (_rb != null)
-            {
-                _rb.isKinematic = false;
-            }
+            _rb.isKinematic = false;
         }
     }
 }

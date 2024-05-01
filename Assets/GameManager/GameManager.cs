@@ -68,12 +68,6 @@ public class GameManager : MonoBehaviour
         return isFinishAvalable;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void CompleteLevel(string name, float timeAfterEnd = 10f)
     {
         Debug.Log(name);
