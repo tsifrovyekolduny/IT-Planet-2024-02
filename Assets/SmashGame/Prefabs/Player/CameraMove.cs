@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CameraMove : MonoBehaviour
@@ -17,14 +18,24 @@ public class CameraMove : MonoBehaviour
     
     void Start()
     {
-        canTakeDamage = false;
+        canTakeDamage = true;
         time = Time.deltaTime;
         hp = GameManager.Instance.GetNumberOfCompletedLevels();
+    }
+
+    IEnumerator HurtReload()
+    {
+        canTakeDamage = false;
+
+        yield return new WaitForSeconds(1);
+
+        canTakeDamage = true;
     }
 
     void TakeDamage()
     {
         hp -= 1;
+        
         if (hp <= 0)
         {
             CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(hp);
@@ -33,11 +44,11 @@ public class CameraMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.tag == "Damage") {
+        if (collision.gameObject.tag == "Damage" && canTakeDamage) {
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
                 TakeDamage();
+                StartCoroutine(HurtReload());
             }
         }
     }

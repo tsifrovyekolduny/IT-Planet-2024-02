@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 2927384743860776617}
   - component: {fileID: 5568295059105698443}
   - component: {fileID: 234284248502035439}
+  - component: {fileID: -810619209486634806}
   m_Layer: 0
   m_Name: Player
   m_TagString: MainCamera
@@ -342,10 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de81c86148c0f442986a69e1fc2a851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  first: {fileID: 0}
-  second: {fileID: 0}
-  third: {fileID: 0}
-  fourth: {fileID: 0}
   speed: 12
   pushForce: 750
   time: 0
@@ -374,6 +371,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.0427992, y: 2.560741, z: 1.5091974}
   m_Center: {x: 0.39096332, y: -2.4891021, z: 6.4538765}
+--- !u!95 &-810619209486634806
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639483315508102986}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e2aeef814f1324c4c8e4c9c52ec12300, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5459232489533292010
 PrefabInstance:
   m_ObjectHideFlags: 0
