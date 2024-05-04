@@ -11,13 +11,46 @@ public class CreateBoard : MonoBehaviour
 
 
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
+    public GameObject ramka, kartinka;
     void Start()
     {
+        Global.ramka = ramka;
+        Global.kartinka = kartinka;
         GenerateBoard();
         ShowBoard();
+
+        Renderer renderer = Global.kartinka.GetComponent<Renderer>();
+        Color color = renderer.material.color;
+        color.a = 0; // 1f делает объект полностью непрозрачным
+        renderer.material.color = color;
+
+        renderer = Global.ramka.GetComponent<Renderer>();
+        color = renderer.material.color;
+        color.a = 0; // 1f делает объект полностью непрозрачным
+        renderer.material.color = color;
     }
     void Update()
     {
+        if (MoveChip.game_finished)
+        {
+            Renderer renderer = Global.kartinka.GetComponent<Renderer>();
+            Color color = renderer.material.color;
+            if (color.a <1 )
+            {
+                color.a += 0.001f; // 1f делает объект полностью непрозрачным
+                renderer.material.color = color;
+
+            }
+
+            renderer = Global.ramka.GetComponent<Renderer>();
+            color = renderer.material.color;
+            if (color.a < 1)
+            {
+                color.a += 0.001f; // 1f делает объект полностью непрозрачным
+                renderer.material.color = color;
+
+            }
+        }
 
     }
     void GenerateBoard()

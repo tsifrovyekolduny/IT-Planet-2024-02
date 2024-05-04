@@ -7,11 +7,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
 {
+    public static bool game_finished = false;
+
     enum PreferredMove
     {
         Up,Down,Left,Right, None
     };
     private PreferredMove preferredMove;
+
     private int number_chip;
     private int row_position;
     private int col_position;
@@ -42,12 +45,18 @@ public class MoveChip : MonoBehaviour
         {
             MoveChipOnBoard();
         }
+        //if (game_finished == false)
+        //{
+        //    Completed();
+        //}
+        
     }
 
     Vector3 input_vector;
     void OnMouseDown()
     {
         initialMousePos = Input.mousePosition;
+        Completed();
     }
     void OnMouseUp()
     {
@@ -111,9 +120,12 @@ public class MoveChip : MonoBehaviour
     }
     public void Completed()
     {
+        game_finished = true;
         Debug.Log("Уровень завершён");
+        Global.ramka.GetComponent<MeshRenderer>().enabled = true;
+        Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
         //ui_completed.GetComponent<Text>().enabled = true;
-        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
+        //GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
     }
     void CalculateDirection()
     {
