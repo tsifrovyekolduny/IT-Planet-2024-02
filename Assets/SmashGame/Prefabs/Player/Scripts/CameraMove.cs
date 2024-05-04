@@ -5,6 +5,7 @@ public class CameraMove : MonoBehaviour
 {
     private int hp;
     private bool canTakeDamage;
+    private bool _isReloading;
     private Vector3 dir;
     private Ray ray;
     private RaycastHit hit;
@@ -65,7 +66,13 @@ public class CameraMove : MonoBehaviour
     }
 
 
+    //IEnumerator ReloadBullet()
+    //{
 
+    //    yield return new WaitForSeconds(1);
+
+    //    bullet.SetActive(false);
+    //}
 
     void FixedUpdate()
     {
@@ -84,7 +91,9 @@ public class CameraMove : MonoBehaviour
                 dir = shootingPoint.transform.position - hit.point;
                 dir.Normalize();
                 bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
+                //StartCoroutine(DestroyBullet(bullet));
             }
         }
     }
+
 }

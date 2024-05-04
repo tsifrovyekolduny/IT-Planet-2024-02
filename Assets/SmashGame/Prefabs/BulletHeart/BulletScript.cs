@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
@@ -7,12 +7,14 @@ public class BulletScript : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, 4);
+        StartCoroutine(DestroyBullet());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator DestroyBullet()
     {
 
+        yield return new WaitForSeconds(secondsOfLife);
+
+        gameObject.SetActive(false);
     }
 }
