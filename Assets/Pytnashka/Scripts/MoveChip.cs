@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
 {
@@ -110,7 +111,9 @@ public class MoveChip : MonoBehaviour
     }
     public void Completed()
     {
-        ui_completed.GetComponent<Text>().enabled = true;
+        Debug.Log("Уровень завершён");
+        //ui_completed.GetComponent<Text>().enabled = true;
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
     }
     void CalculateDirection()
     {

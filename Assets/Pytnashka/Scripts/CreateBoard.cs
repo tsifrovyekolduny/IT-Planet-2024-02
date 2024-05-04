@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 public class CreateBoard : MonoBehaviour
 {
-    public GameObject[] chips = new GameObject[16];
+    public GameObject[] chips;
     private int skiped_element;
 
 

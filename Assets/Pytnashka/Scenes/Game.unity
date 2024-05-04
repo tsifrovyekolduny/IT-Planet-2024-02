@@ -236,6 +236,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 1075861060691536838, guid: ef2ddf414dc179d4ea8241875887cc69, type: 3}
+      propertyPath: chips.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075861060691536838, guid: ef2ddf414dc179d4ea8241875887cc69, type: 3}
+      propertyPath: chips.Array.data[15]
+      value: 
+      objectReference: {fileID: 5448585466661998396, guid: 82d74bde12271b544a54a826ef8da706, type: 3}
     - target: {fileID: 1075861060691536839, guid: ef2ddf414dc179d4ea8241875887cc69, type: 3}
       propertyPath: m_RootOrder
       value: 3
