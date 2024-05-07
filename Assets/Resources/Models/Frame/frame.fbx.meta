@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: frame
+    second: {fileID: 2100000, guid: fcfb9ae522d786d4dafd30aa7bc60102, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: outline
     second: {fileID: 2100000, guid: 901830ccc2e7607458df1ae0ee0faa89, type: 2}
   materials:
