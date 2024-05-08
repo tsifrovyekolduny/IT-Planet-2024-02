@@ -3,49 +3,53 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    private int hp;
-    private bool canTakeDamage;
+    private int _hp;
+    private bool _canTakeDamage;
     private bool _isReloading;
     private Vector3 dir;
     private Ray ray;
     private RaycastHit hit;
+
     public float speed = 1.0f;
     public float pushForce;
     public float time;
-    public GameObject shootingPoint;
+    public float reloadTime = 0.8f;
+    public float invisibleTime = 1f;
+    public Animator PlayerAnimator;
+    public GameObject ShootingPoint;
     public GameObject Bullet;
-    public GameObject[] respawns;
     public Camera CutSceneCamera;
     
     void Start()
     {
-        canTakeDamage = true;
+        _canTakeDamage = true;
         time = Time.deltaTime;
-        hp = GameManager.Instance.GetNumberOfCompletedLevels();
+        _hp = GameManager.Instance.GetNumberOfCompletedLevels();
+        _isReloading = false;
     }
 
     IEnumerator HurtReload()
     {
-        canTakeDamage = false;
+        _canTakeDamage = false;
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(invisibleTime);
 
-        canTakeDamage = true;
+        _canTakeDamage = true;
     }
 
     void TakeDamage()
     {
-        hp -= 1;
+        _hp -= 1;
         
-        if (hp <= 0)
+        if (_hp <= 0)
         {
-            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(hp);
+            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(_hp);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Damage" && canTakeDamage) {
+        if (collision.gameObject.tag == "Damage" && _canTakeDamage) {
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
                 TakeDamage();
@@ -68,13 +72,17 @@ public class CameraMove : MonoBehaviour
     }
 
 
-    //IEnumerator ReloadBullet()
-    //{
+    IEnumerator ReloadBullet()
+    {
+        _isReloading = true;
 
-    //    yield return new WaitForSeconds(1);
+        PlayerAnimator.Play("ShootingAnim");
 
-    //    bullet.SetActive(false);
-    //}
+        yield return new WaitForSeconds(reloadTime);
+
+        PlayerAnimator.Play("Normal");
+        _isReloading = false;
+    }
 
     void FixedUpdate()
     {
@@ -84,16 +92,16 @@ public class CameraMove : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_isReloading)
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                GameObject bullet = Instantiate(Bullet, shootingPoint.transform.position, transform.rotation);
-                dir = shootingPoint.transform.position - hit.point;
+                GameObject bullet = Instantiate(Bullet, ShootingPoint.transform.position, transform.rotation);
+                dir = ShootingPoint.transform.position - hit.point;
                 dir.Normalize();
                 bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
-                //StartCoroutine(DestroyBullet(bullet));
+                StartCoroutine(ReloadBullet());
             }
         }
     }
