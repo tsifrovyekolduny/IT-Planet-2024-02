@@ -59,6 +59,8 @@ public class CameraMove : MonoBehaviour
 
 
         if (otherObject.tag == "Endingzone") {
+
+
             CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted();
         }
         

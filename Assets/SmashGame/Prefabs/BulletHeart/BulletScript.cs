@@ -10,6 +10,14 @@ public class BulletScript : MonoBehaviour
         StartCoroutine(DestroyBullet());
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Damage")
+        {
+            collision.gameObject.GetComponent<DamageScript>().BeingHit();
+        }
+    }
+
     IEnumerator DestroyBullet()
     {
 

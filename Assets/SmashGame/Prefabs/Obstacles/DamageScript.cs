@@ -22,9 +22,9 @@ public class DamageScript : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void BeingHit()
     {
-        if (collision.gameObject.tag == "Bullet" && _rb.isKinematic == false)
+        if (_rb.isKinematic == false)
         {
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
