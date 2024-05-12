@@ -9,17 +9,17 @@ public class Door : MonoBehaviour
     public bool OpenedOnStart = false;
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
-    private bool _focused;
-    private bool _hovered = false;
+    protected bool _focused;
+    protected bool _hovered = false;
     public bool isOpenable = true;
     public bool fourthDoor = false;
     public bool finalDoor = false;
     public Animator AnimatorDoor;
     public AnimationClip AnimationClipDoor;
 
-    [SerializeField] private AudioClip _openSoundClip;
-    [SerializeField] private AudioClip _closeSoundClip;
-    [SerializeField] private AudioClip _enterSoundClip;
+    [SerializeField] protected AudioClip _openSoundClip;
+    [SerializeField] protected AudioClip _closeSoundClip;
+    [SerializeField] protected AudioClip _enterSoundClip;
 
     public void Awake()
     {
@@ -27,7 +27,6 @@ public class Door : MonoBehaviour
         {
             SetToHingeJointTarget(OpenAngle, true);
         }
-        
     }
 
     public void OnMouseOver()
@@ -84,14 +83,17 @@ public class Door : MonoBehaviour
 
     public void OnMouseExit()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
             if (!_focused)
             {
                 CloseDoor();
+
+                SoundManager.s_Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
+
+                _hovered = false;
             }
         }
-
     }
 
     public void OpenDoor()

@@ -442,7 +442,7 @@ public class LabManager : MonoBehaviour
     {
         foreach (Node node in subSection)
         {
-            GetNodeInScene(node).GetComponent<Door>().CanBeFocusable = focusable;
+            GetNodeInScene(node).GetComponent<LabDoor>().CanBeFocusable = focusable;
         }
     }
 
@@ -504,7 +504,7 @@ public class LabManager : MonoBehaviour
         Node startNode = Nodes.GetNode(int.Parse(matches[0].Value));
         Node endNode = Nodes.GetNode(int.Parse(matches[2].Value));
 
-        GetNodeInScene(startNode).GetComponent<Door>().CloseDoor();
+        GetNodeInScene(startNode).GetComponent<LabDoor>().CloseDoor();
         ChangeFocusableForNodesIn(Nodes.GetSubSection(startNode), false);
 
         _currentNode = endNode;
