@@ -15,6 +15,7 @@ public class UiScript : MonoBehaviour
     void Awake()
     {
         GetComponent<Canvas>().worldCamera = Camera.main;
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
