@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    private int _hp;
+    private int _hp = 3;
     private bool _canTakeDamage;
     private bool _isReloading;
     private Vector3 dir;
@@ -24,7 +24,7 @@ public class CameraMove : MonoBehaviour
     {
         _canTakeDamage = true;
         time = Time.deltaTime;
-        _hp = GameManager.Instance.GetNumberOfCompletedLevels();
+        //_hp = GameManager.Instance.GetNumberOfCompletedLevels();
         _isReloading = false;
     }
 
@@ -32,7 +32,15 @@ public class CameraMove : MonoBehaviour
     {
         _canTakeDamage = false;
 
+        PlayerAnimator.SetBool("isHurt", true);
+
+        Debug.Log(PlayerAnimator.GetBool("isHurt"));
+
         yield return new WaitForSeconds(invisibleTime);
+
+        PlayerAnimator.SetBool("isHurt", false);
+
+        Debug.Log(PlayerAnimator.GetBool("isHurt"));
 
         _canTakeDamage = true;
     }
@@ -76,11 +84,12 @@ public class CameraMove : MonoBehaviour
     {
         _isReloading = true;
 
-        PlayerAnimator.Play("ShootingAnim");
+        PlayerAnimator.SetBool("isReloading", true);
 
         yield return new WaitForSeconds(reloadTime);
 
-        PlayerAnimator.Play("Normal");
+        PlayerAnimator.SetBool("isReloading", false);
+
         _isReloading = false;
     }
 
