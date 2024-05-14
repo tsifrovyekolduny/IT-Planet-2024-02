@@ -10,7 +10,7 @@ public class Global : MonoBehaviour
     public const int x_size = 6, y_size = 6, x_offset = 1, y_offset = 1;
     public static int[,] board = new int[x_size, y_size];
     public static GameObject ramka = null, kartinka = null, oboi = null, comod = null, camera = null;
-    public static bool test = false;
+    public static bool test = true;
     public static int max_count_steps = 80;
     public static Text count_steps;
     public static bool is_game_over = false;
