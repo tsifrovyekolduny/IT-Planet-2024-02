@@ -11,7 +11,7 @@ public class MoveChip : MonoBehaviour
 
     enum PreferredMove
     {
-        Up,Down,Left,Right, None
+        Up, Down, Left, Right, None
     };
     private PreferredMove preferredMove;
 
@@ -45,29 +45,29 @@ public class MoveChip : MonoBehaviour
         {
             MoveChipOnBoard();
         }
-        //if (game_finished == false)
-        //{
-        //    Completed();
-        //}
-        
     }
 
     Vector3 input_vector;
     void OnMouseDown()
     {
         initialMousePos = Input.mousePosition;
-        Completed();
+        if (Global.test)
+        {
+            Completed();
+        }
     }
     void OnMouseUp()
     {
-        if (!can_move)
+        if (game_finished == false)
         {
-            finalMousePos = Input.mousePosition;
-            FindOnBoard();
-            CalculateDirection();
+            if (!can_move)
+            {
+                finalMousePos = Input.mousePosition;
+                FindOnBoard();
+                CalculateDirection();
+            }
         }
     }
-
     void PlaySound()
     {
         GetComponent<AudioSource>().Play();
@@ -124,8 +124,7 @@ public class MoveChip : MonoBehaviour
         Debug.Log("Уровень завершён");
         Global.ramka.GetComponent<MeshRenderer>().enabled = true;
         Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
-        //ui_completed.GetComponent<Text>().enabled = true;
-        //GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
+        Global.comod.GetComponent<SpriteRenderer>().enabled = true;
     }
     void CalculateDirection()
     {
@@ -133,7 +132,7 @@ public class MoveChip : MonoBehaviour
         {
             // Вычисляем предпочтительное
             mouseDelta = finalMousePos - initialMousePos;
-           if(Math.Abs(mouseDelta.x) > Math.Abs(mouseDelta.y))
+            if (Math.Abs(mouseDelta.x) > Math.Abs(mouseDelta.y))
             {
                 if (Math.Abs(mouseDelta.x) < 10)
                 {
@@ -209,7 +208,7 @@ public class MoveChip : MonoBehaviour
                 //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
                 //    return;
                 //}
-                
+
                 old_position = new Vector3(transform.position.x, 0, transform.position.z);
 
                 if (preferredMove == PreferredMove.Up)

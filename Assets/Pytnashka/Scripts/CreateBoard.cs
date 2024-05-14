@@ -1,44 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿using UnityEngine;
 
 public class CreateBoard : MonoBehaviour
 {
     public static float alpha_value = 0.0f;
+    public static Vector3 komod_end_location = new Vector3(4.46999979f, 0.810000002f, 0.49000001f);
+    public static Vector3 komod_start_location = new Vector3(5.44000006f, 2.28999996f, 0.49000001f);
+    public static Vector3 kamera_end_location = new Vector3(1.60000002f, 8.97000027f, 0.540000021f);
+    public static Vector3 kamera_start_location = new Vector3(-0.5f, 6.0f, 0.540000021f);
+
+    public float percent_anim_compeate{
+        get
+        {
+            return alpha_value/1.0f;
+        }
+    }
     public GameObject[] chips;
     private int skiped_element;
 
 
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
-    public GameObject ramka, kartinka;
-
+    public GameObject ramka, kartinka, oboi, comode, kamera;
+    
     //private static int SP_Alpha_Value = Shader.PropertyToID("_CustomAlphaValue");
 
     void Start()
     {
         try
         {
-            //Shader.SetGlobalFloat(SP_Alpha_Value, alpha_value);
             Global.ramka = ramka;
             Global.kartinka = kartinka;
+            Global.oboi = oboi;
+            Global.comod = comode;
+            Global.camera = kamera;
             GenerateBoard();
             ShowBoard();
 
             Renderer renderer = Global.kartinka.GetComponent<Renderer>();
             var matetial = renderer.material;
-            //Color color = renderer.material.color;
-            //color.a = 0; // 1f делает объект полностью непрозрачным
-            //renderer.material.color = color;
 
-            //var rebder = Global.ramka.GetComponent<MeshRenderer>();
-            //rebder.material.SetFloat("_CustomAlphaValue", alpha_value);
-            //matetial.SetFloat(SP_Alpha_Value, alpha_value);
-
-            //color = material.color;
-            //color.a = 0; // 1f делает объект полностью непрозрачным
-            //renderer.material.color = color;
+            renderer = Global.oboi.GetComponent<Renderer>();
+            var color = renderer.material.color;
+            color.a = alpha_value; // 1f делает объект полностью непрозрачным
+            renderer.material.color = color;
         }
         catch
         {
@@ -51,30 +54,42 @@ public class CreateBoard : MonoBehaviour
         {
             if (alpha_value < 1)
             {
-                alpha_value += 0.001f;
+                alpha_value += 0.005f;
 
+                //Картинка
                 Renderer renderer = Global.kartinka.GetComponent<Renderer>();
                 Color color = renderer.material.color;
                 color.a = alpha_value; // 1f делает объект полностью непрозрачным
                 renderer.material.color = color;
 
+                //Обои
+                renderer = Global.oboi.GetComponent<Renderer>();
+                color = renderer.material.color;
+                color.a = alpha_value; // 1f делает объект полностью непрозрачным
+                renderer.material.color = color;
+
+                //Комод
+                Transform komod = Global.comod.GetComponent<Transform>();
+                //Vector3 pos = komod.position;
+                Vector3 directionVector = komod_end_location - komod_start_location;
+                directionVector*=percent_anim_compeate;
+                Vector3 end_location = komod_start_location + directionVector;
+                komod.position = end_location;
+
+                //Камера
+                Transform kamera = Global.camera.GetComponent<Transform>();
+                directionVector = kamera_end_location - kamera_start_location;
+                directionVector *= percent_anim_compeate;
+                end_location = kamera_start_location + directionVector;
+                kamera.position = end_location;
+
             }
-
-
-            //renderer = Global.ramka.GetComponent<Renderer>();
-            //color = renderer.material.color;
-            //if (color.a < 1)
-            //{
-            //    color.a += 0.001f; // 1f делает объект полностью непрозрачным
-            //    renderer.material.color = color;
-
-            //}
         }
 
     }
     void GenerateBoard()
     {
-        if (false)
+        if (!Global.test)
         {
             int maxCountBlocks = 16 - Global.countEraceBlocks;
             for (int i = 0; i <= maxCountBlocks; i++)
