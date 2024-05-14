@@ -10,4 +10,5 @@ public class Global : MonoBehaviour
     public static int[,] board = new int[x_size, y_size];
     public static GameObject ramka = null, kartinka = null, oboi = null, comod = null, camera = null;
     public static bool test = false;
+    public static int masx_count_steps, current_steps;
 }
