@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class CreateBoard : MonoBehaviour
 {
     public static float alpha_value = 0.0f;
-    public static Vector3 komod_end_location = new Vector3(4.46999979f, 0.810000002f, 0.49000001f);
+    public static Vector3 komod_end_location = new Vector3(4.46515036f, -0.560000002f, 0.49000001f);
     public static Vector3 komod_start_location = new Vector3(5.44000006f, 2.28999996f, 0.49000001f);
     public static Vector3 kamera_end_location = new Vector3(1.60000002f, 8.97000027f, 0.540000021f);
     public static Vector3 kamera_start_location = new Vector3(-0.5f, 6.0f, 0.540000021f);
@@ -21,7 +21,7 @@ public class CreateBoard : MonoBehaviour
 
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
     public GameObject ramka, kartinka, oboi, comode, kamera;
-    public Text cout_steps;
+    public Text count_steps;
     
     //private static int SP_Alpha_Value = Shader.PropertyToID("_CustomAlphaValue");
 
@@ -34,8 +34,11 @@ public class CreateBoard : MonoBehaviour
             Global.oboi = oboi;
             Global.comod = comode;
             Global.camera = kamera;
+            Global.count_steps = count_steps;
             GenerateBoard();
-            ShowBoard();                        
+            ShowBoard();
+            Global.UpdateText();
+
 
             Renderer renderer = Global.kartinka.GetComponent<Renderer>();
             var matetial = renderer.material;
