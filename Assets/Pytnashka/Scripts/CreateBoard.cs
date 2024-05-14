@@ -35,7 +35,7 @@ public class CreateBoard : MonoBehaviour
             Global.comod = comode;
             Global.camera = kamera;
             GenerateBoard();
-            ShowBoard();
+            ShowBoard();                        
 
             Renderer renderer = Global.kartinka.GetComponent<Renderer>();
             var matetial = renderer.material;
@@ -44,6 +44,10 @@ public class CreateBoard : MonoBehaviour
             var color = renderer.material.color;
             color.a = alpha_value; // 1f делает объект полностью непрозрачным
             renderer.material.color = color;
+
+            Global.ramka.SetActive(false);
+            Global.oboi.SetActive(false);
+            Global.kartinka.SetActive(false);
         }
         catch
         {
@@ -54,6 +58,10 @@ public class CreateBoard : MonoBehaviour
     {
         if (MoveChip.game_finished)
         {
+            Global.ramka.SetActive(true);
+            Global.oboi.SetActive(true);
+            Global.kartinka.SetActive(true);
+
             if (alpha_value < 1)
             {
                 alpha_value += 0.005f;
