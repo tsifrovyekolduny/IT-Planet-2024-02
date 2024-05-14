@@ -65,6 +65,10 @@ public class MoveChip : MonoBehaviour
                 finalMousePos = Input.mousePosition;
                 FindOnBoard();
                 CalculateDirection();
+                if (can_move)
+                {
+                    Global.board[new_row, new_col] = number_chip;
+                }
             }
         }
     }
@@ -131,6 +135,7 @@ public class MoveChip : MonoBehaviour
         Global.ramka.GetComponent<MeshRenderer>().enabled = true;
         Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
         Global.comod.GetComponent<MeshRenderer>().enabled = true;
+        Global.oboi.GetComponent<MeshRenderer>().enabled = true;
         GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10);
     }
     void CalculateDirection()
@@ -176,10 +181,14 @@ public class MoveChip : MonoBehaviour
                 }
             }
 
+
+        }
+        catch { }
+        try
+        {
             //left
             if (Global.board[row_position, col_position - 1] == 0)
             {
-
                 empty_position = new Vector3(transform.position.x, 0, transform.position.z - GlobalVars.z_offset);
                 new_row = row_position;
                 new_col = col_position - 1;
@@ -198,7 +207,6 @@ public class MoveChip : MonoBehaviour
             }
         }
         catch { }
-
 
         //up
         try

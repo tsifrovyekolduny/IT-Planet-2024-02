@@ -11,7 +11,7 @@ public class Global : MonoBehaviour
     public static int[,] board = new int[x_size, y_size];
     public static GameObject ramka = null, kartinka = null, oboi = null, comod = null, camera = null;
     public static bool test = false;
-    public static int max_count_steps = 80;
+    public static int max_count_steps = 10;
     public static Text count_steps;
     public static bool is_game_over = false;
 
