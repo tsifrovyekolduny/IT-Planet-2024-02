@@ -14,8 +14,6 @@ public class Door : MonoBehaviour
     public bool isOpenable = true;
     public bool fourthDoor = false;
     public bool finalDoor = false;
-    public Animator AnimatorDoor;
-    public AnimationClip AnimationClipDoor;
 
     [SerializeField] protected AudioClip _openSoundClip;
     [SerializeField] protected AudioClip _closeSoundClip;
@@ -28,6 +26,11 @@ public class Door : MonoBehaviour
             SetToHingeJointTarget(OpenAngle, true);
         }
     }
+
+    public void OnMouseEnter()
+    {
+        ShowCursorWithIcon();
+    }    
 
     public void OnMouseOver()
     {
@@ -48,9 +51,14 @@ public class Door : MonoBehaviour
         }        
     }
 
-    void UnFocusOtherDoors()
+    public void ShowCursorWithIcon()
     {
+        Cursor.visible = true;
+    }
 
+    public void HideCursor()
+    {
+        Cursor.visible = false;
     }
 
     public void OnMouseDown()
@@ -66,23 +74,18 @@ public class Door : MonoBehaviour
                     {
                         door.CloseDoor();
                     }
-                }
-                if (AnimatorDoor != null)
-                {
-                    AnimatorDoor.Play(AnimationClipDoor.name);
-                }
-
+                }               
                 
                 SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
             }
-        }       
-
+        }
     }
 
     public void OnMouseExit()
     {
+        HideCursor();
         if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
             if (!_focused)

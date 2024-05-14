@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public struct LevelsComleted
     {
-        public bool Maze;
-        public bool TicTacToe;
-        public bool TagGame;
+        public LevelState Maze;
+        public LevelState TicTacToe;
+        public LevelState TagGame;
 
-        public LevelsComleted(bool maze, bool ticTacToe, bool tagGame)
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
         {
-            Maze = maze;    
+            Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
         }
@@ -27,15 +27,15 @@ public class GameManager : MonoBehaviour
     public int GetNumberOfCompletedLevels()
     {
         int counter = 0;
-        if (CompletedLevels.Maze)
+        if (CompletedLevels.Maze != LevelState.NotStarted)
         {
             ++counter;
         }
-        if (CompletedLevels.TicTacToe)
+        if (CompletedLevels.TicTacToe != LevelState.NotStarted)
         {
             ++counter;
         }
-        if (CompletedLevels.TagGame)
+        if (CompletedLevels.TagGame != LevelState.NotStarted)
         {
             ++counter;
         }
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(false, false, false);
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
         isFinishAvalable = false;
     }
 
@@ -74,22 +74,27 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CompleteLevel(string name, float timeAfterEnd = 10f)
+    public void CompleteLevel(string name, float timeAfterEnd = 10f, bool isWin = true)
     {
+        LevelState levelState = isWin ? LevelState.Won : LevelState.Defeat;
+
         Debug.Log(name);
 
         if (name == "LabLevel")
         {
-            CompletedLevels.Maze = true;
+            CompletedLevels.Maze = levelState;
         }
         if (name == "TicTacToeLevel")
         {
-            CompletedLevels.TicTacToe = true;
+            CompletedLevels.TicTacToe = levelState;
         }
         if (name == "Game")
         {
-            CompletedLevels.TagGame = true;
+            CompletedLevels.TagGame = levelState;
         }
+
+        // TODO fade dark or fade light
+
         FourthDoor.isOpenable = true;
         Invoke("BackToHub", timeAfterEnd);
     }
@@ -103,4 +108,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(name);
     }
+}
+
+public enum LevelState
+{
+    NotStarted,
+    Won,
+    Defeat
 }
