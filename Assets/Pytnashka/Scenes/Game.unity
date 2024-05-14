@@ -301,6 +301,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1940591671}
     - target: {fileID: 1075861060691536838, guid: ef2ddf414dc179d4ea8241875887cc69, type: 3}
+      propertyPath: cout_steps
+      value: 
+      objectReference: {fileID: 1962417061}
+    - target: {fileID: 1075861060691536838, guid: ef2ddf414dc179d4ea8241875887cc69, type: 3}
       propertyPath: chips.Array.size
       value: 16
       objectReference: {fileID: 0}

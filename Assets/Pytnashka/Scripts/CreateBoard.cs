@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class CreateBoard : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class CreateBoard : MonoBehaviour
 
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
     public GameObject ramka, kartinka, oboi, comode, kamera;
+    public Text cout_steps;
     
     //private static int SP_Alpha_Value = Shader.PropertyToID("_CustomAlphaValue");
 
