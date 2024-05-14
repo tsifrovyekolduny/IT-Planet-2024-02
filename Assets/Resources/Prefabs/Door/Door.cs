@@ -9,6 +9,8 @@ public class Door : MonoBehaviour
     public bool OpenedOnStart = false;
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
+    public string LevelName;    
+
     protected bool _focused;
     protected bool _hovered = false;
     public bool isOpenable = true;
@@ -79,8 +81,27 @@ public class Door : MonoBehaviour
                 SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
+
+                StartCoroutine(MoveCameraToDoor());
             }
         }
+    }
+
+    IEnumerator MoveCameraToDoor()
+    {        
+        HubCameraMovement camera = Camera.main.gameObject.GetComponent<HubCameraMovement>();
+        Vector3 startPoint = camera.transform.position;
+        camera.SetBlock(true);
+        GameManager.Instance.MakeFade(Color.white, true);
+        while (camera.transform.position != transform.position)
+        {    
+            camera.transform.position = Vector3.MoveTowards(camera.transform.position, transform.position, camera.Speed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        GameManager.Instance.PickLevel(LevelName);
+        yield break;
     }
 
     public void OnMouseExit()

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public bool isFinishAvalable = false;
     public Door FourthDoor;
+    public GameObject FadeInTemplate;
+    public GameObject FadeOutTemplate;
     [System.Serializable]
     public struct LevelsComleted
     {
@@ -23,6 +25,62 @@ public class GameManager : MonoBehaviour
         }
      }
     public LevelsComleted CompletedLevels;
+    void Awake()
+    {
+        Debug.Log("GameManager awoken");
+        MakeFade(Color.black, false);
+        BlockCursor();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance == this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+        InitializeManager();
+    }
+
+
+    public void MakeFade(Color color, bool fadeIn)
+    {
+        Fader fader;
+
+        if (fadeIn)
+        {
+            fader = Instantiate(FadeInTemplate).GetComponent<Fader>();
+        }
+        else
+        {
+            fader = Instantiate(FadeOutTemplate).GetComponent<Fader>();
+        }
+
+        fader.BackgroundColor = color;
+        fader.StartFade();
+    }    
+
+    public void BlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Debug.Log(level);
+        if (level != 0)
+        {
+            MakeFade(Color.white, false);
+            UnblockCursor();
+        }        
+    }
+
+    public void UnblockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
 
     public int GetNumberOfCompletedLevels()
     {
@@ -42,21 +100,7 @@ public class GameManager : MonoBehaviour
 
         return counter;
     }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance == this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
-        InitializeManager();
-    }
-
+    
     private void InitializeManager()
     {
         CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
@@ -91,22 +135,30 @@ public class GameManager : MonoBehaviour
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }
-
-        // TODO fade dark or fade light
+        }        
 
         FourthDoor.isOpenable = true;
+
+        if (isWin)
+        {
+            MakeFade(Color.white, true);
+        }
+        else
+        {
+            MakeFade(Color.black, true);
+        }
         Invoke("BackToHub", timeAfterEnd);
     }
 
     void BackToHub()
     {
+        BlockCursor();
         SceneManager.LoadScene("HubScene");
     }
 
     public void PickLevel(string name)
-    {
-        SceneManager.LoadScene(name);
+    {        
+        SceneManager.LoadScene(name);        
     }
 }
 
