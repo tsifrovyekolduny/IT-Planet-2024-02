@@ -74,7 +74,13 @@ public class MoveChip : MonoBehaviour
     }
     void MotionCountPlus()
     {
-        Global.count++;
+        ++Global.count;
+        Global.UpdateText();
+        if(Global.count == Global.max_count_steps)
+        {
+            Global.is_game_over = true;
+            Completed();
+        }
         //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.count.ToString();
     }
     void MoveChipOnBoard()
@@ -124,7 +130,8 @@ public class MoveChip : MonoBehaviour
         Debug.Log("Уровень завершён");
         Global.ramka.GetComponent<MeshRenderer>().enabled = true;
         Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
-        Global.comod.GetComponent<SpriteRenderer>().enabled = true;
+        Global.comod.GetComponent<MeshRenderer>().enabled = true;
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10);
     }
     void CalculateDirection()
     {
@@ -249,7 +256,6 @@ public class MoveChip : MonoBehaviour
         {
             if (Global.board[row_position + 1, col_position] == 0)
             {
-
                 empty_position = new Vector3(transform.position.x + GlobalVars.x_offset, 0, transform.position.z);
                 new_row = row_position + 1;
                 new_col = col_position;
