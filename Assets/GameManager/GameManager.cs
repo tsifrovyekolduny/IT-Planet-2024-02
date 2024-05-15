@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public class LastCompletedLevel
+{
+    public string LevelName;
+    public LevelState State;
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -10,13 +16,16 @@ public class GameManager : MonoBehaviour
     public Door FourthDoor;
     public GameObject FadeInTemplate;
     public GameObject FadeOutTemplate;
+
+    private LastCompletedLevel _lastCompletedLevel;
+
     [System.Serializable]
     public struct LevelsComleted
     {
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
-
+        
         public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
         {
             Maze = maze;
@@ -25,10 +34,10 @@ public class GameManager : MonoBehaviour
         }
      }
     public LevelsComleted CompletedLevels;
+
+
     void Awake()
     {
-        Debug.Log("GameManager awoken");
-        MakeFade(Color.black, false);
         BlockCursor();
         if (Instance == null)
         {
@@ -73,7 +82,68 @@ public class GameManager : MonoBehaviour
         {
             MakeFade(Color.white, false);
             UnblockCursor();
-        }        
+        }
+        else
+        {
+            BlockCursor();            
+            if (_lastCompletedLevel != null)
+            {                
+                InitHub();                
+            }
+        }
+    }
+
+    public void InitHubDoors()
+    {        
+        if(CompletedLevels.Maze == LevelState.Won)
+        {
+            SetBlockToDoor("LabLevel", true);
+        }
+        if(CompletedLevels.TagGame == LevelState.Won)
+        {
+            SetBlockToDoor("Game", true);
+        }
+        if(CompletedLevels.TicTacToe == LevelState.Won)
+        {
+            SetBlockToDoor("TicTacToeLevel", true);
+        }
+
+        if(GetNumberOfCompletedLevels() > 0)
+        {
+            SetBlockToDoor("FourthDoor", false);
+        }
+    }
+
+    public void SetBlockToDoor(string name, bool isBlocked)
+    {
+        GameObject.Find(name).GetComponent<Door>().isOpenable = isBlocked;
+    }
+
+    public void InitHub()
+    {        
+        Transform door = GameObject.Find(_lastCompletedLevel.LevelName).transform;
+        Transform camera = Camera.main.transform;
+
+        Door doorScript = door.GetComponent<Door>();        
+
+        if (_lastCompletedLevel.State == LevelState.Defeat)
+        {
+            MakeFade(Color.black, false);
+        }
+        else
+        {
+            MakeFade(Color.white, false);
+        }
+
+        camera.LookAt(door);
+        camera.position = door.position;
+
+        HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();
+
+        cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);        
+        cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
+        cameraScript.EventOnMovingToEnd.AddListener(InitHubDoors);
+        StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero));
     }
 
     public void UnblockCursor()
@@ -118,7 +188,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CompleteLevel(string name, float timeAfterEnd = 10f, bool isWin = true)
+    public void CompleteLevel(string name, float timeAfterEnd = 5f, bool isWin = true)
     {
         LevelState levelState = isWin ? LevelState.Won : LevelState.Defeat;
 
@@ -135,9 +205,7 @@ public class GameManager : MonoBehaviour
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }        
-
-        FourthDoor.isOpenable = true;
+        }                
 
         if (isWin)
         {
@@ -147,6 +215,11 @@ public class GameManager : MonoBehaviour
         {
             MakeFade(Color.black, true);
         }
+
+        _lastCompletedLevel = new LastCompletedLevel();
+        _lastCompletedLevel.LevelName = name;
+        _lastCompletedLevel.State = levelState;
+
         Invoke("BackToHub", timeAfterEnd);
     }
 

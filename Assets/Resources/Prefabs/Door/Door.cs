@@ -82,26 +82,17 @@ public class Door : MonoBehaviour
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
 
-                StartCoroutine(MoveCameraToDoor());
+                MoveCameraToDoor();
             }
         }
-    }
+    }    
 
-    IEnumerator MoveCameraToDoor()
-    {        
-        HubCameraMovement camera = Camera.main.gameObject.GetComponent<HubCameraMovement>();
-        Vector3 startPoint = camera.transform.position;
-        camera.SetBlock(true);
+    public void MoveCameraToDoor()
+    {
+        HubCameraMovement camera = Camera.main.GetComponent<HubCameraMovement>();
         GameManager.Instance.MakeFade(Color.white, true);
-        while (camera.transform.position != transform.position)
-        {    
-            camera.transform.position = Vector3.MoveTowards(camera.transform.position, transform.position, camera.Speed * Time.deltaTime);
-
-            yield return null;
-        }
-
-        GameManager.Instance.PickLevel(LevelName);
-        yield break;
+        StartCoroutine(camera.MoveCameraToPoint(transform.position));
+        camera.EventOnMovingToEnd.AddListener(delegate { GameManager.Instance.PickLevel(LevelName); } );
     }
 
     public void OnMouseExit()

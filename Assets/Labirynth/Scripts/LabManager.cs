@@ -313,6 +313,9 @@ public class LabManager : MonoBehaviour
     private GameObject _player;
 
     private Dictionary<int, Node> _bestOptionDict;
+    private bool _isFinished = false;
+    private LevelState _levelState;
+
 
     [SerializeField]
     private Node _currentNode;
@@ -492,7 +495,7 @@ public class LabManager : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, TimeAfterEnd);
+            _levelState = LevelState.Won;            
         }
 
     }
@@ -517,7 +520,11 @@ public class LabManager : MonoBehaviour
     }
     void Update()
     {
-
+        if(_levelState == LevelState.Won && !_isFinished)
+        {
+            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, TimeAfterEnd);
+            _isFinished = true;
+        }        
     }
 }
 

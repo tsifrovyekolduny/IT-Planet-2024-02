@@ -14,7 +14,9 @@ public class UiScript : MonoBehaviour
 
     void Awake()
     {
-        GetComponent<Canvas>().worldCamera = Camera.main;
+        Canvas canvas = GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
+        canvas.planeDistance = 0.5f;
         DontDestroyOnLoad(gameObject);
     }
 

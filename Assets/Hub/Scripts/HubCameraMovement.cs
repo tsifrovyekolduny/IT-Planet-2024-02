@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HubCameraMovement : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class HubCameraMovement : MonoBehaviour
 	public float MaxRotationConstraint = 0f;
 	public float StartTimeForBlockingCamera = 10f;
 	public float Speed = 1f;
+	public UnityEvent EventOnMovingToEnd = new UnityEvent();
 
 	private bool _isBlocked = false;
 
@@ -36,7 +38,21 @@ public class HubCameraMovement : MonoBehaviour
         }		
 	}
 
-    void FixedUpdate()
+	public IEnumerator MoveCameraToPoint(Vector3 destination)
+	{	
+		SetBlock(true);		
+		while (transform.position != destination)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, destination, Speed * Time.deltaTime);
+
+			yield return null;
+		}
+
+		EventOnMovingToEnd.Invoke();
+		yield break;
+	}
+
+	void FixedUpdate()
 	{
         if (!_isBlocked)
         {
