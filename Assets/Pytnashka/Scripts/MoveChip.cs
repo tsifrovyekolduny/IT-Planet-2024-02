@@ -135,7 +135,9 @@ public class MoveChip : MonoBehaviour
         Global.ramka.GetComponent<MeshRenderer>().enabled = true;
         Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
         Global.comod.GetComponent<MeshRenderer>().enabled = true;
-        Global.oboi.GetComponent<MeshRenderer>().enabled = true;
+        Global.count_steps.enabled = false;
+        if (Global.is_game_over == false)
+            Global.oboi.GetComponent<MeshRenderer>().enabled = true;
         GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10);
     }
     void CalculateDirection()
@@ -194,11 +196,6 @@ public class MoveChip : MonoBehaviour
                 new_col = col_position - 1;
                 PlaySound();
                 can_move = true;
-                //if (empty_position != old_position)
-                //{
-                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                //    return;
-                //}
                 old_position = new Vector3(transform.position.x, 0, transform.position.z);
                 if (preferredMove == PreferredMove.Left)
                 {

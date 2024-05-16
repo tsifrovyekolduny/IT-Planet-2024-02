@@ -7,6 +7,7 @@ public class CreateBoard : MonoBehaviour
     public static Vector3 komod_end_location = new Vector3(4.46515036f, -0.560000002f, 0.49000001f);
     public static Vector3 komod_start_location = new Vector3(5.44000006f, 2.28999996f, 0.49000001f);
     public static Vector3 kamera_end_location = new Vector3(1.60000002f, 8.97000027f, 0.540000021f);
+    public static Vector3 kamera_end_location_over = new Vector3(1.60000002f, 1000.97000027f, 0.540000021f);
     public static Vector3 kamera_start_location = new Vector3(-0.5f, 6.0f, 0.540000021f);
 
     public float percent_anim_compeate{
@@ -96,6 +97,21 @@ public class CreateBoard : MonoBehaviour
                 end_location = kamera_start_location + directionVector;
                 kamera.position = end_location;
 
+            }
+            else
+            {
+                if (Global.is_game_over)
+                {
+                    //Поднимаем камеру
+                    //Камера
+                    Transform kamera = Global.camera.GetComponent<Transform>();
+                    if(kamera.position.y < kamera_end_location_over.y)
+                    {
+                       Vector3 new_pos = kamera.position;
+                       new_pos.y += 1f;
+                       kamera.position = new_pos;
+                    }
+                }
             }
         }
 
