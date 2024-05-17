@@ -11,7 +11,7 @@ public class LabDoor : Door
         yield return new WaitForSeconds(0.2f);
         
         OpenDoor();
-        SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 0.3f);
+        SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 0.3f);
         _isOpened = true;
     }
 
@@ -56,7 +56,7 @@ public class LabDoor : Door
             {
                 _isOpened = false;
                 CloseDoor();
-                SoundManager.s_Instance.PlayAudioClip(_closeSoundClip, transform, 0.3f);
+                SoundManager.Instance.PlayAudioClip(_closeSoundClip, transform, 0.3f);
             }
         }
     }

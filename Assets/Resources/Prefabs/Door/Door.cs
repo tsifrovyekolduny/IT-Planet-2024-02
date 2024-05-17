@@ -17,6 +17,8 @@ public class Door : MonoBehaviour
     public bool fourthDoor = false;
     public bool finalDoor = false;
 
+    public Texture2D SelectIcon;
+
     [SerializeField] protected AudioClip _openSoundClip;
     [SerializeField] protected AudioClip _closeSoundClip;
     [SerializeField] protected AudioClip _enterSoundClip;
@@ -47,7 +49,7 @@ public class Door : MonoBehaviour
             
             if (!_hovered)
             {
-                SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+                SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
                 _hovered = true;
             }
         }        
@@ -56,6 +58,7 @@ public class Door : MonoBehaviour
     public void ShowCursorWithIcon()
     {
         Cursor.visible = true;
+        Cursor.SetCursor(SelectIcon, Vector2.zero, CursorMode.Auto);
     }
 
     public void HideCursor()
@@ -78,7 +81,7 @@ public class Door : MonoBehaviour
                     }
                 }               
                 
-                SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+                SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
 
@@ -91,7 +94,7 @@ public class Door : MonoBehaviour
     {
         HubCameraMovement camera = Camera.main.GetComponent<HubCameraMovement>();
         GameManager.Instance.MakeFade(Color.white, true);
-        StartCoroutine(camera.MoveCameraToPoint(transform.position));
+        StartCoroutine(camera.MoveCameraToPoint(transform.position, true));
         camera.EventOnMovingToEnd.AddListener(delegate { GameManager.Instance.PickLevel(LevelName); } );
     }
 
@@ -104,7 +107,7 @@ public class Door : MonoBehaviour
             {
                 CloseDoor();
 
-                SoundManager.s_Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
+                SoundManager.Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
 
                 _hovered = false;
             }

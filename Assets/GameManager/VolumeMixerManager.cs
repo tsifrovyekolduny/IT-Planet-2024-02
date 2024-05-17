@@ -4,14 +4,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 
-public class NewBehaviourScript : MonoBehaviour
+public class NewBehaviourScript : Singletone<NewBehaviourScript>
 {
-    [SerializeField] private AudioMixer audioMixer;
-
-    public void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    [SerializeField] private AudioMixer audioMixer;    
 
     public void SetSoundsVolume(float level)
     {

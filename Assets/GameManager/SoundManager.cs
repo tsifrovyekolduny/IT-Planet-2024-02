@@ -2,25 +2,14 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class SoundManager : MonoBehaviour
-{
-    public static SoundManager s_Instance;
+public class SoundManager : Singletone<SoundManager>
+{    
     private AudioMixer _mixer;
 
-    [SerializeField] private AudioSource soundObject;
+    [SerializeField] private AudioSource soundObject;    
 
     private void Awake()
     {
-        if (s_Instance == null)
-        {
-            s_Instance = this;
-        }
-        else if (s_Instance == this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
         InitializeManager();
     }
 

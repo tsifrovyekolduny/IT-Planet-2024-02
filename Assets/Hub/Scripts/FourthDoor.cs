@@ -9,14 +9,14 @@ public class FourthDoor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManager.Instance.IsFinishAvalable())
+        if (GameManager.Instance.GetNumberOfCompletedLevels() > 0)
         {
             door.gameObject.SetActive(true);
             //door.gameObject.GetComponent<Renderer>().enabled = true;
         }
         else
         {
-            door.gameObject.GetComponent<GameObject>().SetActive(false);
+            door.gameObject.SetActive(false);
         }
     }
     

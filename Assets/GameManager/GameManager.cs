@@ -9,15 +9,12 @@ public class LastCompletedLevel
     public LevelState State;
 }
 
-public class GameManager : MonoBehaviour
-{
-    public static GameManager Instance;
-    public bool isFinishAvalable = false;
-    public Door FourthDoor;
+public class GameManager : Singletone<GameManager>
+{    
     public GameObject FadeInTemplate;
     public GameObject FadeOutTemplate;
 
-    private LastCompletedLevel _lastCompletedLevel;
+    public LastCompletedLevel LastLevel;
 
     [System.Serializable]
     public struct LevelsComleted
@@ -33,24 +30,7 @@ public class GameManager : MonoBehaviour
             TagGame = tagGame;
         }
      }
-    public LevelsComleted CompletedLevels;
-
-
-    void Awake()
-    {
-        BlockCursor();
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance == this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
-        InitializeManager();
-    }
-
+    public LevelsComleted CompletedLevels;    
 
     public void MakeFade(Color color, bool fadeIn)
     {
@@ -75,76 +55,39 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
     }
 
+    private void Awake()
+    {
+        InitializeManager();
+        MakeFade(Color.black, false);
+        BlockCursor();
+    }
+
     private void OnLevelWasLoaded(int level)
     {
         Debug.Log(level);
         if (level != 0)
         {
-            MakeFade(Color.white, false);
             UnblockCursor();
+            MakeFade(Color.white, false);            
         }
         else
         {
             BlockCursor();            
-            if (_lastCompletedLevel != null)
-            {                
-                InitHub();                
+            if (LastLevel != null)
+            {
+                if (LastLevel.State == LevelState.Defeat)
+                {
+                    MakeFade(Color.black, false);
+                }
+                else
+                {
+                    MakeFade(Color.white, false);
+                }
             }
         }
     }
 
-    public void InitHubDoors()
-    {        
-        if(CompletedLevels.Maze == LevelState.Won)
-        {
-            SetBlockToDoor("LabLevel", true);
-        }
-        if(CompletedLevels.TagGame == LevelState.Won)
-        {
-            SetBlockToDoor("Game", true);
-        }
-        if(CompletedLevels.TicTacToe == LevelState.Won)
-        {
-            SetBlockToDoor("TicTacToeLevel", true);
-        }
-
-        if(GetNumberOfCompletedLevels() > 0)
-        {
-            SetBlockToDoor("FourthDoor", false);
-        }
-    }
-
-    public void SetBlockToDoor(string name, bool isBlocked)
-    {
-        GameObject.Find(name).GetComponent<Door>().isOpenable = isBlocked;
-    }
-
-    public void InitHub()
-    {        
-        Transform door = GameObject.Find(_lastCompletedLevel.LevelName).transform;
-        Transform camera = Camera.main.transform;
-
-        Door doorScript = door.GetComponent<Door>();        
-
-        if (_lastCompletedLevel.State == LevelState.Defeat)
-        {
-            MakeFade(Color.black, false);
-        }
-        else
-        {
-            MakeFade(Color.white, false);
-        }
-
-        camera.LookAt(door);
-        camera.position = door.position;
-
-        HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();
-
-        cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);        
-        cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
-        cameraScript.EventOnMovingToEnd.AddListener(InitHubDoors);
-        StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero));
-    }
+    
 
     public void UnblockCursor()
     {
@@ -173,14 +116,8 @@ public class GameManager : MonoBehaviour
     
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
-        isFinishAvalable = false;
-    }
-
-    public bool IsFinishAvalable()
-    {
-        return isFinishAvalable;
-    }
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
+    }    
 
     // Update is called once per frame
     void Update()
@@ -216,9 +153,9 @@ public class GameManager : MonoBehaviour
             MakeFade(Color.black, true);
         }
 
-        _lastCompletedLevel = new LastCompletedLevel();
-        _lastCompletedLevel.LevelName = name;
-        _lastCompletedLevel.State = levelState;
+        LastLevel = new LastCompletedLevel();
+        LastLevel.LevelName = name;
+        LastLevel.State = levelState;
 
         Invoke("BackToHub", timeAfterEnd);
     }

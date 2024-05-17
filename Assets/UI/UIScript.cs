@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UiScript : MonoBehaviour
+public class UiScript : Singletone<UiScript>
 {
     public GameObject MenuPanel;
     public GameObject SurrenderButton;    
@@ -16,8 +16,7 @@ public class UiScript : MonoBehaviour
     {
         Canvas canvas = GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
-        canvas.planeDistance = 0.5f;
-        DontDestroyOnLoad(gameObject);
+        canvas.planeDistance = 0.5f;        
     }
 
     // Update is called once per frame
