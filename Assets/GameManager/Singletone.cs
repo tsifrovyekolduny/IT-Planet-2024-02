@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class Singletone<T> : MonoBehaviour where T : class
 {
     public static T Instance;
-    private void Start()
+    protected virtual void Start()
     {        
         if (Instance == null)
         {

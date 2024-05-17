@@ -351,14 +351,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2143193224}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
 --- !u!1 &252533814
 GameObject:
@@ -973,7 +969,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093296396}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: d7a761b3f910c86458973975df67d4ab, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: f3fa7995922b6554a8f29c5150c4fd58, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 1
   m_TargetCamera: {fileID: 0}
@@ -986,14 +982,14 @@ VideoPlayer:
   m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 1
   m_TargetAudioSources:
-  - {fileID: 0}
+  - {fileID: 252533816}
   m_DirectAudioVolumes:
   - 1
   m_Url: 
   m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
+  m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 0
@@ -1384,34 +1380,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2143193222 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
-  m_PrefabInstance: {fileID: 137942609}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2143193224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143193222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f164dec47315fa45a1d87c572b7d0ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OpenAngle: -120
-  OpenedOnStart: 0
-  OpeningSpeed: 30
-  CanBeFocusable: 0
-  LevelName: SmashGame
-  isOpenable: 0
-  fourthDoor: 0
-  finalDoor: 0
-  _openSoundClip: {fileID: 8300000, guid: 61f51e72867dabc4bb4bbea7b2426216, type: 3}
-  _closeSoundClip: {fileID: 8300000, guid: 6b849504e17e3ac44926d332bf758a3e, type: 3}
-  _enterSoundClip: {fileID: 8300000, guid: cd208ef89466d0d46b3aaa0c936c9178, type: 3}
 --- !u!1001 &5915316842733114206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1425,9 +1393,25 @@ PrefabInstance:
       value: UI
       objectReference: {fileID: 0}
     - target: {fileID: 3225186217751699904, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225186217751699904, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225186217751699904, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1285943790}
+    - target: {fileID: 3225186217751699904, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225186217751699904, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: NewBehaviourScript, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5207520239745721897, guid: cd0c9731e3e7df34383de7a3fc55f9ff, type: 3}
       propertyPath: m_Pivot.x
       value: 0

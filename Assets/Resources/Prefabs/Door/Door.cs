@@ -55,12 +55,19 @@ public class Door : MonoBehaviour
 
     public virtual void ShowCursor()
     {
-        Cursor.visible = true;        
+        if (UiScript.Instance.Hidden)
+        {
+            Cursor.visible = true;
+        }
+        
     }
 
     public void HideCursor()
     {
-        Cursor.visible = false;        
+        if (UiScript.Instance.Hidden)
+        {
+            Cursor.visible = false;
+        }
     }
 
     public void OnMouseDown()

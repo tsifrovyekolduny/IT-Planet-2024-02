@@ -80,8 +80,9 @@ public class HubManager : MonoBehaviour
             camera.LookAt(door);
             camera.position = door.position;
 
-            HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();
-            cameraScript.StartTimeForBlockingCamera = 0f;
+            HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();            
+            cameraScript.StopAllCoroutines();
+            cameraScript.SetBlock(true);
 
             cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);
             cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });

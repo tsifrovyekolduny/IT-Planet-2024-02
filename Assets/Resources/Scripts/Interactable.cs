@@ -4,9 +4,12 @@ public class Interactable : MonoBehaviour
 {
     public Texture2D InteractionCursor;
 
-    private void OnMouseEnter()
-    {                
-        Cursor.SetCursor(InteractionCursor, Vector2.zero, CursorMode.Auto);
+    public void OnMouseEnter()
+    {
+        if (UiScript.Instance.Hidden || LayerMask.LayerToName(gameObject.layer) == "UI")
+        {
+            Cursor.SetCursor(InteractionCursor, Vector2.zero, CursorMode.Auto);
+        }        
     }
 
     public void OnMouseExit()
