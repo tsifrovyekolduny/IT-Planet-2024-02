@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 
 public class LabDoor : Door
 {
-    private bool _isOpened;
+    private bool _isOpened;    
+
     IEnumerator OpenAfterTime()
     {
         yield return new WaitForSeconds(0.2f);

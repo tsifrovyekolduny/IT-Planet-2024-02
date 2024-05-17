@@ -15,9 +15,7 @@ public class Door : MonoBehaviour
     protected bool _hovered = false;
     public bool isOpenable = true;
     public bool fourthDoor = false;
-    public bool finalDoor = false;
-
-    public Texture2D SelectIcon;
+    public bool finalDoor = false;    
 
     [SerializeField] protected AudioClip _openSoundClip;
     [SerializeField] protected AudioClip _closeSoundClip;
@@ -33,7 +31,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        ShowCursorWithIcon();
+        ShowCursor();
     }    
 
     public void OnMouseOver()
@@ -53,17 +51,16 @@ public class Door : MonoBehaviour
                 _hovered = true;
             }
         }        
-    }
+    }    
 
-    public void ShowCursorWithIcon()
+    public virtual void ShowCursor()
     {
-        Cursor.visible = true;
-        Cursor.SetCursor(SelectIcon, Vector2.zero, CursorMode.Auto);
+        Cursor.visible = true;        
     }
 
     public void HideCursor()
     {
-        Cursor.visible = false;
+        Cursor.visible = false;        
     }
 
     public void OnMouseDown()

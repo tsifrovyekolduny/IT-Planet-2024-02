@@ -7,16 +7,8 @@ public class HubManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManager.Instance.LastLevel != null)
-        {
-            InitHubAfterLevel();            
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        InitIconOfLastDoor();
+        InitHubAfterLevel();        
     }
 
     public void InitDoorsAfterLevel()
@@ -45,22 +37,56 @@ public class HubManager : MonoBehaviour
         GameObject.Find(name).GetComponent<Door>().isOpenable = isBlocked;
     }
 
+    public void InitIconOfLastDoor()
+    {
+        Cursor.visible = true;
+        Texture2D icon;
+
+        if (GameManager.Instance == null)
+        {
+            icon = Resources.Load<Texture2D>("Icons/Doors/games0");
+        }
+        else
+        {
+            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfCompletedLevels();
+
+            if (numberOfCompletedLevels == 0)
+            {
+                icon = Resources.Load<Texture2D>("Icons/Doors/games0");
+            }
+            else if (numberOfCompletedLevels < 3 && numberOfCompletedLevels > 0)
+            {
+                icon = Resources.Load<Texture2D>("Icons/Doors/games1-2");
+            }
+            else
+            {
+                icon = Resources.Load<Texture2D>("Icons/Doors/games3");
+            }
+        }
+
+        GameObject.Find("Final-SmashHit").GetComponent<Interactable>().InteractionCursor = icon;
+
+    }
+
     public void InitHubAfterLevel()
     {
-        Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;
-        Transform camera = Camera.main.transform;
+        if (GameManager.Instance?.LastLevel != null)
+        {
+            Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;
+            Transform camera = Camera.main.transform;
 
-        Door doorScript = door.GetComponent<Door>();
+            Door doorScript = door.GetComponent<Door>();
 
-        camera.LookAt(door);
-        camera.position = door.position;        
+            camera.LookAt(door);
+            camera.position = door.position;
 
-        HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();
-        cameraScript.StartTimeForBlockingCamera = 0f;        
+            HubCameraMovement cameraScript = Camera.main.GetComponent<HubCameraMovement>();
+            cameraScript.StartTimeForBlockingCamera = 0f;
 
-        cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);
-        cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
-        cameraScript.EventOnMovingToEnd.AddListener(InitDoorsAfterLevel);
-        StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero, false));
+            cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);
+            cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
+            cameraScript.EventOnMovingToEnd.AddListener(InitDoorsAfterLevel);
+            StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero, false));
+        }
     }
 }
