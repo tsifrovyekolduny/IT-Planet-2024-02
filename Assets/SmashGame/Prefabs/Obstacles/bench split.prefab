@@ -190,7 +190,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -213,8 +213,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.5542834, y: 3.5186367, z: 9.883778}
-  m_Center: {x: 0.7877587, y: 0.56565976, z: -0.041682243}
+  m_Size: {x: 3.5542834, y: 3.626207, z: 10.125366}
+  m_Center: {x: 0.7877587, y: 0.61944497, z: -0.03847766}
 --- !u!205 &8917054984564398966
 LODGroup:
   m_ObjectHideFlags: 0
@@ -234,6 +234,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 3423430093160461938}
     - renderer: {fileID: 963754406415720190}
+    - renderer: {fileID: 8475715235952775126}
   m_Enabled: 1
 --- !u!114 &5583700658694961323
 MonoBehaviour:
@@ -268,8 +269,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

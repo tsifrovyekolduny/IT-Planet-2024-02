@@ -19,6 +19,10 @@ public class DamageScript : MonoBehaviour
             _rb = GetComponent<Rigidbody>();
             _rb.isKinematic = true;
         }
+        if (gameObject.name == "Trash")
+        {
+            Debug.Log(_rb.isKinematic);
+        }
 
     }
 
@@ -56,6 +60,10 @@ public class DamageScript : MonoBehaviour
         if (_rb != null)
         {
             _rb.isKinematic = false;
+        }
+        if (gameObject.name == "Trash")
+        {
+            Debug.Log(gameObject.name + ": " + _rb.isKinematic);
         }
     }
 }

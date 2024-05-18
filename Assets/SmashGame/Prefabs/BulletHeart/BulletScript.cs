@@ -15,7 +15,7 @@ public class BulletScript : MonoBehaviour
         if (collision.gameObject.tag == "Damage")
         {
             collision.gameObject.GetComponent<DamageScript>().BeingHit();
-            StartCoroutine(DestroyBullet(1.0f));
+            StartCoroutine(DestroyBullet(0.4f));
         }
     }
 
