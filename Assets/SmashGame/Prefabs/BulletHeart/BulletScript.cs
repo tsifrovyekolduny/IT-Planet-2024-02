@@ -7,7 +7,7 @@ public class BulletScript : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(DestroyBullet());
+        StartCoroutine(DestroyBullet(secondsOfLife));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -15,13 +15,14 @@ public class BulletScript : MonoBehaviour
         if (collision.gameObject.tag == "Damage")
         {
             collision.gameObject.GetComponent<DamageScript>().BeingHit();
+            StartCoroutine(DestroyBullet(1.0f));
         }
     }
 
-    IEnumerator DestroyBullet()
+    IEnumerator DestroyBullet(float timeToDestroy)
     {
 
-        yield return new WaitForSeconds(secondsOfLife);
+        yield return new WaitForSeconds(timeToDestroy);
 
         gameObject.SetActive(false);
     }

@@ -26,6 +26,7 @@ public class DamageScript : MonoBehaviour
     {
         if (_rb.isKinematic == false)
         {
+            Debug.Log(gameObject.name);
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
             {

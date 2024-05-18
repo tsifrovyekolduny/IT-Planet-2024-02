@@ -34,13 +34,9 @@ public class CameraMove : MonoBehaviour
 
         PlayerAnimator.SetBool("isHurt", true);
 
-        Debug.Log(PlayerAnimator.GetBool("isHurt"));
-
         yield return new WaitForSeconds(invisibleTime);
 
         PlayerAnimator.SetBool("isHurt", false);
-
-        Debug.Log(PlayerAnimator.GetBool("isHurt"));
 
         _canTakeDamage = true;
     }
@@ -96,7 +92,6 @@ public class CameraMove : MonoBehaviour
     void FixedUpdate()
     {
         gameObject.transform.Translate(Vector3.forward * speed * time);
-        
     }
 
     private void Update()
