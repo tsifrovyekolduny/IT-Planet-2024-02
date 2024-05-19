@@ -1,27 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class UiScript : MonoBehaviour
+public class UiScript : Singletone<UiScript>
 {
     public GameObject MenuPanel;
-    public GameObject SurrenderButton;    
+    public GameObject SurrenderButton;
 
-    [SerializeField]
-    private bool _hidden;
+    private bool _hidden = true;
+    public bool Hidden
+    {
+        get
+        {
+            return _hidden;
+        }
+        private set
+        {
+            _hidden = value;
+        }
+    }
+    private CursorLockMode _previousLockMode;
+
     public bool Surrender;
 
-
-    void Awake()
+    protected override void Start()
     {
-        GetComponent<Canvas>().worldCamera = Camera.main;
+        base.Start();
+        Canvas canvas = GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
+        canvas.planeDistance = 0.5f;       
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        {            
             ChangeActive();
         }
     }
@@ -32,23 +44,38 @@ public class UiScript : MonoBehaviour
         GameManager.Instance.CompleteLevel("");
     }
 
-    public void ChangeActive()
+    public void ResetCursor()
     {
-        if (_hidden)
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+    public void ChangeActive()
+    {        
+        if (Hidden)
         {
+            _previousLockMode = Cursor.lockState;            
+            GameManager.Instance.UnblockCursor();            
+
             MenuPanel.SetActive(true);
             if (!Surrender)
             {
                 SurrenderButton.SetActive(false);
             }
             Time.timeScale = 0;
-            _hidden = false;
+            Hidden = false;
         }
         else
         {
             MenuPanel.SetActive(false);
             Time.timeScale = 1;
-            _hidden = true;
+            Hidden = true;
+
+            if (_previousLockMode != CursorLockMode.Confined)
+            {
+                GameManager.Instance.BlockCursor();
+            }
+
+            ResetCursor();
         }
     }
 }
