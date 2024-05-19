@@ -28,7 +28,7 @@ public class HubManager : MonoBehaviour
 
         if (GameManager.Instance.GetNumberOfCompletedLevels() > 0)
         {
-            SetBlockToDoor("Final-SmashHit", true);
+            SetBlockToDoor("SmashGame", true);
         }
     }
 
@@ -64,7 +64,7 @@ public class HubManager : MonoBehaviour
             }
         }
 
-        GameObject.Find("Final-SmashHit").GetComponent<Interactable>().InteractionCursor = icon;
+        GameObject.Find("SmashGame").GetComponent<Interactable>().InteractionCursor = icon;
 
     }
 

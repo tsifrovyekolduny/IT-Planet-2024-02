@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_Name
-      value: Final-SmashHit
+      value: SmashGame
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_IsActive

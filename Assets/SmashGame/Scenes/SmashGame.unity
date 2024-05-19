@@ -11631,10 +11631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e89bd445471e54299c0e8bdee4d7e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoodEnging: {fileID: 284795910}
-  BadEnging: {fileID: 667713518}
-  SoSoEnging: {fileID: 1295357627}
-  camera: {fileID: 1878292509}
 --- !u!1001 &1917636922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13115,6 +13111,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5568295059105698443, guid: 81cc0b472caee6b40a807f21240901d9, type: 3}
+      propertyPath: speed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5568295059105698443, guid: 81cc0b472caee6b40a807f21240901d9, type: 3}
       propertyPath: CutSceneCamera
       value: 

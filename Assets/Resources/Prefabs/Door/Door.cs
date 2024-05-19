@@ -23,6 +23,7 @@ public class Door : MonoBehaviour
 
     public void Awake()
     {
+        LevelName = gameObject.name;
         if (OpenedOnStart)
         {
             SetToHingeJointTarget(OpenAngle, true);

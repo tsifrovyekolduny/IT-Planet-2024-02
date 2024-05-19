@@ -86,12 +86,15 @@ public class CameraMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        gameObject.transform.Translate(Vector3.forward * speed * time);
+        if(_hp > 0)
+        {
+            gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        }        
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !_isReloading)
+        if (Input.GetMouseButtonDown(0) && !_isReloading && _hp > 0)
         {
             Shoot();
         }
