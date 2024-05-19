@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SmashGame/Scenes/SmashGame.unity
     guid: 3f1b41b4ff128314a8dfa983a148b029
+  - enabled: 1
+    path: Assets/Ending/Scenes/Ending.unity
+    guid: ea868f9ccaa30884cb203112fa43ae3d
   m_configObjects: {}

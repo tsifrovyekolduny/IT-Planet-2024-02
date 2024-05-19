@@ -78,7 +78,10 @@ public class HubCameraMovement : MonoBehaviour
 
             Vector3 eulerRot = transform.rotation.eulerAngles;
 
-            VideoPlane.transform.rotation = Quaternion.Euler(180, eulerRot.y + 180, 0);
+            if(VideoPlane != null)
+            {
+                VideoPlane.transform.rotation = Quaternion.Euler(180, eulerRot.y + 180, 0);
+            }            
 
             eulerRot.y = (eulerRot.y + 180f) % 360f - 180f;
             eulerRot.x = (eulerRot.x + 180f) % 360f - 180f;

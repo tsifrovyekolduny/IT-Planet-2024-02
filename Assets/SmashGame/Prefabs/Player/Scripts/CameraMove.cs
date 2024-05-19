@@ -47,7 +47,7 @@ public class CameraMove : MonoBehaviour
         
         if (_hp <= 0)
         {
-            GameManager.Instance.CompleteLevel("SmashHit", timeAfterEnd: 10f, false);            
+            GameManager.Instance.CompleteLevel("SmashGame", timeAfterEnd: 10f, false);            
         }
     }
 
@@ -66,7 +66,7 @@ public class CameraMove : MonoBehaviour
     {
         if (otherObject.tag == "Endingzone") {
 
-            GameManager.Instance.CompleteLevel("SmashHit");            
+            GameManager.Instance.CompleteLevel("SmashGame");            
         }
     }
 

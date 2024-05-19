@@ -22,14 +22,14 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
-        public LevelState SmashHit;
+        public LevelState SmashGame;
         
         public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
-            SmashHit = smashHit;
+            SmashGame = smashHit;
         }
      }
     public LevelsComleted CompletedLevels;    
@@ -66,11 +66,11 @@ public class GameManager : Singletone<GameManager>
 
     private void OnLevelWasLoaded(int level)
     {        
-        if (level != 0)
+        if (level < (SceneManager.sceneCountInBuildSettings - 1) && level > 0)
         {
             UnblockCursor();
             MakeFade(Color.white, false);            
-        }
+        }        
         else
         {
             BlockCursor();            
@@ -113,7 +113,7 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashHit != levelState)
+            if (CompletedLevels.SmashGame != levelState)
             {
                 ++counter;
             }
@@ -132,7 +132,7 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashHit == levelState)
+            if (CompletedLevels.SmashGame == levelState)
             {
                 ++counter;
             }
@@ -173,7 +173,7 @@ public class GameManager : Singletone<GameManager>
         }                
         if(name == "SmashGame")
         {
-            CompletedLevels.SmashHit = levelState;
+            CompletedLevels.SmashGame = levelState;
         }
 
         if (isWin)
