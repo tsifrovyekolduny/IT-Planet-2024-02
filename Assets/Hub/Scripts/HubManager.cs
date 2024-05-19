@@ -72,10 +72,11 @@ public class HubManager : MonoBehaviour
     {
         if (GameManager.Instance?.LastLevel != null)
         {
-            Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;
+            Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;            
             Transform camera = Camera.main.transform;
 
             Door doorScript = door.GetComponent<Door>();
+            doorScript.CanBeFocusable = false;
 
             camera.LookAt(door);
             camera.position = door.position;
@@ -86,6 +87,7 @@ public class HubManager : MonoBehaviour
 
             cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);
             cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
+            cameraScript.EventOnMovingToEnd.AddListener(delegate { doorScript.CanBeFocusable = true; });
             cameraScript.EventOnMovingToEnd.AddListener(InitDoorsAfterLevel);
             StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero, false));
         }
