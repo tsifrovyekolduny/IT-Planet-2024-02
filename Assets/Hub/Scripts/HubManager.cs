@@ -26,7 +26,7 @@ public class HubManager : MonoBehaviour
             SetBlockToDoor("TicTacToeLevel", false);
         }
 
-        if (GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        if (GameManager.Instance.GetNumberOfLevels() > 0)
         {
             SetBlockToDoor("SmashGame", true);
         }
@@ -48,7 +48,7 @@ public class HubManager : MonoBehaviour
         }
         else
         {
-            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfCompletedLevels();
+            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfLevels();
 
             if (numberOfCompletedLevels == 0)
             {

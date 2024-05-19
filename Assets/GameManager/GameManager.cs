@@ -171,6 +171,10 @@ public class GameManager : Singletone<GameManager>
         {
             CompletedLevels.TagGame = levelState;
         }                
+        if(name == "SmashGame")
+        {
+            CompletedLevels.SmashHit = levelState;
+        }
 
         if (isWin)
         {
@@ -185,13 +189,26 @@ public class GameManager : Singletone<GameManager>
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
 
-        Invoke("BackToHub", timeAfterEnd);
+        if(name == "SmashGame")
+        {
+            Invoke("ToEnding", timeAfterEnd);
+        }
+        else
+        {
+            Invoke("BackToHub", timeAfterEnd);
+        }
+        
     }
 
     void BackToHub()
     {
         BlockCursor();
         SceneManager.LoadScene("HubScene");
+    }
+
+    void ToEnding()
+    {
+        SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)
