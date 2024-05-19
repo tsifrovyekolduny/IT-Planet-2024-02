@@ -126,7 +126,7 @@ public class Main : MonoBehaviour
             yield return null;
         }
 
-        SoundManager.s_Instance.PlayAudioClip(_glassFallSound, transform, 1f);
+        SoundManager.Instance.PlayAudioClip(_glassFallSound, transform, 1f);
     }
 
     public IEnumerator SpawnObjects(float time)

@@ -9,17 +9,17 @@ public class Door : MonoBehaviour
     public bool OpenedOnStart = false;
     public float OpeningSpeed = 100f;
     public bool CanBeFocusable;
-    private bool _focused;
-    private bool _hovered = false;
+    public string LevelName;    
+
+    protected bool _focused;
+    protected bool _hovered = false;
     public bool isOpenable = true;
     public bool fourthDoor = false;
-    public bool finalDoor = false;
-    public Animator AnimatorDoor;
-    public AnimationClip AnimationClipDoor;
+    public bool finalDoor = false;    
 
-    [SerializeField] private AudioClip _openSoundClip;
-    [SerializeField] private AudioClip _closeSoundClip;
-    [SerializeField] private AudioClip _enterSoundClip;
+    [SerializeField] protected AudioClip _openSoundClip;
+    [SerializeField] protected AudioClip _closeSoundClip;
+    [SerializeField] protected AudioClip _enterSoundClip;
 
     public void Awake()
     {
@@ -27,12 +27,16 @@ public class Door : MonoBehaviour
         {
             SetToHingeJointTarget(OpenAngle, true);
         }
-        
     }
+
+    public void OnMouseEnter()
+    {
+        ShowCursor();
+    }    
 
     public void OnMouseOver()
     {
-        if (fourthDoor && GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        if (fourthDoor && GameManager.Instance.GetNumberOfLevels() > 0)
         {
             isOpenable = true;
         }
@@ -43,15 +47,27 @@ public class Door : MonoBehaviour
             
             if (!_hovered)
             {
-                SoundManager.s_Instance.PlayAudioClip(_openSoundClip, transform, 1f);
+                SoundManager.Instance.PlayAudioClip(_openSoundClip, transform, 1f);
                 _hovered = true;
             }
         }        
+    }    
+
+    public virtual void ShowCursor()
+    {
+        if (UiScript.Instance.Hidden)
+        {
+            Cursor.visible = true;
+        }
+        
     }
 
-    void UnFocusOtherDoors()
+    public void HideCursor()
     {
-
+        if (UiScript.Instance.Hidden)
+        {
+            Cursor.visible = false;
+        }
     }
 
     public void OnMouseDown()
@@ -67,31 +83,39 @@ public class Door : MonoBehaviour
                     {
                         door.CloseDoor();
                     }
-                }
-                if (AnimatorDoor != null)
-                {
-                    AnimatorDoor.Play(AnimationClipDoor.name);
-                }
-
+                }               
                 
-                SoundManager.s_Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
+                SoundManager.Instance.PlayAudioClip(_enterSoundClip, transform, 1f);
 
                 DestroyImmediate(GameObject.Find("MusicManager"));
-            }
-        }       
 
+                MoveCameraToDoor();
+            }
+        }
+    }    
+
+    public void MoveCameraToDoor()
+    {
+        HubCameraMovement camera = Camera.main.GetComponent<HubCameraMovement>();
+        GameManager.Instance.MakeFade(Color.white, true);
+        StartCoroutine(camera.MoveCameraToPoint(transform.position, true));
+        camera.EventOnMovingToEnd.AddListener(delegate { GameManager.Instance.PickLevel(LevelName); } );
     }
 
     public void OnMouseExit()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        HideCursor();
+        if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
             if (!_focused)
             {
                 CloseDoor();
+
+                SoundManager.Instance.PlayAudioClip(_closeSoundClip, transform, 1f);
+
+                _hovered = false;
             }
         }
-
     }
 
     public void OpenDoor()

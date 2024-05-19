@@ -17,7 +17,7 @@ public class CameraMove : MonoBehaviour
     {
         startPosition = transform.position;
         time = Time.deltaTime;
-        hp = GameManager.Instance.GetNumberOfCompletedLevels();
+        hp = GameManager.Instance.GetNumberOfLevels();
     }
 
     void TakeDamage()

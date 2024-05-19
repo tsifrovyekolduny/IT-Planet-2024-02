@@ -1,24 +1,15 @@
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Audio;
 
-public class SoundManager : MonoBehaviour
-{
-    public static SoundManager s_Instance;
+public class SoundManager : Singletone<SoundManager>
+{    
+    private AudioMixer _mixer;
 
-    [SerializeField] private AudioSource soundObject;
+    [SerializeField] private AudioSource soundObject;    
 
     private void Awake()
     {
-        if (s_Instance == null)
-        {
-            s_Instance = this;
-        }
-        else if (s_Instance == this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
         InitializeManager();
     }
 
@@ -32,6 +23,7 @@ public class SoundManager : MonoBehaviour
         AudioSource audioSource = Instantiate(soundObject, spawnTransform.position, Quaternion.identity);
 
         audioSource.clip = audioClip;
+
         audioSource.volume = volume;
 
         audioSource.Play();
@@ -48,6 +40,7 @@ public class SoundManager : MonoBehaviour
         int rand = Random.Range(0, audioClip.Length - 1);
 
         audioSource.clip = audioClip[rand];
+
         audioSource.volume = volume;
 
         audioSource.Play();

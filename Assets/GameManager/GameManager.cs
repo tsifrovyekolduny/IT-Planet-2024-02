@@ -3,70 +3,139 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class LastCompletedLevel
 {
-    public static GameManager Instance;
-    public bool isFinishAvalable = false;
-    public Door FourthDoor;
+    public string LevelName;
+    public LevelState State;
+}
+
+public class GameManager : Singletone<GameManager>
+{    
+    public GameObject FadeInTemplate;
+    public GameObject FadeOutTemplate;
+
+    public LastCompletedLevel LastLevel;
+
     [System.Serializable]
     public struct LevelsComleted
     {
-        public bool Maze;
-        public bool TicTacToe;
-        public bool TagGame;
-
-        public LevelsComleted(bool maze, bool ticTacToe, bool tagGame)
+        public LevelState Maze;
+        public LevelState TicTacToe;
+        public LevelState TagGame;
+        
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
         {
-            Maze = maze;    
+            Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
         }
      }
-    public LevelsComleted CompletedLevels;
+    public LevelsComleted CompletedLevels;    
 
-    public int GetNumberOfCompletedLevels()
+    public void MakeFade(Color color, bool fadeIn)
+    {
+        Fader fader;
+
+        if (fadeIn)
+        {
+            fader = Instantiate(FadeInTemplate).GetComponent<Fader>();
+        }
+        else
+        {
+            fader = Instantiate(FadeOutTemplate).GetComponent<Fader>();
+        }
+
+        fader.BackgroundColor = color;
+        fader.StartFade();
+    }    
+
+    public void BlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void Awake()
+    {
+        InitializeManager();
+        MakeFade(Color.black, false);
+        BlockCursor();
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {        
+        if (level != 0)
+        {
+            UnblockCursor();
+            MakeFade(Color.white, false);            
+        }
+        else
+        {
+            BlockCursor();            
+            if (LastLevel != null)
+            {
+                if (LastLevel.State == LevelState.Defeat)
+                {
+                    MakeFade(Color.black, false);
+                }
+                else
+                {
+                    MakeFade(Color.white, false);
+                }
+            }
+        }
+    }
+
+    
+
+    public void UnblockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
+
+    public int GetNumberOfLevels(LevelState levelState = LevelState.NotStarted, bool intersect = true)
     {
         int counter = 0;
-        if (CompletedLevels.Maze)
+        if (intersect)
         {
-            ++counter;
+            if (CompletedLevels.Maze != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame != levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TicTacToe)
+        else
         {
-            ++counter;
+            if (CompletedLevels.Maze == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame == levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TagGame)
-        {
-            ++counter;
-        }
+        
 
         return counter;
     }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance == this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
-        InitializeManager();
-    }
-
+    
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(false, false, false);
-        isFinishAvalable = false;
-    }
-
-    public bool IsFinishAvalable()
-    {
-        return isFinishAvalable;
-    }
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
+    }    
 
     // Update is called once per frame
     void Update()
@@ -74,33 +143,56 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CompleteLevel(string name, float timeAfterEnd = 10f)
+    public void CompleteLevel(string name, float timeAfterEnd = 5f, bool isWin = true)
     {
+        LevelState levelState = isWin ? LevelState.Won : LevelState.Defeat;
+
         Debug.Log(name);
 
         if (name == "LabLevel")
         {
-            CompletedLevels.Maze = true;
+            CompletedLevels.Maze = levelState;
         }
         if (name == "TicTacToeLevel")
         {
-            CompletedLevels.TicTacToe = true;
+            CompletedLevels.TicTacToe = levelState;
         }
         if (name == "Game")
         {
-            CompletedLevels.TagGame = true;
+            CompletedLevels.TagGame = levelState;
+        }                
+
+        if (isWin)
+        {
+            MakeFade(Color.white, true);
         }
-        FourthDoor.isOpenable = true;
+        else
+        {
+            MakeFade(Color.black, true);
+        }
+
+        LastLevel = new LastCompletedLevel();
+        LastLevel.LevelName = name;
+        LastLevel.State = levelState;
+
         Invoke("BackToHub", timeAfterEnd);
     }
 
     void BackToHub()
     {
+        BlockCursor();
         SceneManager.LoadScene("HubScene");
     }
 
     public void PickLevel(string name)
-    {
-        SceneManager.LoadScene(name);
+    {        
+        SceneManager.LoadScene(name);        
     }
+}
+
+public enum LevelState
+{
+    NotStarted,
+    Won,
+    Defeat
 }

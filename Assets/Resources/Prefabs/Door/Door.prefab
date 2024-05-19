@@ -116,6 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5483919615852281613}
   - component: {fileID: 4034915340792913216}
+  - component: {fileID: -7911393851292607865}
   - component: {fileID: -604033780720757804}
   m_Layer: 0
   m_Name: Door
@@ -157,11 +158,26 @@ MonoBehaviour:
   OpenedOnStart: 0
   OpeningSpeed: 30
   CanBeFocusable: 0
-  AnimatorDoor: {fileID: 0}
-  AnimationClipDoor: {fileID: 0}
+  LevelName: 
+  isOpenable: 1
+  fourthDoor: 0
+  finalDoor: 0
   _openSoundClip: {fileID: 8300000, guid: 7a1cc8fd3f73625429d3d7abdda5e464, type: 3}
-  _closeSoundClip: {fileID: 8300000, guid: f49a57e10b67c5445af6bc70455a3570, type: 3}
+  _closeSoundClip: {fileID: 8300000, guid: 6b849504e17e3ac44926d332bf758a3e, type: 3}
   _enterSoundClip: {fileID: 8300000, guid: cd208ef89466d0d46b3aaa0c936c9178, type: 3}
+--- !u!114 &-7911393851292607865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8921846370759990389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d6889770c04a644087b2c6108ca3f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractionCursor: {fileID: 2800000, guid: cf30a531a7ed95949a14727a64320d4a, type: 3}
 --- !u!65 &-604033780720757804
 BoxCollider:
   m_ObjectHideFlags: 0

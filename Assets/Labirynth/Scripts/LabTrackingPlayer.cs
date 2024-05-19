@@ -37,7 +37,7 @@ public class LabTrackingPlayer : MonoBehaviour
         {
             Transform trackingObject;
 
-            if (rightMouseButtonOnHold || GameManager.Instance.CompletedLevels.Maze)
+            if (rightMouseButtonOnHold || GameManager.Instance.CompletedLevels.Maze != LevelState.NotStarted)
             {
                 trackingObject = Heart;
             }

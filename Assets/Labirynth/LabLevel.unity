@@ -161,7 +161,7 @@ MonoBehaviour:
   - {fileID: 5610241755134622303, guid: f2d6ec3eb9302414488f93f89565281f, type: 3}
   - {fileID: 5610241755134622303, guid: 58981619eb03f3245b74246628cd22fb, type: 3}
   - {fileID: 5610241755134622303, guid: 10eaa4473cee8524ea730a4a710a98e3, type: 3}
-  Hole: {fileID: 1968636306}
+  Hole: {fileID: 8075759135724521129, guid: 00a3e71a02fef934c89310ad5cbc4400, type: 3}
   Section: {fileID: 4464779713495560656, guid: 8fb1c26687a93324bad54993d6c2d034, type: 3}
   SectionSpawnPoint: {fileID: 611641524}
   Plane: {fileID: 1510953483}
@@ -324,7 +324,7 @@ AudioSource:
   m_GameObject: {fileID: 1408371753}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -9170755341462293588, guid: 809e7e71e9081904dbb927288dbb1633, type: 2}
   m_audioClip: {fileID: 8300000, guid: c9e4da9146ee1ef4bbab2031d8d899d6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -549,6 +549,18 @@ PrefabInstance:
       propertyPath: m_Center.x
       value: -0.047301807
       objectReference: {fileID: 0}
+    - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: _openSoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 61f51e72867dabc4bb4bbea7b2426216, type: 3}
+    - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: _closeSoundClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034915340792913216, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
+      propertyPath: _enterSoundClip
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5483919615852281613, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.61600304
@@ -684,11 +696,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1364654349}
   m_SourcePrefab: {fileID: 100100000, guid: e5ca06b0537bf9c418f2c6f7e302493c, type: 3}
---- !u!1 &1968636306 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
-  m_PrefabInstance: {fileID: 1542031684}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2132991815
 GameObject:
   m_ObjectHideFlags: 0
