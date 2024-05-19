@@ -1191,6 +1191,7 @@ GameObject:
   - component: {fileID: 7850509421340807328}
   - component: {fileID: 8134632296164291870}
   - component: {fileID: 2244404612458515470}
+  - component: {fileID: 5169891005623972786}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -1296,6 +1297,21 @@ MonoBehaviour:
   MenuPanel: {fileID: 1139417775965235262}
   SurrenderButton: {fileID: 2140600675354853219}
   Surrender: 1
+--- !u!114 &5169891005623972786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8641733458278576951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb52765b261e9b489f09127f05cdeec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuPanel: {fileID: 0}
+  SurrenderButton: {fileID: 0}
+  Surrender: 0
 --- !u!1 &8866788667865657897
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,21 +96,48 @@ public class GameManager : Singletone<GameManager>
         Cursor.visible = true;
     }
 
-    public int GetNumberOfCompletedLevels()
+    public int GetNumberOfLevels(LevelState levelState = LevelState.NotStarted, bool intersect = true)
     {
         int counter = 0;
-        if (CompletedLevels.Maze != LevelState.NotStarted)
+        if (intersect)
         {
-            ++counter;
+            if (CompletedLevels.Maze != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.SmashHit != levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TicTacToe != LevelState.NotStarted)
+        else
         {
-            ++counter;
+            if (CompletedLevels.Maze == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.SmashHit == levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TagGame != LevelState.NotStarted)
-        {
-            ++counter;
-        }
+        
 
         return counter;
     }
@@ -143,11 +170,7 @@ public class GameManager : Singletone<GameManager>
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }
-        if (name == "SmashHit")
-        {
-            CompletedLevels.SmashHit = levelState;
-        }
+        }                
 
         if (isWin)
         {
@@ -161,26 +184,14 @@ public class GameManager : Singletone<GameManager>
         LastLevel = new LastCompletedLevel();
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
-        if(name == "SmashHit")
-        {
-            Invoke("ToEnding", timeAfterEnd);
-        }
-        else
-        {
-            Invoke("BackToHub", timeAfterEnd);
-        }        
+
+        Invoke("BackToHub", timeAfterEnd);
     }
 
     void BackToHub()
     {
         BlockCursor();
         SceneManager.LoadScene("HubScene");
-    }
-
-    void ToEnding()
-    {
-        BlockCursor();
-        SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)
