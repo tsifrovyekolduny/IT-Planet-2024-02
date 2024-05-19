@@ -57,8 +57,11 @@ public class EndingScript : MonoBehaviour
         }
         else
         {
+            _actor = GirlAnimator;
             _endingText = "Мужчина жив, здоров. Дочь пошла поступила в колледж. Жена вернулась. Работа восстановилась...";
             ChangeActiveToObjects(GoodObjects, true);
+            TimeBeforeActing = 5f;
+            TimeBeforeEnd = 10f;
         }
 
         Invoke("MakeActorsPlay", TimeBeforeActing);
