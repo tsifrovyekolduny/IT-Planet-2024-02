@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,91 +24,92 @@ public class Main : MonoBehaviour
     private int _redNumber = 0;
 
     public float SpawningDelay = 0.05f;
-
     public float MovingSpeed = 1f;
 
     public int LineSizeToWin = 5;
+    public int GameResult = 0;
 
-    public int CheckFinishCondition()
+    public int CheckFinishCondition(int id)
     {
-        // X row
-        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateX)
-        {
-            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length); ++coordinateY)
-            {
-                int controlSumm = 0;
-                for (int addition = 0; addition < LineSizeToWin; ++addition) 
-                {
-                    controlSumm += _map[coordinateX + addition, coordinateY];
-                }
+        List<int> checksums = new List<int>();
 
-                if (controlSumm == 5)
+        int currentX = id / 10;
+        int currentY = id % 10;
+
+        //x row
+        for (int coordinateX = currentX - (LineSizeToWin - 1); coordinateX <= currentX; ++coordinateX)
+        {
+            int checksum = 0;
+
+            for (int addition = 0; addition < LineSizeToWin; ++addition)
+            {
+                if (0 <= coordinateX + addition & coordinateX + addition < 10)
                 {
-                    //победа
-                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
-                    return 1;
-                }
-                else if (controlSumm == -5)
-                {
-                    //слив
-                    GameManager.Instance.CompleteLevel("");
-                    return -1;
+                    checksum += _map[currentY, coordinateX + addition];
                 }
             }
-        }
-        // Y row
-        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length); ++coordinateX)
-        {
-            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateY)
-            {
-                int controlSumm = 0;
-                for (int addition = 0; addition < LineSizeToWin; ++addition)
-                {
-                    controlSumm += _map[coordinateX, coordinateY + addition];
-                }
-
-                if (controlSumm == 5)
-                {
-                    //победа
-                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
-                    return 1;
-                }
-                else if (controlSumm == -5)
-                {
-                    //слив
-                    Debug.Log("bad result");
-                    GameManager.Instance.CompleteLevel("");
-                    return -1;
-                }
-            }
-        }
-        // diagonal
-        for (int coordinateX = 0; coordinateX < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateX)
-        {
-            for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length) - LineSizeToWin; ++coordinateY)
-            {
-                int controlSumm = 0;
-                for (int addition = 0; addition < LineSizeToWin; ++addition)
-                {
-                    controlSumm += _map[coordinateX + addition, coordinateY + addition];
-                }
-                
-                if (controlSumm == 5)
-                {
-                    //победа
-                    GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name);
-                    return 1;
-                }
-                else if (controlSumm == -5)
-                {
-                    //слив
-                    Debug.Log("bad result");
-                    GameManager.Instance.CompleteLevel("");
-                    return -1;
-                }
-            }
+            checksums.Add(checksum);
         }
 
+        //y row
+        for (int coordinateY = currentX - (LineSizeToWin - 1); coordinateY <= currentY; ++coordinateY)
+        {
+            int checksum = 0;
+
+            for (int addition = 0; addition < LineSizeToWin; ++addition)
+            {
+                if (0 <= coordinateY + addition & coordinateY + addition < 10)
+                {
+                    checksum += _map[coordinateY + addition, currentX];
+                }
+            }
+            checksums.Add(checksum);
+        }
+
+        //main diagonal
+        for (int deletion = LineSizeToWin - 1; deletion >= 0; --deletion)
+        {
+            int checksum = 0;
+
+            for (int addition = 0; addition < LineSizeToWin; ++addition)
+            {
+                if (currentX - deletion + addition >= 0 & 
+                    currentX - deletion + addition < 10 &
+                    currentY - deletion + addition >= 0 &
+                    currentY - deletion + addition < 10)
+                {
+                    checksum += _map[currentY - deletion + addition, currentX - deletion + addition];
+                }
+            }
+            checksums.Add(checksum);
+        }
+
+        //not main diagonal
+        for (int deletion = LineSizeToWin - 1; deletion >= 0; --deletion)
+        {
+            int checksum = 0;
+
+            for (int addition = 0; addition < LineSizeToWin; ++addition)
+            {
+                if (currentX - deletion + addition >= 0 &
+                    currentX - deletion + addition < 10 &
+                    currentY + deletion - addition >= 0 &
+                    currentY + deletion - addition < 10)
+                {
+                    checksum += _map[currentY + deletion - addition, currentX - deletion + addition];
+                }
+            }
+            checksums.Add(checksum);
+        }
+
+        if (checksums.Contains(5))
+        {
+            return 1;
+        }
+        if (checksums.Contains(-5))
+        {
+            return -1;
+        }
         return 0;
     }
 
@@ -143,7 +146,10 @@ public class Main : MonoBehaviour
 
         for (int objectIndex = 0;  objectIndex < _greenPlayer.Length; ++objectIndex)
         {
-            
+            if (GameResult != 0)
+            {
+                yield break;
+            }
 
             Vector3 newEnemyPosition = new Vector3(UnityEngine.Random.Range(enemyX - shift, enemyX + shift), 
                                                     commonY,
@@ -155,11 +161,6 @@ public class Main : MonoBehaviour
 
             _redPlayer[objectIndex] = Instantiate(_redObject, newEnemyPosition, _redObject.transform.rotation);
             _greenPlayer[objectIndex] = Instantiate(_greenObject, newPlayerPosition, _greenObject.transform.rotation);
-
-            if (CheckFinishCondition() != 0)
-            {
-                yield break;
-            }
 
             yield return new WaitForSeconds(time);
         }
@@ -186,7 +187,7 @@ public class Main : MonoBehaviour
 
         ++_greenNumber;
 
-        CheckFinishCondition();
+        GameResult = CheckFinishCondition(id);
     }
     public void SetRed()
     {
@@ -210,6 +211,6 @@ public class Main : MonoBehaviour
 
         ++_redNumber;
 
-        CheckFinishCondition();
+        GameResult = CheckFinishCondition(id);
     }
 }
