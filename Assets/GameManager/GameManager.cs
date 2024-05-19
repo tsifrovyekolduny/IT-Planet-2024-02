@@ -22,12 +22,14 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
+        public LevelState SmashHit;
         
-        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
+            SmashHit = smashHit;
         }
      }
     public LevelsComleted CompletedLevels;    
@@ -57,7 +59,7 @@ public class GameManager : Singletone<GameManager>
 
     private void Awake()
     {
-        InitializeManager();
+        // InitializeManager();
         MakeFade(Color.black, false);
         BlockCursor();
     }
@@ -111,6 +113,10 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
+            if (CompletedLevels.SmashHit != levelState)
+            {
+                ++counter;
+            }
         }
         else
         {
@@ -126,6 +132,10 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
+            if (CompletedLevels.SmashHit == levelState)
+            {
+                ++counter;
+            }
         }
         
 
@@ -134,7 +144,7 @@ public class GameManager : Singletone<GameManager>
     
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
     }    
 
     // Update is called once per frame

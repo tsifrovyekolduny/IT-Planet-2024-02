@@ -8,7 +8,7 @@ public class EndingScript : MonoBehaviour
 {
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
-    public GameObject[] BadObjects;
+    public GameObject[] BadObjects;    
 
     public Animator DeathAnimator;
     public Animator GirlAnimator;
@@ -18,6 +18,7 @@ public class EndingScript : MonoBehaviour
     public float TimeBeforeActing = 5f;
     public float TimeBeforeEnd = 15f;
 
+    [SerializeField]
     private int _counterOfWonnedGames;
     private string _endingText;
 
@@ -30,15 +31,24 @@ public class EndingScript : MonoBehaviour
         ChangeActiveToObjects(BadObjects, false);
     }
 
+    void InitBadEnding()
+    {
+        _endingText = "Мужчина в возрасте 42 лет скончался от сердечного приступа. Причина: алкоголизм";
+        ChangeActiveToObjects(BadObjects, true);
+        RenderSettings.fog = enabled;
+        RenderSettings.fogColor = Color.black;
+        RenderSettings.fogDensity = 0.1f;
+        RenderSettings.ambientLight = new Color(5f, 5f, 5f);
+        _actor = DeathAnimator;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         _counterOfWonnedGames = GameManager.Instance.GetNumberOfLevels(LevelState.Won, false);
         if(_counterOfWonnedGames < 1)
         {
-            _endingText = "Мужчина в возрасте 42 лет скончался от сердечного приступа. Причина: алкоголизм";
-            ChangeActiveToObjects(BadObjects, true);
-            _actor = DeathAnimator;
+            InitBadEnding();
         }
         else if (_counterOfWonnedGames < 4)
         {

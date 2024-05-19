@@ -166,9 +166,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8641733458278576951, guid: d082ae80b099fb949a1cc64128dfe913, type: 3}
       propertyPath: m_Name
-      value: UI Variant
+      value: CoolerUI
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5169891005623972786, guid: d082ae80b099fb949a1cc64128dfe913, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
