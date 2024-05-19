@@ -22,12 +22,14 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
+        public LevelState SmashHit;
         
-        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
+            SmashHit = smashHit;
         }
      }
     public LevelsComleted CompletedLevels;    
@@ -115,7 +117,7 @@ public class GameManager : Singletone<GameManager>
     
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
     }    
 
     // Update is called once per frame
@@ -141,7 +143,11 @@ public class GameManager : Singletone<GameManager>
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }                
+        }
+        if (name == "SmashHit")
+        {
+            CompletedLevels.SmashHit = levelState;
+        }
 
         if (isWin)
         {
@@ -155,14 +161,26 @@ public class GameManager : Singletone<GameManager>
         LastLevel = new LastCompletedLevel();
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
-
-        Invoke("BackToHub", timeAfterEnd);
+        if(name == "SmashHit")
+        {
+            Invoke("ToEnding", timeAfterEnd);
+        }
+        else
+        {
+            Invoke("BackToHub", timeAfterEnd);
+        }        
     }
 
     void BackToHub()
     {
         BlockCursor();
         SceneManager.LoadScene("HubScene");
+    }
+
+    void ToEnding()
+    {
+        BlockCursor();
+        SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)

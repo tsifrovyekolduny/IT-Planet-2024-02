@@ -47,7 +47,7 @@ public class CameraMove : MonoBehaviour
         
         if (_hp <= 0)
         {
-            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted(_hp);
+            GameManager.Instance.CompleteLevel("SmashHit", timeAfterEnd: 10f, false);            
         }
     }
 
@@ -64,15 +64,10 @@ public class CameraMove : MonoBehaviour
 
     void OnTriggerEnter(Collider otherObject)
     {
-
-
         if (otherObject.tag == "Endingzone") {
 
-
-            CutSceneCamera.GetComponent<ForFinalScript>().EndingStarted();
+            GameManager.Instance.CompleteLevel("SmashHit");            
         }
-        
-
     }
 
 
