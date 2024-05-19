@@ -44,7 +44,7 @@ public class MoveChip : MonoBehaviour
 
     void PlaySound()
     {
-        SoundManager.s_Instance.PlayAudioClip(_moveSound, transform, 1f);
+        SoundManager.Instance.PlayAudioClip(_moveSound, transform, 1f);
     }    
 
     void MoveChipOnBoard()

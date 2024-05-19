@@ -94,11 +94,10 @@ MonoBehaviour:
   OpenedOnStart: 0
   OpeningSpeed: 100
   CanBeFocusable: 0
+  LevelName: 
   isOpenable: 1
   fourthDoor: 0
   finalDoor: 0
-  AnimatorDoor: {fileID: 0}
-  AnimationClipDoor: {fileID: 0}
   _openSoundClip: {fileID: 8300000, guid: 61f51e72867dabc4bb4bbea7b2426216, type: 3}
   _closeSoundClip: {fileID: 8300000, guid: 6b849504e17e3ac44926d332bf758a3e, type: 3}
   _enterSoundClip: {fileID: 0}
