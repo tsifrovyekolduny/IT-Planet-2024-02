@@ -35,7 +35,7 @@ public class Main : MonoBehaviour
             for (int coordinateY = 0; coordinateY < Mathf.Sqrt(_map.Length); ++coordinateY)
             {
                 int controlSumm = 0;
-                for (int addition = 0; addition < LineSizeToWin; ++addition) 
+                for (int addition = 0; addition < LineSizeToWin; ++addition)
                 {
                     controlSumm += _map[coordinateX + addition, coordinateY];
                 }
@@ -90,7 +90,7 @@ public class Main : MonoBehaviour
                 {
                     controlSumm += _map[coordinateX + addition, coordinateY + addition];
                 }
-                
+
                 if (controlSumm == 5)
                 {
                     //победа
@@ -113,17 +113,16 @@ public class Main : MonoBehaviour
     public IEnumerator MoveObject(GameObject currentObject, Vector3 position)
     {
         float counter = 0;
+        currentObject.layer = LayerMask.NameToLayer("Through");
+        currentObject.transform.localScale *= 1.5f;
 
         while (counter < MovingSpeed)
         {
             counter += Time.deltaTime;
 
             Vector3 currentPosition = currentObject.transform.position;
-
-            float time = Vector3.Distance(currentPosition, position) / (MovingSpeed - counter) * Time.deltaTime;
-
-            currentObject.transform.position = Vector3.MoveTowards(currentPosition, position, time);
-
+            float time = Mathf.Abs(Vector3.Distance(currentPosition, position) / (MovingSpeed - counter) * Time.deltaTime);
+            currentObject.transform.position = Vector3.MoveTowards(currentPosition, position, time);            
             yield return null;
         }
 
@@ -131,7 +130,7 @@ public class Main : MonoBehaviour
     }
 
     public IEnumerator SpawnObjects(float time)
-    {        
+    {
         float commonY = EnemySpawnpoint.transform.position.y;
 
         float enemyZ = EnemySpawnpoint.transform.position.z;
@@ -141,11 +140,11 @@ public class Main : MonoBehaviour
         float playerX = PlayerSpawnpoint.transform.position.x;
         float shift = 1.5f;
 
-        for (int objectIndex = 0;  objectIndex < _greenPlayer.Length; ++objectIndex)
+        for (int objectIndex = 0; objectIndex < _greenPlayer.Length; ++objectIndex)
         {
-            
 
-            Vector3 newEnemyPosition = new Vector3(UnityEngine.Random.Range(enemyX - shift, enemyX + shift), 
+
+            Vector3 newEnemyPosition = new Vector3(UnityEngine.Random.Range(enemyX - shift, enemyX + shift),
                                                     commonY,
                                                     UnityEngine.Random.Range(enemyZ - shift, enemyZ + shift));
 
@@ -179,7 +178,7 @@ public class Main : MonoBehaviour
 
         currentCollider.enabled = false;
 
-        _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(30f, 0f, 0f);
         _greenPlayer[_greenNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_greenPlayer[_greenNumber].gameObject, currentCollider.transform.position));
@@ -201,7 +200,8 @@ public class Main : MonoBehaviour
 
         _map[id % 10, id / 10] = -1;
 
-        _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+        _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(30f, 0f, 0f);
         _redPlayer[_redNumber].GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(MoveObject(_redPlayer[_redNumber].gameObject, currentCollider.transform.position));
