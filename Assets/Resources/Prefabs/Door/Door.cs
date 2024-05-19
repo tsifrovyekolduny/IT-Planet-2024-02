@@ -36,7 +36,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseOver()
     {
-        if (fourthDoor && GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        if (fourthDoor && GameManager.Instance.GetNumberOfLevels() > 0)
         {
             isOpenable = true;
         }

@@ -94,21 +94,40 @@ public class GameManager : Singletone<GameManager>
         Cursor.visible = true;
     }
 
-    public int GetNumberOfCompletedLevels()
+    public int GetNumberOfLevels(LevelState levelState = LevelState.NotStarted, bool intersect = true)
     {
         int counter = 0;
-        if (CompletedLevels.Maze != LevelState.NotStarted)
+        if (intersect)
         {
-            ++counter;
+            if (CompletedLevels.Maze != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame != levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TicTacToe != LevelState.NotStarted)
+        else
         {
-            ++counter;
+            if (CompletedLevels.Maze == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame == levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TagGame != LevelState.NotStarted)
-        {
-            ++counter;
-        }
+        
 
         return counter;
     }

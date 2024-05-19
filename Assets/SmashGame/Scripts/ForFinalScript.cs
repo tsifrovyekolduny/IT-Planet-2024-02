@@ -29,7 +29,7 @@ public class ForFinalScript : MonoBehaviour
         }
         else
         {
-            counterOfCompletetedGames = GameManager.Instance.GetNumberOfCompletedLevels();
+            counterOfCompletetedGames = GameManager.Instance.GetNumberOfLevels();
         }
         
         foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
