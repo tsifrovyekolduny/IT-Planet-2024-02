@@ -8,11 +8,12 @@ public class HubCameraMovement : MonoBehaviour
     public float Sensitivity;
     public GameObject VideoPlane;
     public float SpeedOfLookAt = 1f;
-    public float MinRotationConstraint = -90f;
-    public float MaxRotationConstraint = 0f;
     public float StartTimeForBlockingCamera = 10f;
     public float Speed = 1f;
     public UnityEvent EventOnMovingToEnd = new UnityEvent();
+
+    public Vector3 MaxRotation;
+    public Vector3 MinRotaton;
 
     private bool _isBlocked = false;
 
@@ -82,12 +83,14 @@ public class HubCameraMovement : MonoBehaviour
                 VideoPlane.transform.rotation = Quaternion.Euler(180, eulerRot.y + 180, 0);
             }
 
-            float yRot = (eulerRot.x + 180f) % 360f - 180f;
+            eulerRot.y = (eulerRot.y + 180f) % 360f - 180f;
+            eulerRot.x = (eulerRot.x + 180f) % 360f - 180f;
+            eulerRot.z = (eulerRot.z + 180f) % 360f - 180f;
+            eulerRot.y = Mathf.Clamp(eulerRot.y, MinRotaton.y, MaxRotation.y);
+            eulerRot.z = Mathf.Clamp(eulerRot.z, MinRotaton.z, MaxRotation.z);
+            eulerRot.x = Mathf.Clamp(eulerRot.x, MinRotaton.x, MaxRotation.x);
 
-            if (yRot > MaxRotationConstraint)
-            {
-                transform.rotation = Quaternion.Euler(MaxRotationConstraint, eulerRot.y, eulerRot.z);
-            }
+            transform.localRotation = Quaternion.Euler(eulerRot);
         }
     }
 }

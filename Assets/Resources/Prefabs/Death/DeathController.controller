@@ -60,7 +60,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsTaunt
+    m_ConditionEvent: NextAction
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7509929554207764586}
@@ -85,7 +85,7 @@ AnimatorController:
   m_Name: DeathController
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: IsTaunt
+  - m_Name: NextAction
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
