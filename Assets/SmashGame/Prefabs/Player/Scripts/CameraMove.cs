@@ -98,15 +98,20 @@ public class CameraMove : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !_isReloading)
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameObject bullet = Instantiate(Bullet, ShootingPoint.transform.position, transform.rotation);
-                dir = ShootingPoint.transform.position - hit.point;
-                dir.Normalize();
-                bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
-                StartCoroutine(ReloadBullet());
-            }
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            GameObject bullet = Instantiate(Bullet, ShootingPoint.transform.position, transform.rotation);
+            dir = ShootingPoint.transform.position - hit.point;
+            dir.Normalize();
+            bullet.GetComponent<Rigidbody>().AddForce(-1 * dir * pushForce, ForceMode.VelocityChange);
+            StartCoroutine(ReloadBullet());
         }
     }
 

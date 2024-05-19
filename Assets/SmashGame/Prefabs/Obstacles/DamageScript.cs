@@ -61,9 +61,5 @@ public class DamageScript : MonoBehaviour
         {
             _rb.isKinematic = false;
         }
-        if (gameObject.name == "Trash")
-        {
-            Debug.Log(gameObject.name + ": " + _rb.isKinematic);
-        }
     }
 }
