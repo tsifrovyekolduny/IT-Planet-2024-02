@@ -7,34 +7,59 @@ public class DamageScript : MonoBehaviour
 {
     public bool isDamaged;
     public Material brokenStateMaterial;
-    // Start is called before the first frame update
+    private BoxCollider _boxCollider;
+    private Rigidbody _rb;
+
     void Start()
     {
         isDamaged = false;
+        _boxCollider = GetComponent<BoxCollider>();
+        if (GetComponent<Rigidbody>() != null)
+        {
+            _rb = GetComponent<Rigidbody>();
+            _rb.isKinematic = true;
+        }
+        if (gameObject.name == "Trash")
+        {
+            Debug.Log(_rb.isKinematic);
+        }
+
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void BeingHit()
     {
-        if (collision.gameObject.tag == "Bullet") {
+        if (_rb.isKinematic == false)
+        {
+            Debug.Log(gameObject.name);
             isDamaged = true;
+            if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
+            {
+                Destroy(_boxCollider);
+                Destroy(_rb);
+            }
+            
             foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
             {
-                child.AddComponent<Rigidbody>(); 
-                child.AddComponent<MeshCollider>().convex = true;
-                MeshRenderer renderer = child.GetComponent<MeshRenderer>();
-                if (renderer != null && brokenStateMaterial != null)
-                {
-                    renderer.material = brokenStateMaterial;
+                if (child.GetComponent<Rigidbody>() == null) { 
+                    child.AddComponent<Rigidbody>();
+                    child.AddComponent<MeshCollider>().convex = true;
+                    MeshCollider MC = GetComponent<MeshCollider>();
+                    MeshRenderer renderer = child.GetComponent<MeshRenderer>();
+                    if (renderer != null && brokenStateMaterial != null)
+                    {
+                        renderer.material = brokenStateMaterial;
+                    }
                 }
-                Destroy(child.gameObject, 5);
+                
             }
-            Destroy(gameObject, 5);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnBecameVisible()
     {
-        
+        if (_rb != null)
+        {
+            _rb.isKinematic = false;
+        }
     }
 }

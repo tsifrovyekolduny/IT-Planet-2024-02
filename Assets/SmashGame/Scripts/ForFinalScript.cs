@@ -8,19 +8,8 @@ public class ForFinalScript : MonoBehaviour
     public GameObject BadEnging;
     public GameObject SoSoEnging;
     public Camera camera;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void EndingStarted(int hp = -1)
+    public void EndingStarted(int hp = 0)
     {
         int counterOfCompletetedGames;
         if (hp == 0)

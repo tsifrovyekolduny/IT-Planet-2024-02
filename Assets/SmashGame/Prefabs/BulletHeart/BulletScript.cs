@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
@@ -7,12 +7,23 @@ public class BulletScript : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, 4);
+        StartCoroutine(DestroyBullet(secondsOfLife));
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Damage")
+        {
+            collision.gameObject.GetComponent<DamageScript>().BeingHit();
+            StartCoroutine(DestroyBullet(0.4f));
+        }
+    }
+
+    IEnumerator DestroyBullet(float timeToDestroy)
     {
 
+        yield return new WaitForSeconds(timeToDestroy);
+
+        gameObject.SetActive(false);
     }
 }
