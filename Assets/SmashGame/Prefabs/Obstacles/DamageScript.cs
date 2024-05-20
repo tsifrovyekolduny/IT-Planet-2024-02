@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class DamageScript : MonoBehaviour
 {
-    [SerializeField] protected AudioClip _bottleHitSoundClip;
-    [SerializeField] protected AudioClip _chumBucketHitSoundClip;
-    [SerializeField] protected AudioClip _getDamageSoundClip;
+    [SerializeField] protected AudioClip[] _hitSoundClips;
 
     public bool isDamaged;
     public Material brokenStateMaterial;
@@ -33,14 +31,7 @@ public class DamageScript : MonoBehaviour
     {
         if (_rb.isKinematic == false)
         {
-            if (gameObject.name == "Trash")
-            {
-                SoundManager.Instance.PlayAudioClip(_chumBucketHitSoundClip, transform, 1f);
-            }
-            if (gameObject.name == "bottleBreakable 1")
-            {
-                SoundManager.Instance.PlayAudioClip(_bottleHitSoundClip, transform, 1f);
-            }
+            SoundManager.Instance.PlayAudioClip(_hitSoundClips, transform, 1f);
 
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)

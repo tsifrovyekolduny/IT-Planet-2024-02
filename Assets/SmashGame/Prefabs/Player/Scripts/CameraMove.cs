@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField] protected AudioClip _getDamageSoundClip;
+    [SerializeField] protected AudioClip[] _getDamageSoundClip;
 
     private int _hp = 3;
     private bool _canTakeDamage;

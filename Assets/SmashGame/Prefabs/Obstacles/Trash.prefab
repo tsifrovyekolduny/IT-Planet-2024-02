@@ -112,6 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384a2c3d9ca446d4bba891daa9ac91c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitSoundClips:
+  - {fileID: 8300000, guid: 2308aca070a471f4a88953cfc99081bb, type: 3}
+  - {fileID: 8300000, guid: 7ccec94c5409b9f4a858605231f78273, type: 3}
   isDamaged: 0
   brokenStateMaterial: {fileID: 0}
 --- !u!54 &8110384822163966552
