@@ -232,9 +232,12 @@ MonoBehaviour:
   Sensitivity: 5
   VideoPlane: {fileID: 898402752}
   SpeedOfLookAt: 1
-  StartTimeForBlockingCamera: 1
+  StartTimeForBlockingCamera: 5
   Speed: 0.5
   EventOnMovingToEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnUnblockingAfterTime:
     m_PersistentCalls:
       m_Calls: []
   MaxRotation: {x: 0, y: 180, z: 180}
@@ -1280,6 +1283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a14ae0ab38af94aad8f6f0c9dcd0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HintImage: {fileID: 1708665753}
+  ShowTime: 2
 --- !u!114 &1370153554
 MonoBehaviour:
   m_ObjectHideFlags: 0
