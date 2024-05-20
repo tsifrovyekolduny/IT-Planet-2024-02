@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class DamageScript : MonoBehaviour
 {
+    [SerializeField] protected AudioClip _bottleHitSoundClip;
+    [SerializeField] protected AudioClip _chumBucketHitSoundClip;
+    [SerializeField] protected AudioClip _getDamageSoundClip;
+
     public bool isDamaged;
     public Material brokenStateMaterial;
     private BoxCollider _boxCollider;
@@ -23,14 +27,21 @@ public class DamageScript : MonoBehaviour
         {
             Debug.Log(_rb.isKinematic);
         }
-
     }
 
     public void BeingHit()
     {
         if (_rb.isKinematic == false)
         {
-            Debug.Log(gameObject.name);
+            if (gameObject.name == "Trash")
+            {
+                SoundManager.Instance.PlayAudioClip(_chumBucketHitSoundClip, transform, 1f);
+            }
+            if (gameObject.name == "bottleBreakable 1")
+            {
+                SoundManager.Instance.PlayAudioClip(_bottleHitSoundClip, transform, 1f);
+            }
+
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
             {
@@ -50,7 +61,6 @@ public class DamageScript : MonoBehaviour
                         renderer.material = brokenStateMaterial;
                     }
                 }
-                
             }
         }
     }
