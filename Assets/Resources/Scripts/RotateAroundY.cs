@@ -5,7 +5,7 @@ using UnityEngine;
 public class RotateAndScale : MonoBehaviour
 {
     
-    void Update()
+    void FixedUpdate()
     {      
         transform.Rotate(Vector3.up * 1f);        
     }

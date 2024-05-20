@@ -163,14 +163,17 @@ public class GameManager : Singletone<GameManager>
             CompletedLevels.TagGame = levelState;
         }        
 
-        if (isWin)
+        if(timeAfterEnd > 0f)
         {
-            MakeFade(Color.white, true);
-        }
-        else
-        {
-            MakeFade(Color.black, true);
-        }
+            if (isWin)
+            {
+                MakeFade(Color.white, true);
+            }
+            else
+            {
+                MakeFade(Color.black, true);
+            }
+        }        
 
         LastLevel = new LastCompletedLevel();
         LastLevel.LevelName = name;

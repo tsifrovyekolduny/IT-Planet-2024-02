@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UiScript : Singletone<UiScript>
 {
@@ -37,16 +38,35 @@ public class UiScript : Singletone<UiScript>
             ChangeActive();
         }
     }
-    
+
+    private void OnLevelWasLoaded(int level)
+    {
+        if(level >= 1 & level <= 3)
+        {
+            Surrender = true;            
+        }
+        else
+        {
+            Surrender = false;            
+        }
+    }
+
     public void DiscardFromGame()
     {
         Debug.Log("Discard from game");
-        GameManager.Instance.CompleteLevel("");
+        UiScript.Instance.ChangeActive();
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 0f, false);
     }
 
     public void ResetCursor()
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+    public void ExitFromGame()
+    {
+        Debug.Log("Exit from game");
+        Application.Quit();
     }
 
     public void ChangeActive()
@@ -57,10 +77,7 @@ public class UiScript : Singletone<UiScript>
             GameManager.Instance.UnblockCursor();            
 
             MenuPanel.SetActive(true);
-            if (!Surrender)
-            {
-                SurrenderButton.SetActive(false);
-            }
+            SurrenderButton.SetActive(Surrender);
             Time.timeScale = 0;
             Hidden = false;
         }
