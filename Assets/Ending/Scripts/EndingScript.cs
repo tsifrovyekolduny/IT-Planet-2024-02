@@ -80,7 +80,6 @@ public class EndingScript : MonoBehaviour
 
         while(image.color.a < 1)
         {
-            Debug.Log(image.color.a);
             color = image.color;
             color.a += 0.01f;
             image.color = color;
