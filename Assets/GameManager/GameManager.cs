@@ -177,12 +177,11 @@ public class GameManager : Singletone<GameManager>
         LastLevel.State = levelState;
 
         if (name == "SmashGame")
-        {
+        {            
             Invoke("ToEnding", timeAfterEnd);
         }
         else
-        {
-            LifeCounter = GetNumberOfLevels(LevelState.Won, false);
+        {            
             Invoke("BackToHub", timeAfterEnd);
         }
 
@@ -195,12 +194,16 @@ public class GameManager : Singletone<GameManager>
     }
 
     void ToEnding()
-    {
+    {                
         SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)
     {
+        if(name == "SmashGame")
+        {
+            LifeCounter = GetNumberOfLevels(LevelState.Won, false);
+        }
         SceneManager.LoadScene(name);
     }
 }

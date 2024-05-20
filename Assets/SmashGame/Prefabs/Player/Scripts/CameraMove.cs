@@ -24,7 +24,7 @@ public class CameraMove : MonoBehaviour
     {
         _canTakeDamage = true;
         time = Time.deltaTime;
-        //_hp = GameManager.Instance.GetNumberOfCompletedLevels();
+        _hp = GameManager.Instance.LifeCounter;
         _isReloading = false;
     }
 
@@ -44,6 +44,7 @@ public class CameraMove : MonoBehaviour
     void TakeDamage()
     {
         _hp -= 1;
+        GameManager.Instance.LifeCounter = _hp;
         
         if (_hp <= 0)
         {

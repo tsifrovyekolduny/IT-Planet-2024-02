@@ -1364,6 +1364,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
+      propertyPath: LifeCounter
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
       propertyPath: FadeInTemplate
       value: 
       objectReference: {fileID: 2395136151317254080, guid: e5af522859d23e04282ee10b50f660ad, type: 3}

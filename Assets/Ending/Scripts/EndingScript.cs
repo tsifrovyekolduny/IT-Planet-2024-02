@@ -33,7 +33,7 @@ public class EndingScript : MonoBehaviour
 
     void InitBadEnding()
     {
-        _endingText = "EKK. 7, 17";
+        _endingText = "EKKL. 7:17";
         ChangeActiveToObjects(BadObjects, true);
         RenderSettings.fog = enabled;
         RenderSettings.fogColor = Color.black;
@@ -46,19 +46,19 @@ public class EndingScript : MonoBehaviour
     void Start()
     {
         _counterOfWonnedGames = GameManager.Instance.LifeCounter;
-        if(_counterOfWonnedGames == 0)
+        if(_counterOfWonnedGames <= 0)
         {
             InitBadEnding();
         }
-        else if (_counterOfWonnedGames < 3)
+        else if (_counterOfWonnedGames <= 2)
         {
-            _endingText = "PS. 24, 16";
+            _endingText = "PS. 24:16";
             ChangeActiveToObjects(SoSoObjects, true);
         }
         else
         {
             _actor = GirlAnimator;
-            _endingText = "1 FES. 5, 16";
+            _endingText = "FES. 5:16";
             ChangeActiveToObjects(GoodObjects, true);
             TimeBeforeActing = 5f;
             TimeBeforeEnd = 10f;
