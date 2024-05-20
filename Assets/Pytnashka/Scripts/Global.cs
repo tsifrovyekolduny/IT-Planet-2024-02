@@ -27,7 +27,7 @@ public class Global {
     public int[,] board = new int[x_size, y_size];
     public GameObject ramka = null, kartinka = null, oboi = null, comod = null, camera = null;
     public bool test = false;
-    public int max_count_steps = 5;
+    public int max_count_steps = 111;
     public Text count_steps;
     public bool is_game_over = false;
 
