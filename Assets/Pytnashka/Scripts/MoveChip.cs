@@ -138,7 +138,7 @@ public class MoveChip : MonoBehaviour
         Global.count_steps.enabled = false;
         if (Global.is_game_over == false)
             Global.oboi.GetComponent<MeshRenderer>().enabled = true;
-        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10);
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10, !Global.is_game_over);
     }
     void CalculateDirection()
     {

@@ -22,12 +22,14 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
+        public LevelState SmashGame;
         
-        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
+            SmashGame = smashHit;
         }
      }
     public LevelsComleted CompletedLevels;    
@@ -57,18 +59,18 @@ public class GameManager : Singletone<GameManager>
 
     private void Awake()
     {
-        InitializeManager();
+        // InitializeManager();
         MakeFade(Color.black, false);
         BlockCursor();
     }
 
     private void OnLevelWasLoaded(int level)
     {        
-        if (level != 0)
+        if (level < (SceneManager.sceneCountInBuildSettings - 1) && level > 0)
         {
             UnblockCursor();
             MakeFade(Color.white, false);            
-        }
+        }        
         else
         {
             BlockCursor();            
@@ -94,28 +96,55 @@ public class GameManager : Singletone<GameManager>
         Cursor.visible = true;
     }
 
-    public int GetNumberOfCompletedLevels()
+    public int GetNumberOfLevels(LevelState levelState = LevelState.NotStarted, bool intersect = true)
     {
         int counter = 0;
-        if (CompletedLevels.Maze != LevelState.NotStarted)
+        if (intersect)
         {
-            ++counter;
+            if (CompletedLevels.Maze != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame != levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.SmashGame != levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TicTacToe != LevelState.NotStarted)
+        else
         {
-            ++counter;
+            if (CompletedLevels.Maze == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TicTacToe == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.TagGame == levelState)
+            {
+                ++counter;
+            }
+            if (CompletedLevels.SmashGame == levelState)
+            {
+                ++counter;
+            }
         }
-        if (CompletedLevels.TagGame != LevelState.NotStarted)
-        {
-            ++counter;
-        }
+        
 
         return counter;
     }
     
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
     }    
 
     // Update is called once per frame
@@ -142,6 +171,10 @@ public class GameManager : Singletone<GameManager>
         {
             CompletedLevels.TagGame = levelState;
         }                
+        if(name == "SmashGame")
+        {
+            CompletedLevels.SmashGame = levelState;
+        }
 
         if (isWin)
         {
@@ -156,13 +189,26 @@ public class GameManager : Singletone<GameManager>
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
 
-        Invoke("BackToHub", timeAfterEnd);
+        if(name == "SmashGame")
+        {
+            Invoke("ToEnding", timeAfterEnd);
+        }
+        else
+        {
+            Invoke("BackToHub", timeAfterEnd);
+        }
+        
     }
 
     void BackToHub()
     {
         BlockCursor();
         SceneManager.LoadScene("HubScene");
+    }
+
+    void ToEnding()
+    {
+        SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)

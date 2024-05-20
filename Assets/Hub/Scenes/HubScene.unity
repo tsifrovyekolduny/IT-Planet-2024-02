@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 91428031}
   - component: {fileID: 91428030}
   - component: {fileID: 91428033}
-  - component: {fileID: 91428034}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -232,33 +231,13 @@ MonoBehaviour:
   Sensitivity: 2
   VideoPlane: {fileID: 898402752}
   SpeedOfLookAt: 1
-  MinRotationConstraint: -90
-  MaxRotationConstraint: 0
   StartTimeForBlockingCamera: 1
   Speed: 0.5
   EventOnMovingToEnd:
     m_PersistentCalls:
       m_Calls: []
---- !u!1818360609 &91428034
-RotationConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91428029}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Weight: 1
-  m_RotationAtRest: {x: -90, y: 0, z: 0}
-  m_RotationOffset: {x: 0, y: 0, z: 0}
-  m_AffectRotationX: 1
-  m_AffectRotationY: 0
-  m_AffectRotationZ: 0
-  m_Active: 1
-  m_IsLocked: 1
-  m_Sources:
-  - sourceTransform: {fileID: 91428032}
-    weight: 1
+  MaxRotation: {x: 0, y: 180, z: 180}
+  MinRotaton: {x: -90, y: -180, z: -180}
 --- !u!1001 &137942609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -345,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_Name
-      value: Final-SmashHit
+      value: SmashGame
       objectReference: {fileID: 0}
     - target: {fileID: 8921846370759990389, guid: d2bb4592c3775cd4b8a7c3c29f824c8e, type: 3}
       propertyPath: m_IsActive
@@ -1287,6 +1266,18 @@ PrefabInstance:
       propertyPath: FadeOutTemplate
       value: 
       objectReference: {fileID: 2395136151317254080, guid: 5ac08f90d6693ab40858902d392b72b0, type: 3}
+    - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
+      propertyPath: CompletedLevels.Maze
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
+      propertyPath: CompletedLevels.TagGame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713745081498531165, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
+      propertyPath: CompletedLevels.TicTacToe
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4447094059308535203, guid: 99b305fb145a865459ad9284b5f997fc, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -1509,6 +1500,7 @@ SceneRoots:
   - {fileID: 252533815}
   - {fileID: 1285943791}
   - {fileID: 944654994}
+  - {fileID: 5915316842733114206}
   - {fileID: 577072349}
   - {fileID: 1137088722}
   - {fileID: 2027430928}
@@ -1517,4 +1509,3 @@ SceneRoots:
   - {fileID: 1093296398}
   - {fileID: 898402756}
   - {fileID: 446078590}
-  - {fileID: 5915316842733114206}

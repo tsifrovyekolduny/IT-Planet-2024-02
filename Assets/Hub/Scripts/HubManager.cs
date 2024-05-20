@@ -26,9 +26,9 @@ public class HubManager : MonoBehaviour
             SetBlockToDoor("TicTacToeLevel", false);
         }
 
-        if (GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        if (GameManager.Instance.GetNumberOfLevels() > 0)
         {
-            SetBlockToDoor("Final-SmashHit", true);
+            SetBlockToDoor("SmashGame", true);
         }
     }
 
@@ -48,7 +48,7 @@ public class HubManager : MonoBehaviour
         }
         else
         {
-            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfCompletedLevels();
+            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfLevels();
 
             if (numberOfCompletedLevels == 0)
             {
@@ -64,7 +64,7 @@ public class HubManager : MonoBehaviour
             }
         }
 
-        GameObject.Find("Final-SmashHit").GetComponent<Interactable>().InteractionCursor = icon;
+        GameObject.Find("SmashGame").GetComponent<Interactable>().InteractionCursor = icon;
 
     }
 
@@ -72,10 +72,11 @@ public class HubManager : MonoBehaviour
     {
         if (GameManager.Instance?.LastLevel != null)
         {
-            Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;
+            Transform door = GameObject.Find(GameManager.Instance.LastLevel.LevelName).transform;            
             Transform camera = Camera.main.transform;
 
             Door doorScript = door.GetComponent<Door>();
+            doorScript.CanBeFocusable = false;
 
             camera.LookAt(door);
             camera.position = door.position;
@@ -86,6 +87,7 @@ public class HubManager : MonoBehaviour
 
             cameraScript.EventOnMovingToEnd.AddListener(doorScript.CloseDoor);
             cameraScript.EventOnMovingToEnd.AddListener(delegate { cameraScript.SetBlock(false); });
+            cameraScript.EventOnMovingToEnd.AddListener(delegate { doorScript.CanBeFocusable = true; });
             cameraScript.EventOnMovingToEnd.AddListener(InitDoorsAfterLevel);
             StartCoroutine(cameraScript.MoveCameraToPoint(Vector3.zero, false));
         }

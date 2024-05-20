@@ -23,6 +23,7 @@ public class Door : MonoBehaviour
 
     public void Awake()
     {
+        LevelName = gameObject.name;
         if (OpenedOnStart)
         {
             SetToHingeJointTarget(OpenAngle, true);
@@ -36,7 +37,7 @@ public class Door : MonoBehaviour
 
     public void OnMouseOver()
     {
-        if (fourthDoor && GameManager.Instance.GetNumberOfCompletedLevels() > 0)
+        if (fourthDoor && GameManager.Instance.GetNumberOfLevels() > 0)
         {
             isOpenable = true;
         }

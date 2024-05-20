@@ -16,6 +16,7 @@ TagManager:
   - PrefabObstacles
   - Endingzone
   - ForFinal
+  - DestroyObstaclesZone
   layers:
   - Default
   - TransparentFX
