@@ -33,7 +33,7 @@ public class EndingScript : MonoBehaviour
 
     void InitBadEnding()
     {
-        _endingText = "Мужчина в возрасте 42 лет скончался от сердечного приступа. Причина: алкоголизм";
+        _endingText = "EKK. 7, 17";
         ChangeActiveToObjects(BadObjects, true);
         RenderSettings.fog = enabled;
         RenderSettings.fogColor = Color.black;
@@ -52,13 +52,13 @@ public class EndingScript : MonoBehaviour
         }
         else if (_counterOfWonnedGames < 4)
         {
-            _endingText = "Мужчина в возрасте 45 лет застрелился. Причина: затяжная депрессия";
+            _endingText = "PS. 24, 16";
             ChangeActiveToObjects(SoSoObjects, true);
         }
         else
         {
             _actor = GirlAnimator;
-            _endingText = "Мужчина жив, здоров. Дочь пошла поступила в колледж. Жена вернулась. Работа восстановилась...";
+            _endingText = "1 FES. 5, 16";
             ChangeActiveToObjects(GoodObjects, true);
             TimeBeforeActing = 5f;
             TimeBeforeEnd = 10f;
