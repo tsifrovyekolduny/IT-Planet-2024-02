@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MoveChip : MonoBehaviour
 {
-    public static bool game_finished = false;
 
     enum PreferredMove
     {
@@ -51,14 +50,14 @@ public class MoveChip : MonoBehaviour
     void OnMouseDown()
     {
         initialMousePos = Input.mousePosition;
-        if (Global.test)
+        if (Global.Get.test)
         {
             Completed();
         }
     }
     void OnMouseUp()
     {
-        if (game_finished == false)
+        if (Global.Get.game_finished == false)
         {
             if (!can_move)
             {
@@ -67,7 +66,7 @@ public class MoveChip : MonoBehaviour
                 CalculateDirection();
                 if (can_move)
                 {
-                    Global.board[new_row, new_col] = number_chip;
+                    Global.Get.board[new_row, new_col] = number_chip;
                 }
             }
         }
@@ -78,14 +77,14 @@ public class MoveChip : MonoBehaviour
     }
     void MotionCountPlus()
     {
-        ++Global.count;
-        Global.UpdateText();
-        if(Global.count == Global.max_count_steps)
+        ++Global.Get.count;
+        Global.Get.UpdateText();
+        if(Global.Get.count == Global.Get.max_count_steps)
         {
-            Global.is_game_over = true;
+            Global.Get.is_game_over = true;
             Completed();
         }
-        //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.count.ToString();
+        //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.Get.count.ToString();
     }
     void MoveChipOnBoard()
     {
@@ -95,8 +94,8 @@ public class MoveChip : MonoBehaviour
         }
         else
         {
-            Global.board[row_position, col_position] = 0;
-            Global.board[new_row, new_col] = number_chip;
+            Global.Get.board[row_position, col_position] = 0;
+            Global.Get.board[new_row, new_col] = number_chip;
             can_move = false;
             row_position = new_row;
             col_position = new_col;
@@ -107,12 +106,12 @@ public class MoveChip : MonoBehaviour
     void CheckOnComplete()
     {
         int count = 1;
-        int maxAcceptCount = 16 - Global.countEraceBlocks + 1;
+        int maxAcceptCount = 16 - Global.Get.countEraceBlocks + 1;
         for (int row = 0; row < 4; row++)
         {
             for (int col = 0; col < 4; col++)
             {
-                if (Global.board[row + Global.x_offset, col + Global.y_offset] == count)
+                if (Global.Get.board[row + Global.x_offset, col + Global.y_offset] == count)
                 {
                     Debug.Log(count);
                 }
@@ -130,15 +129,15 @@ public class MoveChip : MonoBehaviour
     }
     public void Completed()
     {
-        game_finished = true;
+        Global.Get.game_finished = true;
         Debug.Log("Уровень завершён");
-        Global.ramka.GetComponent<MeshRenderer>().enabled = true;
-        Global.kartinka.GetComponent<SpriteRenderer>().enabled = true;
-        Global.comod.GetComponent<MeshRenderer>().enabled = true;
-        Global.count_steps.enabled = false;
-        if (Global.is_game_over == false)
-            Global.oboi.GetComponent<MeshRenderer>().enabled = true;
-        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 10, !Global.is_game_over);
+        Global.Get.ramka.GetComponent<MeshRenderer>().enabled = true;
+        Global.Get.kartinka.GetComponent<SpriteRenderer>().enabled = true;
+        Global.Get.comod.GetComponent<MeshRenderer>().enabled = true;
+        Global.Get.count_steps.enabled = false;
+        if (Global.Get.is_game_over == false)
+            Global.Get.oboi.GetComponent<MeshRenderer>().enabled = true;
+        GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 8, !Global.Get.is_game_over);
     }
     void CalculateDirection()
     {
@@ -189,9 +188,9 @@ public class MoveChip : MonoBehaviour
         try
         {
             //left
-            if (Global.board[row_position, col_position - 1] == 0)
+            if (Global.Get.board[row_position, col_position - 1] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z - GlobalVars.z_offset);
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z - Global.Get.z_offset_f);
                 new_row = row_position;
                 new_col = col_position - 1;
                 PlaySound();
@@ -208,9 +207,9 @@ public class MoveChip : MonoBehaviour
         //up
         try
         {
-            if (Global.board[row_position - 1, col_position] == 0)
+            if (Global.Get.board[row_position - 1, col_position] == 0)
             {
-                empty_position = new Vector3(transform.position.x - GlobalVars.x_offset, 0, transform.position.z);
+                empty_position = new Vector3(transform.position.x - Global.Get.x_offset_f, 0, transform.position.z);
                 new_row = row_position - 1;
                 new_col = col_position;
                 PlaySound();
@@ -234,9 +233,9 @@ public class MoveChip : MonoBehaviour
         //right
         try
         {
-            if (Global.board[row_position, col_position + 1] == 0)
+            if (Global.Get.board[row_position, col_position + 1] == 0)
             {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z + GlobalVars.z_offset);
+                empty_position = new Vector3(transform.position.x, 0, transform.position.z + Global.Get.z_offset_f);
                 new_row = row_position;
                 new_col = col_position + 1;
                 PlaySound();
@@ -259,9 +258,9 @@ public class MoveChip : MonoBehaviour
         //down
         try
         {
-            if (Global.board[row_position + 1, col_position] == 0)
+            if (Global.Get.board[row_position + 1, col_position] == 0)
             {
-                empty_position = new Vector3(transform.position.x + GlobalVars.x_offset, 0, transform.position.z);
+                empty_position = new Vector3(transform.position.x + Global.Get.x_offset_f, 0, transform.position.z);
                 new_row = row_position + 1;
                 new_col = col_position;
                 PlaySound();
@@ -288,7 +287,7 @@ public class MoveChip : MonoBehaviour
         {
             for (int col = 0; col < Global.y_size; col++)
             {
-                if (Global.board[row, col] == number_chip)
+                if (Global.Get.board[row, col] == number_chip)
                 {
                     row_position = row;
                     col_position = col;

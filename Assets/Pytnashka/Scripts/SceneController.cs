@@ -18,12 +18,12 @@ public class SceneController : MonoBehaviour
 
     public void Shuffle()
     {
-        Global.count = 0;
+        Global.Get.count = 0;
         for (int row = 0; row < 4; row++)
         {
             for (int col = 0; col < 4; col++)
             {
-                Global.board[row, col] = 0;
+                Global.Get.board[row, col] = 0;
             }
         }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

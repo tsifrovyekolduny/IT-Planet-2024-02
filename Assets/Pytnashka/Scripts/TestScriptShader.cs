@@ -16,6 +16,6 @@ public class TestScriptShader : MonoBehaviour
 
     private void Update()
     {
-        Shader.SetGlobalFloat(SP_PlayerWorldPosition, CreateBoard.alpha_value);
+        Shader.SetGlobalFloat(SP_PlayerWorldPosition, Global.Get.alpha_value);
     }
 }
