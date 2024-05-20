@@ -18,10 +18,13 @@ public class CameraMove : MonoBehaviour
     public Animator PlayerAnimator;
     public GameObject ShootingPoint;
     public GameObject Bullet;
-    public Camera CutSceneCamera;
+
+    public Texture2D AimCursor;
+    public Texture2D UsualCursor;
     
     void Start()
     {
+        Cursor.SetCursor(AimCursor, Vector2.zero, CursorMode.Auto);        
         _canTakeDamage = true;
         time = Time.deltaTime;
         _hp = GameManager.Instance.LifeCounter;
@@ -48,6 +51,7 @@ public class CameraMove : MonoBehaviour
         
         if (_hp <= 0)
         {
+            Cursor.SetCursor(UsualCursor, Vector2.zero, CursorMode.Auto);
             GameManager.Instance.CompleteLevel("SmashGame", timeAfterEnd: 10f, false);            
         }
     }
@@ -66,7 +70,7 @@ public class CameraMove : MonoBehaviour
     void OnTriggerEnter(Collider otherObject)
     {
         if (otherObject.tag == "Endingzone") {
-
+            Cursor.SetCursor(UsualCursor, Vector2.zero, CursorMode.Auto);
             GameManager.Instance.CompleteLevel("SmashGame");            
         }
     }

@@ -13861,6 +13861,14 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5568295059105698443, guid: 81cc0b472caee6b40a807f21240901d9, type: 3}
+      propertyPath: AimCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 45e85818187461f4bbacfc2a3c41a279, type: 3}
+    - target: {fileID: 5568295059105698443, guid: 81cc0b472caee6b40a807f21240901d9, type: 3}
+      propertyPath: UsualCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 4d7e43ec344aebb42bbf8255a29550ed, type: 3}
+    - target: {fileID: 5568295059105698443, guid: 81cc0b472caee6b40a807f21240901d9, type: 3}
       propertyPath: CutSceneCamera
       value: 
       objectReference: {fileID: 0}
