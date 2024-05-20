@@ -45,12 +45,12 @@ public class EndingScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _counterOfWonnedGames = GameManager.Instance.GetNumberOfLevels(LevelState.Won, false);
-        if(_counterOfWonnedGames < 1)
+        _counterOfWonnedGames = GameManager.Instance.LifeCounter;
+        if(_counterOfWonnedGames == 0)
         {
             InitBadEnding();
         }
-        else if (_counterOfWonnedGames < 4)
+        else if (_counterOfWonnedGames < 3)
         {
             _endingText = "PS. 24, 16";
             ChangeActiveToObjects(SoSoObjects, true);

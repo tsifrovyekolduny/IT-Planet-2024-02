@@ -10,10 +10,11 @@ public class LastCompletedLevel
 }
 
 public class GameManager : Singletone<GameManager>
-{    
+{
     public GameObject FadeInTemplate;
     public GameObject FadeOutTemplate;
 
+    public int LifeCounter;
     public LastCompletedLevel LastLevel;
 
     [System.Serializable]
@@ -22,17 +23,15 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
-        public LevelState SmashGame;
-        
-        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
+
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
-            SmashGame = smashHit;
         }
-     }
-    public LevelsComleted CompletedLevels;    
+    }
+    public LevelsComleted CompletedLevels;
 
     public void MakeFade(Color color, bool fadeIn)
     {
@@ -49,7 +48,7 @@ public class GameManager : Singletone<GameManager>
 
         fader.BackgroundColor = color;
         fader.StartFade();
-    }    
+    }
 
     public void BlockCursor()
     {
@@ -65,15 +64,15 @@ public class GameManager : Singletone<GameManager>
     }
 
     private void OnLevelWasLoaded(int level)
-    {        
+    {
         if (level < (SceneManager.sceneCountInBuildSettings - 1) && level > 0)
         {
             UnblockCursor();
-            MakeFade(Color.white, false);            
-        }        
+            MakeFade(Color.white, false);
+        }
         else
         {
-            BlockCursor();            
+            BlockCursor();
             if (LastLevel != null)
             {
                 if (LastLevel.State == LevelState.Defeat)
@@ -88,7 +87,7 @@ public class GameManager : Singletone<GameManager>
         }
     }
 
-    
+
 
     public void UnblockCursor()
     {
@@ -113,10 +112,6 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashGame != levelState)
-            {
-                ++counter;
-            }
         }
         else
         {
@@ -132,25 +127,21 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashGame == levelState)
-            {
-                ++counter;
-            }
         }
-        
+
 
         return counter;
     }
-    
+
     private void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
-    }    
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void CompleteLevel(string name, float timeAfterEnd = 5f, bool isWin = true)
@@ -170,11 +161,7 @@ public class GameManager : Singletone<GameManager>
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }                
-        if(name == "SmashGame")
-        {
-            CompletedLevels.SmashGame = levelState;
-        }
+        }        
 
         if (isWin)
         {
@@ -189,15 +176,16 @@ public class GameManager : Singletone<GameManager>
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
 
-        if(name == "SmashGame")
+        if (name == "SmashGame")
         {
             Invoke("ToEnding", timeAfterEnd);
         }
         else
         {
+            LifeCounter = GetNumberOfLevels(LevelState.Won, false);
             Invoke("BackToHub", timeAfterEnd);
         }
-        
+
     }
 
     void BackToHub()
@@ -212,8 +200,8 @@ public class GameManager : Singletone<GameManager>
     }
 
     public void PickLevel(string name)
-    {        
-        SceneManager.LoadScene(name);        
+    {
+        SceneManager.LoadScene(name);
     }
 }
 
