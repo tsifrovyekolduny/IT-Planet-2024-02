@@ -175,6 +175,7 @@ public class Main : MonoBehaviour
     public void SetGreen(int id)
     {
         _map[id % 10, id / 10] = 1;
+        DeleteInteractablre(id);
 
         Collider currentCollider = GameObject.Find(id.ToString()).GetComponent<Collider>();
 
@@ -189,9 +190,16 @@ public class Main : MonoBehaviour
 
         GameResult = CheckFinishCondition(id);
     }
+
+    private void DeleteInteractablre(int id)
+    {
+        var interactable = GameObject.Find(id.ToString()).GetComponent<Interactable>();
+        Destroy(interactable);
+    }
+
     public void SetRed()
     {
-        int id;
+        int id;        
         Collider currentCollider;
         do
         {
@@ -199,7 +207,7 @@ public class Main : MonoBehaviour
             currentCollider = GameObject.Find(id.ToString()).GetComponent<Collider>();
         }
         while (currentCollider.enabled == false);
-
+        DeleteInteractablre(id);
         _map[id % 10, id / 10] = -1;
 
         _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
