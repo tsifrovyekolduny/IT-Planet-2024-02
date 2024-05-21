@@ -60,6 +60,7 @@ public class GameManager : Singletone<GameManager>
     {        
         MakeFade(Color.black, false);
         BlockCursor();
+        Cursor.visible = false;
     }
 
     private void OnLevelWasLoaded(int level)
@@ -90,7 +91,7 @@ public class GameManager : Singletone<GameManager>
 
     public void UnblockCursor()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
