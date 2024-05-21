@@ -15,17 +15,15 @@ public class Cell : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (main.CheckFinishCondition() == 0)
+            if (main.GameResult == 0)
             {
                 main.SetGreen(id);
             }
 
-            if (main.CheckFinishCondition() == 0)
+            if (main.GameResult == 0)
             {
                 main.SetRed();
             }
-        }
-
-        
+        }                
     }
 }
