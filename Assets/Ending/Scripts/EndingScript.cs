@@ -17,7 +17,7 @@ public class EndingScript : MonoBehaviour
     public Animator DeathAnimator;
     public Animator GirlAnimator;
 
-    public Canvas EndCanvas;
+    public EndUI EndCanvas;
 
     public float TimeBeforeActing = 5f;
     public float TimeBeforeEnd = 15f;
@@ -30,8 +30,6 @@ public class EndingScript : MonoBehaviour
 
     private void Awake()
     {
-
-
         ChangeActiveToObjects(GoodObjects, false);
         ChangeActiveToObjects(SoSoObjects, false);
         ChangeActiveToObjects(BadObjects, false);
@@ -75,33 +73,8 @@ public class EndingScript : MonoBehaviour
     void EndGame()
     {
         EndCanvas.gameObject.SetActive(true);
-        StartCoroutine("ShowUI");
-    }
-
-    IEnumerator ShowUI()
-    {
-        Image image = EndCanvas.GetComponentInChildren<Image>();
-        Color color;
-
-        while (image.color.a < 1)
-        {
-            color = image.color;
-            color.a += 0.01f;
-            image.color = color;
-            yield return null;
-        }
-
-        TextMeshProUGUI textMesh = EndCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        textMesh.text = _endingText;
-        while (textMesh.color.a < 1)
-        {
-            color = textMesh.color;
-            color.a += 0.01f;
-            textMesh.color = color;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-    }
+        EndCanvas.ShowUI(_endingText);
+    }    
 
     void MakeActorsPlay()
     {
@@ -124,12 +97,4 @@ public class EndingScript : MonoBehaviour
             gameObject.SetActive(isActive);
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
 }

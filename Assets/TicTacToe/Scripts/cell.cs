@@ -9,12 +9,12 @@ public class Cell : MonoBehaviour
     private int id;
 
     [SerializeField]
-    private Main main;
+    private Main main;    
 
     private void OnMouseDown()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
-        {
+        {           
             if (main.GameResult == 0)
             {
                 main.SetGreen(id);

@@ -58,7 +58,7 @@ public class GameManager : Singletone<GameManager>
 
     private void Awake()
     {
-        // InitializeManager();
+        InitializeManager();
         MakeFade(Color.black, false);
         BlockCursor();
     }
@@ -133,9 +133,10 @@ public class GameManager : Singletone<GameManager>
         return counter;
     }
 
-    private void InitializeManager()
+    public void InitializeManager()
     {
         CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
+        LifeCounter = 0;
     }
 
     // Update is called once per frame
@@ -190,7 +191,7 @@ public class GameManager : Singletone<GameManager>
 
     }
 
-    void BackToHub()
+    public void BackToHub()
     {
         BlockCursor();
         SceneManager.LoadScene("HubScene");
