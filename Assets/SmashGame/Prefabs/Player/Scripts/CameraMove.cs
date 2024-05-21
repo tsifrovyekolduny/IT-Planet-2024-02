@@ -6,6 +6,7 @@ public class CameraMove : MonoBehaviour
     [SerializeField] protected AudioClip[] _getDamageSoundClip;
 
     private int _hp = 3;
+    private bool _isFinished = false;
     private bool _canTakeDamage;
     private bool _isReloading;
     private Vector3 dir;
@@ -23,10 +24,10 @@ public class CameraMove : MonoBehaviour
 
     public Texture2D AimCursor;
     public Texture2D UsualCursor;
-    
+
     void Start()
     {
-        Cursor.SetCursor(AimCursor, Vector2.zero, CursorMode.Auto);        
+        Cursor.SetCursor(AimCursor, Vector2.zero, CursorMode.Auto);
         _canTakeDamage = true;
         time = Time.deltaTime;
         _hp = GameManager.Instance.LifeCounter;
@@ -50,21 +51,23 @@ public class CameraMove : MonoBehaviour
     {
         _hp -= 1;
         GameManager.Instance.LifeCounter = _hp;
-        
+
         if (_hp <= 0)
         {
             Cursor.SetCursor(UsualCursor, Vector2.zero, CursorMode.Auto);
-            GameManager.Instance.CompleteLevel("SmashGame", timeAfterEnd: 10f, false);            
+            GameManager.Instance.CompleteLevel("SmashGame", timeAfterEnd: 10f, false);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Damage" && _canTakeDamage) {
+        if (collision.gameObject.tag == "Damage" && _canTakeDamage)
+        {
             SoundManager.Instance.PlayAudioClip(_getDamageSoundClip, transform, 1f);
 
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
-            if (!isDamaged) {
+            if (!isDamaged)
+            {
                 TakeDamage();
                 StartCoroutine(HurtReload());
             }
@@ -73,9 +76,12 @@ public class CameraMove : MonoBehaviour
 
     void OnTriggerEnter(Collider otherObject)
     {
-        if (otherObject.tag == "Endingzone") {
+        if (otherObject.tag == "Endingzone" && !_isFinished)
+        {
+            _isFinished = true;
             Cursor.SetCursor(UsualCursor, Vector2.zero, CursorMode.Auto);
-            GameManager.Instance.CompleteLevel("SmashGame");            
+            Debug.Log("Smash Game won");
+            GameManager.Instance.CompleteLevel("SmashGame");
         }
     }
 
@@ -95,10 +101,10 @@ public class CameraMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(_hp > 0)
+        if (_hp > 0)
         {
             gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        }        
+        }
     }
 
     private void Update()
