@@ -3123,13 +3123,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _greenObject: {fileID: 5793579010119531731, guid: 767e1ae2ffc9b73488acf4a74ead5517, type: 3}
   _redObject: {fileID: 7471416012626715080, guid: 65161ca626e8cbf47af857a85655ce73, type: 3}
-  _glassFallSound:
+  _bottlePlaceSound:
   - {fileID: 8300000, guid: d74fc588093ed2e43b153593b52568c0, type: 3}
   - {fileID: 8300000, guid: 884243ceb401a024cbe247c9ce5da414, type: 3}
+  _heartPlaceSound:
+  - {fileID: 8300000, guid: eaca5c38806a012479e897841aa0dfe6, type: 3}
+  - {fileID: 8300000, guid: acfffa6d5c7a8404ab1ecd689f77fbff, type: 3}
   PlayerSpawnpoint: {fileID: 960652860}
   EnemySpawnpoint: {fileID: 1195696480}
+  PlayerMovementBlocked: 0
   SpawningDelay: 0.5
   MovingSpeed: 1
+  FlyingSpeed: 1
   LineSizeToWin: 5
   GameResult: 0
 --- !u!4 &567719037

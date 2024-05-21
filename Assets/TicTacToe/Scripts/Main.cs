@@ -13,7 +13,8 @@ public class Main : MonoBehaviour
     [SerializeField] private GameObject _greenObject;
     [SerializeField] private GameObject _redObject;
 
-    [SerializeField] private AudioClip[] _glassFallSound;
+    [SerializeField] private AudioClip[] _bottlePlaceSound;
+    [SerializeField] private AudioClip[] _heartPlaceSound;
 
     public GameObject PlayerSpawnpoint;
     public GameObject EnemySpawnpoint;
@@ -21,9 +22,12 @@ public class Main : MonoBehaviour
     private int _greenNumber = 0;
     private int _redNumber = 0;
 
-    public float SpawningDelay = 0.05f;
-    public float MovingSpeed = 1f;
+    public bool PlayerMovementBlocked;
 
+    public float SpawningDelay = 0.05f;
+    public float MovingSpeed = 3f;
+
+    public float FlyingSpeed = 10f;
     public int LineSizeToWin = 5;
 
     private bool _finished = false;
@@ -113,24 +117,25 @@ public class Main : MonoBehaviour
         return 0;
     }
 
-    public IEnumerator MoveObject(GameObject currentObject, Vector3 position)
+    public IEnumerator MoveObject(GameObject currentObject, Vector3 position, bool playerMovement)
     {
-        float counter = 0;
+        Vector3 oldPosition = currentObject.transform.position;
 
-        while (counter < MovingSpeed)
-        {
-            counter += Time.deltaTime;
-
-            Vector3 currentPosition = currentObject.transform.position;
-
-            float time = Vector3.Distance(currentPosition, position) / (MovingSpeed - counter) * Time.deltaTime;
-
-            currentObject.transform.position = Vector3.MoveTowards(currentPosition, position, time);
+        while (currentObject.transform.position != position)
+        {            
+            currentObject.transform.position = Vector3.MoveTowards(currentObject.transform.position, position, FlyingSpeed);            
 
             yield return null;
         }
 
-        SoundManager.Instance.PlayAudioClip(_glassFallSound, transform, 1f);
+        if (playerMovement)
+        {
+            SoundManager.Instance.PlayAudioClip(_heartPlaceSound, transform, 1f);
+        }
+        else
+        {
+            SoundManager.Instance.PlayAudioClip(_bottlePlaceSound, transform, 1f);
+        }
     }
 
     private void Update()
@@ -184,6 +189,8 @@ public class Main : MonoBehaviour
 
     public void SetGreen(int id)
     {
+        PlayerMovementBlocked = true;
+
         _map[id % 10, id / 10] = 1;
         DeleteInteractablre(id);
 
@@ -194,7 +201,7 @@ public class Main : MonoBehaviour
         _greenPlayer[_greenNumber].transform.rotation = Quaternion.Euler(90f, 0f, 0f);
         _greenPlayer[_greenNumber].GetComponent<Rigidbody>().isKinematic = true;
 
-        StartCoroutine(MoveObject(_greenPlayer[_greenNumber].gameObject, currentCollider.transform.position));
+        StartCoroutine(MoveObject(_greenPlayer[_greenNumber].gameObject, currentCollider.transform.position, true));
 
         ++_greenNumber;
 
@@ -209,6 +216,8 @@ public class Main : MonoBehaviour
 
     public void SetRed()
     {
+        PlayerMovementBlocked = false;
+
         int id;        
         Collider currentCollider;
         do
@@ -223,7 +232,7 @@ public class Main : MonoBehaviour
         _redPlayer[_redNumber].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         _redPlayer[_redNumber].GetComponent<Rigidbody>().isKinematic = true;
 
-        StartCoroutine(MoveObject(_redPlayer[_redNumber].gameObject, currentCollider.transform.position));
+        StartCoroutine(MoveObject(_redPlayer[_redNumber].gameObject, currentCollider.transform.position, false));
 
         currentCollider.enabled = false;
 

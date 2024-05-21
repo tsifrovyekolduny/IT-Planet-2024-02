@@ -13,17 +13,22 @@ public class Cell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && !main.PlayerMovementBlocked)
         {           
             if (main.GameResult == 0)
             {
-                main.SetGreen(id);
+                main.SetGreen(id);                
             }
 
             if (main.GameResult == 0)
             {
-                main.SetRed();
+                Invoke("MakeEnemyMove", main.MovingSpeed);
             }
-        }                
+        }
+    }
+
+    private void MakeEnemyMove()
+    {
+        main.SetRed();
     }
 }

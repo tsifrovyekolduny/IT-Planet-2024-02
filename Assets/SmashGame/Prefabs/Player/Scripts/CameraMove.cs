@@ -27,7 +27,7 @@ public class CameraMove : MonoBehaviour
 
     void Start()
     {
-        Cursor.SetCursor(AimCursor, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(AimCursor, new Vector2(25f, 25f), CursorMode.Auto);
         _canTakeDamage = true;
         time = Time.deltaTime;
         _hp = GameManager.Instance.LifeCounter;
@@ -52,8 +52,9 @@ public class CameraMove : MonoBehaviour
         _hp -= 1;
         GameManager.Instance.LifeCounter = _hp;
 
-        if (_hp <= 0)
+        if (_hp <= 0 & !_isFinished)
         {
+            _isFinished = true;
             Cursor.SetCursor(UsualCursor, Vector2.zero, CursorMode.Auto);
             GameManager.Instance.CompleteLevel("SmashGame", timeAfterEnd: 10f, false);
         }

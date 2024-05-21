@@ -87,7 +87,7 @@ public class UiScript : Singletone<UiScript>
             Time.timeScale = 1;
             Hidden = true;
 
-            if (_previousLockMode != CursorLockMode.Confined)
+            if (_previousLockMode != CursorLockMode.None)
             {
                 GameManager.Instance.BlockCursor();
             }
