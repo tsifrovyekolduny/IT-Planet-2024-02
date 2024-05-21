@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class EndingScript : MonoBehaviour
 {
+    [SerializeField] private AudioSource _goodAudioClip;
+    [SerializeField] private AudioSource _badAudioClip;
+    [SerializeField] private AudioSource _soSoAudioClip;
+
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
     public GameObject[] BadObjects;
@@ -56,13 +61,22 @@ public class EndingScript : MonoBehaviour
         }
         else if (_counterOfWonnedGames <= 2)
         {
+
             _endingText = "PS. 24:16";
+            AudioSource audioSource = Instantiate(_soSoAudioClip, transform.position, Quaternion.identity);
+            Destroy(audioSource.gameObject, audioSource.clip.length);
+
             ChangeActiveToObjects(SoSoObjects, true);
         }
         else
         {
+
             _actor = GirlAnimator;
             _endingText = "FES. 5:16";
+            AudioSource audioSource = Instantiate(_goodAudioClip, transform.position, Quaternion.identity);
+
+            Destroy(audioSource.gameObject, audioSource.clip.length);
+
             ChangeActiveToObjects(GoodObjects, true);
             TimeBeforeActing = 5f;
             TimeBeforeEnd = 10f;
@@ -80,6 +94,16 @@ public class EndingScript : MonoBehaviour
     {
         if (_actor != null)
         {
+            if (_counterOfWonnedGames < 1)
+            {
+                // bad ending
+                Debug.Log(2);
+            }
+            else
+            {
+                // good ending
+                Debug.Log(3);
+            }
             _actor.SetBool("NextAction", true);
             if (GameManager.Instance.LifeCounter == 0)
             {
@@ -96,5 +120,11 @@ public class EndingScript : MonoBehaviour
         {
             gameObject.SetActive(isActive);
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 }

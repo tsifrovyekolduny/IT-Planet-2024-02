@@ -1540,6 +1540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0360f5580baf56b479936c5b43f676a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _goodAudioClip: {fileID: 9063535973581068047, guid: bf60a793e4a0c6546b9d5eedf5df65e3, type: 3}
+  _badAudioClip: {fileID: 0}
+  _soSoAudioClip: {fileID: 1635776564550575961, guid: 6e30ee7d2bc875146935eb57c8c3f29e, type: 3}
   GoodObjects:
   - {fileID: 10700793}
   - {fileID: 195689539}

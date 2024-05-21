@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
+    [SerializeField] protected AudioClip[] _getDamageSoundClip;
+
     private int _hp = 3;
     private bool _canTakeDamage;
     private bool _isReloading;
@@ -59,6 +61,8 @@ public class CameraMove : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Damage" && _canTakeDamage) {
+            SoundManager.Instance.PlayAudioClip(_getDamageSoundClip, transform, 1f);
+
             bool isDamaged = collision.gameObject.GetComponent<DamageScript>().isDamaged;
             if (!isDamaged) {
                 TakeDamage();

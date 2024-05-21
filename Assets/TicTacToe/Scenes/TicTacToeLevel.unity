@@ -1484,7 +1484,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -9170755341462293588, guid: 809e7e71e9081904dbb927288dbb1633, type: 2}
   m_audioClip: {fileID: 8300000, guid: b07058ee3901a244a843db30110466c9, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3126,7 +3126,6 @@ MonoBehaviour:
   _glassFallSound:
   - {fileID: 8300000, guid: d74fc588093ed2e43b153593b52568c0, type: 3}
   - {fileID: 8300000, guid: 884243ceb401a024cbe247c9ce5da414, type: 3}
-  - {fileID: 8300000, guid: feeda5648787efd4c8b8d08eb89966d0, type: 3}
   PlayerSpawnpoint: {fileID: 960652860}
   EnemySpawnpoint: {fileID: 1195696480}
   SpawningDelay: 0.5
