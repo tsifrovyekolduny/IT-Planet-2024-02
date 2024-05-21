@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EndingScript : MonoBehaviour
 {
+    [SerializeField] private AudioSource _goodAudioClip;
+    [SerializeField] private AudioSource _badAudioClip;
+    [SerializeField] private AudioSource _soSoAudioClip;
+
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
     public GameObject[] BadObjects;    
@@ -46,17 +51,25 @@ public class EndingScript : MonoBehaviour
     void Start()
     {
         _counterOfWonnedGames = GameManager.Instance.GetNumberOfLevels(LevelState.Won, false);
-        if(_counterOfWonnedGames < 1)
+        if (_counterOfWonnedGames < 1)
         {
             InitBadEnding();
         }
         else if (_counterOfWonnedGames < 4)
         {
+            AudioSource audioSource = Instantiate(_soSoAudioClip, transform.position, Quaternion.identity);
+
+            Destroy(audioSource.gameObject, audioSource.clip.length);
+
             _endingText = "Мужчина в возрасте 45 лет застрелился. Причина: затяжная депрессия";
             ChangeActiveToObjects(SoSoObjects, true);
         }
         else
         {
+            AudioSource audioSource = Instantiate(_goodAudioClip, transform.position, Quaternion.identity);
+
+            Destroy(audioSource.gameObject, audioSource.clip.length);
+
             _endingText = "Мужчина жив, здоров. Дочь пошла поступила в колледж. Жена вернулась. Работа восстановилась...";
             ChangeActiveToObjects(GoodObjects, true);
         }
@@ -100,8 +113,18 @@ public class EndingScript : MonoBehaviour
     {
         if (_actor != null)
         {
+            if (_counterOfWonnedGames < 1)
+            {
+                // bad ending
+                Debug.Log(2);
+            }
+            else
+            {
+                // good ending
+                Debug.Log(3);
+            }
             _actor.SetBool("NextAction", true);
-            Debug.Log("Actor playing");
+            //Debug.Log("Actor playing");
         }
         Invoke("EndGame", TimeBeforeEnd);
     }
@@ -119,6 +142,4 @@ public class EndingScript : MonoBehaviour
     {
 
     }
-
-
 }

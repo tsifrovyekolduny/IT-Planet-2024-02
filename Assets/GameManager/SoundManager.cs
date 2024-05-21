@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 public class SoundManager : Singletone<SoundManager>
 {    
-    private AudioMixer _mixer;
+    //private AudioMixer _mixer;
 
     [SerializeField] private AudioSource soundObject;    
 
