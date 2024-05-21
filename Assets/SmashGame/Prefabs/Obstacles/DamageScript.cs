@@ -42,15 +42,13 @@ public class DamageScript : MonoBehaviour
             
             foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
             {
-                if (child.GetComponent<Rigidbody>() == null) { 
-                    child.AddComponent<Rigidbody>();
-                    child.AddComponent<MeshCollider>().convex = true;
-                    MeshCollider MC = GetComponent<MeshCollider>();
+                if (child.GetComponent<Rigidbody>() == null) {                                         
                     MeshRenderer renderer = child.GetComponent<MeshRenderer>();
                     if (renderer != null && brokenStateMaterial != null)
                     {
                         renderer.material = brokenStateMaterial;
                     }
+                    child.AddComponent<Rigidbody>();
                 }
             }
         }

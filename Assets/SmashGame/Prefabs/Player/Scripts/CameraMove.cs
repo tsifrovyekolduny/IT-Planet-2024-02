@@ -27,7 +27,7 @@ public class CameraMove : MonoBehaviour
 
     void Start()
     {
-        Cursor.SetCursor(AimCursor, new Vector2(25f, 25f), CursorMode.Auto);
+        Cursor.SetCursor(AimCursor, new Vector2(50f, 50f), CursorMode.Auto);
         _canTakeDamage = true;
         time = Time.deltaTime;
         _hp = GameManager.Instance.LifeCounter;

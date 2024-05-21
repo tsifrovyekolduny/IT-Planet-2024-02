@@ -21,7 +21,6 @@ public class BulletScript : MonoBehaviour
 
     IEnumerator DestroyBullet(float timeToDestroy)
     {
-
         yield return new WaitForSeconds(timeToDestroy);
 
         gameObject.SetActive(false);
