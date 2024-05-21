@@ -7,10 +7,8 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class EndingScript : MonoBehaviour
-{
-    [SerializeField] private AudioSource _goodAudioClip;
-    [SerializeField] private AudioSource _badAudioClip;
-    [SerializeField] private AudioSource _soSoAudioClip;
+{    
+    [SerializeField] private AudioClip _badBell;    
 
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
@@ -51,6 +49,23 @@ public class EndingScript : MonoBehaviour
         _actor = DeathAnimator;
     }
 
+    void InitSoSoEnding()
+    {
+        _endingText = "PS. 24:16";                
+
+        ChangeActiveToObjects(SoSoObjects, true);
+    }
+
+    void InitGoodEnding()
+    {
+        _actor = GirlAnimator;
+        _endingText = "FES. 5:16";                
+
+        ChangeActiveToObjects(GoodObjects, true);
+        TimeBeforeActing = 5f;
+        TimeBeforeEnd = 10f;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,25 +76,12 @@ public class EndingScript : MonoBehaviour
         }
         else if (_counterOfWonnedGames <= 2)
         {
-
-            _endingText = "PS. 24:16";
-            AudioSource audioSource = Instantiate(_soSoAudioClip, transform.position, Quaternion.identity);
-            Destroy(audioSource.gameObject, audioSource.clip.length);
-
-            ChangeActiveToObjects(SoSoObjects, true);
+            InitSoSoEnding();
+            
         }
         else
         {
-
-            _actor = GirlAnimator;
-            _endingText = "FES. 5:16";
-            AudioSource audioSource = Instantiate(_goodAudioClip, transform.position, Quaternion.identity);
-
-            Destroy(audioSource.gameObject, audioSource.clip.length);
-
-            ChangeActiveToObjects(GoodObjects, true);
-            TimeBeforeActing = 5f;
-            TimeBeforeEnd = 10f;
+            InitGoodEnding();            
         }
         Invoke("MakeActorsPlay", TimeBeforeActing);
     }
@@ -87,28 +89,29 @@ public class EndingScript : MonoBehaviour
     void EndGame()
     {
         EndCanvas.gameObject.SetActive(true);
-        EndCanvas.ShowUI(_endingText);
+        EndCanvas.ShowUI(_endingText);        
     }    
 
     void MakeActorsPlay()
     {
         if (_actor != null)
         {
-            if (_counterOfWonnedGames < 1)
+            if (_counterOfWonnedGames == 0)
             {
+                CardioVideo.clip = BadCardioVariant;
+                SoundManager.Instance.PlayAudioClip(_badBell, transform, 1f);
                 // bad ending
                 Debug.Log(2);
             }
             else
             {
+                GameObject.Find("Crying").SetActive(false);
+                CardioVideo.GetComponent<AudioSource>().enabled = false;
                 // good ending
                 Debug.Log(3);
             }
             _actor.SetBool("NextAction", true);
-            if (GameManager.Instance.LifeCounter == 0)
-            {
-                CardioVideo.clip = BadCardioVariant;
-            }
+            
             Debug.Log("Actor playing");
         }
         Invoke("EndGame", TimeBeforeEnd);

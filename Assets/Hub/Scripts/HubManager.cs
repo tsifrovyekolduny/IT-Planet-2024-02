@@ -48,7 +48,7 @@ public class HubManager : MonoBehaviour
         }
         else
         {
-            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfLevels();
+            int numberOfCompletedLevels = GameManager.Instance.GetNumberOfLevels(LevelState.Won, false);
 
             if (numberOfCompletedLevels == 0)
             {

@@ -27,6 +27,8 @@ public class Main : MonoBehaviour
     public float MovingSpeed = 1f;
 
     public int LineSizeToWin = 5;
+
+    private bool _finished = false;
     public int GameResult = 0;
 
     public int CheckFinishCondition(int id)
@@ -131,6 +133,16 @@ public class Main : MonoBehaviour
         }
 
         SoundManager.Instance.PlayAudioClip(_glassFallSound, transform, 1f);
+    }
+
+    private void Update()
+    {
+        if(GameResult != 0 && !_finished)
+        {
+            _finished = true;
+            bool isWin = GameResult == 1;
+            GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 5f, isWin);            
+        }
     }
 
     public IEnumerator SpawnObjects(float time)

@@ -6,6 +6,10 @@ public class FaceScript : MonoBehaviour
 {
     [SerializeField]
     private Material FaceMaterial;
+
+    [SerializeField]
+    private GameObject _goodMusic;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,15 @@ public class FaceScript : MonoBehaviour
 
     public void ChangeFace(float shiftY)
     {
+        if(shiftY == 0.69f)
+        {
+            TurnHappyMusic();
+        }
         FaceMaterial.mainTextureOffset = new Vector2(0, shiftY);
+    }
+
+    void TurnHappyMusic()
+    {        
+        _goodMusic.SetActive(true);
     }
 }

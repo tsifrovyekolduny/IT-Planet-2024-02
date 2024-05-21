@@ -57,8 +57,7 @@ public class GameManager : Singletone<GameManager>
     }
 
     private void Awake()
-    {
-        InitializeManager();
+    {        
         MakeFade(Color.black, false);
         BlockCursor();
     }

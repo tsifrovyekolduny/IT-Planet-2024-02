@@ -47,7 +47,7 @@ public class EndUI : MonoBehaviour
             color = EndingText.color;
             color.a += 0.01f;
             EndingText.color = color;
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
         }
         GameManager.Instance.UnblockCursor();
         ShowButtons();
@@ -55,6 +55,7 @@ public class EndUI : MonoBehaviour
 
     private void ShowButtons()
     {
+        Debug.Log("Buttons showed up");
         foreach(var button in Buttons)
         {
             button.SetActive(true);
