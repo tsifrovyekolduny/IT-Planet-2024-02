@@ -6,7 +6,7 @@ public class SoundManager : Singletone<SoundManager>
 {    
     private AudioMixer _mixer;
 
-    [SerializeField] private AudioSource soundObject;    
+    public AudioSource soundObject;    
 
     private void Awake()
     {

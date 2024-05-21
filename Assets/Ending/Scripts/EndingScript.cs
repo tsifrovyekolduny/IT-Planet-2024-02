@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class EndingScript : MonoBehaviour
 {
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
-    public GameObject[] BadObjects;    
+    public GameObject[] BadObjects;
+
+    public VideoPlayer CardioVideo;
+    public VideoClip BadCardioVariant;
 
     public Animator DeathAnimator;
     public Animator GirlAnimator;
@@ -26,6 +30,8 @@ public class EndingScript : MonoBehaviour
 
     private void Awake()
     {
+
+
         ChangeActiveToObjects(GoodObjects, false);
         ChangeActiveToObjects(SoSoObjects, false);
         ChangeActiveToObjects(BadObjects, false);
@@ -46,7 +52,7 @@ public class EndingScript : MonoBehaviour
     void Start()
     {
         _counterOfWonnedGames = GameManager.Instance.LifeCounter;
-        if(_counterOfWonnedGames <= 0)
+        if (_counterOfWonnedGames <= 0)
         {
             InitBadEnding();
         }
@@ -63,7 +69,6 @@ public class EndingScript : MonoBehaviour
             TimeBeforeActing = 5f;
             TimeBeforeEnd = 10f;
         }
-
         Invoke("MakeActorsPlay", TimeBeforeActing);
     }
 
@@ -78,7 +83,7 @@ public class EndingScript : MonoBehaviour
         Image image = EndCanvas.GetComponentInChildren<Image>();
         Color color;
 
-        while(image.color.a < 1)
+        while (image.color.a < 1)
         {
             color = image.color;
             color.a += 0.01f;
@@ -88,7 +93,7 @@ public class EndingScript : MonoBehaviour
 
         TextMeshProUGUI textMesh = EndCanvas.GetComponentInChildren<TextMeshProUGUI>();
         textMesh.text = _endingText;
-        while(textMesh.color.a < 1)
+        while (textMesh.color.a < 1)
         {
             color = textMesh.color;
             color.a += 0.01f;
@@ -103,6 +108,10 @@ public class EndingScript : MonoBehaviour
         if (_actor != null)
         {
             _actor.SetBool("NextAction", true);
+            if (GameManager.Instance.LifeCounter == 0)
+            {
+                CardioVideo.clip = BadCardioVariant;
+            }
             Debug.Log("Actor playing");
         }
         Invoke("EndGame", TimeBeforeEnd);
@@ -110,7 +119,7 @@ public class EndingScript : MonoBehaviour
 
     void ChangeActiveToObjects(GameObject[] gameObjects, bool isActive)
     {
-        foreach(GameObject gameObject in gameObjects)
+        foreach (GameObject gameObject in gameObjects)
         {
             gameObject.SetActive(isActive);
         }
