@@ -59,8 +59,7 @@ public class GameManager : Singletone<GameManager>
     private void Awake()
     {        
         MakeFade(Color.black, false);
-        BlockCursor();
-        Cursor.visible = false;
+        BlockCursor();        
     }
 
     private void OnLevelWasLoaded(int level)

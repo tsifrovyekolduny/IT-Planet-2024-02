@@ -36,6 +36,7 @@ public class HubCameraMovement : MonoBehaviour
     {
         if (StartTimeForBlockingCamera > 0)
         {
+            Cursor.visible = false;
             _isBlocked = true;
             StartCoroutine(UnblockCameraAfterTime());
         }
@@ -67,7 +68,7 @@ public class HubCameraMovement : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lTargetDir), SpeedOfLookAt);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!_isBlocked)
         {

@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e250e9d5bbf8e049877cced559242ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sensitivity: 7
+  Sensitivity: 2
   VideoPlane: {fileID: 898402752}
   SpeedOfLookAt: 1
   StartTimeForBlockingCamera: 5

@@ -26,7 +26,7 @@ public class HubManager : MonoBehaviour
             SetBlockToDoor("TicTacToeLevel", false);
         }
 
-        if (GameManager.Instance.GetNumberOfLevels() > 0)
+        if (GameManager.Instance.GetNumberOfLevels(LevelState.Won, false) > 0)
         {
             SetBlockToDoor("SmashGame", true);
         }
