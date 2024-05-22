@@ -345,7 +345,6 @@ public class LabManager : MonoBehaviour
             placedSection.transform.parent = Plane.transform;
 
             PlaceNodesAndObstacles(section, placedSection, nodeOffset, currentHeight);
-
         }
     }
 
@@ -491,7 +490,7 @@ public class LabManager : MonoBehaviour
 
             playerScipt.RightNode = rightNodeGameObject;
             playerScipt.HoleEnteredEvent.AddListener(MovePlayerToNode);
-            StartCoroutine(playerScipt.MoveSelf(spawnPointWithOffset));
+            playerScipt.StartMoving(spawnPointWithOffset);            
         }
         else
         {
