@@ -11,6 +11,7 @@ public class LastCompletedLevel
 
 public class GameManager : Singletone<GameManager>
 {
+    private Dictionary<string, bool> _scenesLoaded = new Dictionary<string, bool>();
     public GameObject FadeInTemplate;
     public GameObject FadeOutTemplate;
 
@@ -32,6 +33,22 @@ public class GameManager : Singletone<GameManager>
         }
     }
     public LevelsComleted CompletedLevels;
+
+    public bool IsFirstTimeOfScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (!_scenesLoaded.ContainsKey(sceneName))
+        {
+            return true;
+        }
+        return !_scenesLoaded[sceneName];
+    }
+
+    private void MarkSceneAsLoaded()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        _scenesLoaded[sceneName] = true;
+    }
 
     public void MakeFade(Color color, bool fadeIn)
     {
@@ -63,7 +80,7 @@ public class GameManager : Singletone<GameManager>
     }
 
     private void OnLevelWasLoaded(int level)
-    {
+    {        
         if (level < (SceneManager.sceneCountInBuildSettings - 1) && level > 0)
         {
             UnblockCursor();
@@ -192,17 +209,20 @@ public class GameManager : Singletone<GameManager>
 
     public void BackToHub()
     {
+        MarkSceneAsLoaded();
         BlockCursor();
         SceneManager.LoadScene("HubScene");
     }
 
     void ToEnding()
-    {                
+    {
+        MarkSceneAsLoaded();
         SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)
     {
+        MarkSceneAsLoaded();
         if(name == "SmashGame")
         {
             LifeCounter = GetNumberOfLevels(LevelState.Won, false);

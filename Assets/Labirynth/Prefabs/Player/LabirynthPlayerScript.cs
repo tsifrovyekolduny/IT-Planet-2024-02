@@ -20,8 +20,19 @@ public class LabirynthPlayerScript : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+
+
     static bool IsObstacleOnWay(Transform player, Vector3 destination)
     {
+        var playerCollider = player.GetComponent<BoxCollider>();
+        float minY = player.position.y - (playerCollider.bounds.size.y / 2);
+        float maxY = player.position.y + (playerCollider.bounds.size.y / 2);        
+
+        if(destination.y > maxY || destination.y < minY)
+        {
+            return true;
+        }
+
         float distance = Mathf.Abs((destination - player.transform.position).x);
 
         RaycastHit[] hits = Physics.RaycastAll(player.transform.position, player.transform.right, distance);
