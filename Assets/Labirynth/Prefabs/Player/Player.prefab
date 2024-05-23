@@ -145,7 +145,7 @@ MonoBehaviour:
   HoleEnteredEvent:
     m_PersistentCalls:
       m_Calls: []
-  Speed: 0.3
+  Speed: 1
   RightNode: {fileID: 0}
 --- !u!65 &1242378364522496188
 BoxCollider:

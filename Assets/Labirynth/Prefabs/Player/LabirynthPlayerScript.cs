@@ -19,9 +19,6 @@ public class LabirynthPlayerScript : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
-
-
-
     static bool IsObstacleOnWay(Transform player, Vector3 destination)
     {
         var playerCollider = player.GetComponent<BoxCollider>();
@@ -74,8 +71,7 @@ public class LabirynthPlayerScript : MonoBehaviour
 
         while (transform.position.x != point.x)
         {
-            transform.position = Vector3.MoveTowards(transform.position, newPosition, Speed * Time.fixedDeltaTime);
-            Debug.Log($"{transform.position}, new pos is {newPosition}, delta is {Time.fixedDeltaTime}");
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, Speed * Time.deltaTime);
             yield return null;
         }
 
