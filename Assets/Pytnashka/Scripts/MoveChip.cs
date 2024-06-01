@@ -5,9 +5,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
-
 
 
 public class MoveChip : MonoBehaviour
@@ -211,10 +208,6 @@ public class MoveChip : MonoBehaviour
     private Vector3 old_position = new Vector3(-10, -10, -10);
     int _newRow, _newCol;
 
-    //private GameObject ui_motion;
-    //private GameObject ui_completed;
-
-    //private bool can_move;
     private enum ChipState
     {
         Standing,
@@ -286,7 +279,6 @@ public class MoveChip : MonoBehaviour
             Global.Get.is_game_over = true;
             Completed();
         }
-        //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.Get.count.ToString();
     }
     void MoveChipOnBoard()
     {
@@ -298,7 +290,6 @@ public class MoveChip : MonoBehaviour
         {
             Global.Get.board[_rowPosition, _colPosition] = 0;
             Global.Get.board[_newRow, _newCol] = _numberChip;
-            //_state = ChipState.Standing;
             SwitchStateStanding();
              _rowPosition = _newRow;
             _colPosition = _newCol;
@@ -409,87 +400,6 @@ public class MoveChip : MonoBehaviour
             strategyMove.Move(this);
         }
         catch { }
-        /*
-        try
-        {
-            //left
-            if (Global.Get.board[_rowPosition, _colPosition - 1] == 0)
-            {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z - Global.Get.z_offset_f);
-                _newRow = _rowPosition;
-                _newCol = _colPosition - 1;
-                PlaySound();
-                SwitchStateMoving();
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                if (preferredMove == PreferredMove.Left)
-                {
-                    return;
-                }
-            }
-        }
-        catch { }
-
-        //up
-        try
-        {
-            if (Global.Get.board[_rowPosition - 1, _colPosition] == 0)
-            {
-                empty_position = new Vector3(transform.position.x - Global.Get.x_offset_f, 0, transform.position.z);
-                _newRow = _rowPosition - 1;
-                _newCol = _colPosition;
-                PlaySound();
-                //_state = ChipState.Moving;
-                SwitchStateMoving();
-
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-
-                if (preferredMove == PreferredMove.Up)
-                {
-                    return;
-                }
-            }
-        }
-        catch { }
-
-        //right
-        try
-        {
-            if (Global.Get.board[_rowPosition, _colPosition + 1] == 0)
-            {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z + Global.Get.z_offset_f);
-                _newRow = _rowPosition;
-                _newCol = _colPosition + 1;
-                PlaySound();
-                SwitchStateMoving();
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                if (preferredMove == PreferredMove.Right)
-                {
-                    return;
-                }
-            }
-        }
-        catch { }
-
-        //down
-        try
-        {
-            if (Global.Get.board[_rowPosition + 1, _colPosition] == 0)
-            {
-                empty_position = new Vector3(transform.position.x + Global.Get.x_offset_f, 0, transform.position.z);
-                _newRow = _rowPosition + 1;
-                _newCol = _colPosition;
-                PlaySound();
-                SwitchStateMoving();
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-
-                if (preferredMove == PreferredMove.Down)
-                {
-                    return;
-                }
-            }
-        }
-        catch { }
-        */
 
     }
     void FindOnBoard()
