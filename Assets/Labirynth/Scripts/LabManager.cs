@@ -312,6 +312,9 @@ public class LabManager : MonoBehaviour
     public GameObject Heart;
     private GameObject _player;
 
+    public SectionFactory SectionFactoryOnScene;
+    public NodeFactory NodeFactoryOnScene;
+
     private Dictionary<int, Node> _bestOptionDict;
     private bool _isFinished = false;
     private LevelState _levelState;
@@ -320,31 +323,48 @@ public class LabManager : MonoBehaviour
     [SerializeField]
     private Node _currentNode;
 
+    //void PlaceAll()
+    //{
+    //    var sections = Nodes.Sections;
+
+    //    Vector3 planeSize = GetBoundsOf(Plane.transform).size;
+
+    //    float xSize = planeSize.x * Plane.transform.localScale.x;
+    //    float zSize = planeSize.z * Plane.transform.localScale.z;
+
+    //    float sectionOffset = zSize / sections.Count;
+    //    float nodeOffset = xSize / RowCapacity;
+
+    //    for (int sectionIndex = 0; sectionIndex < sections.Count; ++sectionIndex)
+    //    {
+    //        var section = sections[sectionIndex];
+
+    //        float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
+    //        var placedSectionPosition = new Vector3(Plane.transform.position.x,
+    //            currentHeight,
+    //            Plane.transform.position.z - 0.5f);
+    //        GameObject placedSection = Instantiate(Section, placedSectionPosition, Quaternion.identity);
+    //        placedSection.name = $"Section {sectionIndex}";
+    //        placedSection.transform.parent = Plane.transform;
+
+    //        PlaceNodesAndObstacles(section, placedSection, nodeOffset, currentHeight);
+    //    }
+    //}
+
     void PlaceAll()
     {
         var sections = Nodes.Sections;
-
-        Vector3 planeSize = GetBoundsOf(Plane.transform).size;
-
-        float xSize = planeSize.x * Plane.transform.localScale.x;
-        float zSize = planeSize.z * Plane.transform.localScale.z;
-
-        float sectionOffset = zSize / sections.Count;
-        float nodeOffset = xSize / RowCapacity;
-
         for (int sectionIndex = 0; sectionIndex < sections.Count; ++sectionIndex)
         {
-            var section = sections[sectionIndex];
+            SectionFactoryOnScene.
+            GameObject spawnedSection = SectionFactoryOnScene.CreateObject();
+            List<Node> section = sections[sectionIndex];
 
-            float currentHeight = SectionSpawnPoint.transform.position.y - (sectionOffset * sectionIndex);
-            var placedSectionPosition = new Vector3(Plane.transform.position.x,
-                currentHeight,
-                Plane.transform.position.z - 0.5f);
-            GameObject placedSection = Instantiate(Section, placedSectionPosition, Quaternion.identity);
-            placedSection.name = $"Section {sectionIndex}";
-            placedSection.transform.parent = Plane.transform;
-
-            PlaceNodesAndObstacles(section, placedSection, nodeOffset, currentHeight);
+            for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
+            {
+                Node node = section[nodeIndex];
+                NodeFactoryOnScene.CreateObject(section);
+            }
         }
     }
 
@@ -353,6 +373,7 @@ public class LabManager : MonoBehaviour
         for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
         {
             Node node = section[nodeIndex];
+            
             GameObject nodePrefab = node.IsBlocked ? Walls[Random.Range(0, Walls.Count)] : Hole;
 
             float currentNodeOffset = nodeOffset * nodeIndex;
