@@ -303,10 +303,10 @@ public class LabManager : MonoBehaviour
     public float TimeAfterEnd = 30f;
 
     public LabTrackingPlayer Camera;
-    public List<GameObject> Walls;
-    public GameObject Hole;
-    public GameObject Section;
-    public GameObject SectionSpawnPoint;
+    //public List<GameObject> Walls;
+    //public GameObject Hole;
+    //public GameObject Section;
+    //public GameObject SectionSpawnPoint;
     public GameObject Plane;
     public GameObject Player;
     public GameObject Heart;
@@ -356,37 +356,39 @@ public class LabManager : MonoBehaviour
         var sections = Nodes.Sections;
         for (int sectionIndex = 0; sectionIndex < sections.Count; ++sectionIndex)
         {
-            SectionFactoryOnScene.
+            SectionFactoryOnScene.InitSection(Plane, sections.Count, sectionIndex);
             GameObject spawnedSection = SectionFactoryOnScene.CreateObject();
+
             List<Node> section = sections[sectionIndex];
 
             for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
             {
                 Node node = section[nodeIndex];
-                NodeFactoryOnScene.CreateObject(section);
+                NodeFactoryOnScene.InitNode(node, spawnedSection, Plane, nodeIndex, RowCapacity);
+                NodeFactoryOnScene.CreateObject();
             }
         }
     }
 
-    void PlaceNodesAndObstacles(List<Node> section, GameObject placedSection, float nodeOffset, float currentHeight)
-    {
-        for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
-        {
-            Node node = section[nodeIndex];
+    //void PlaceNodesAndObstacles(List<Node> section, GameObject placedSection, float nodeOffset, float currentHeight)
+    //{
+    //    for (int nodeIndex = 0; nodeIndex < section.Count; ++nodeIndex)
+    //    {
+    //        Node node = section[nodeIndex];
             
-            GameObject nodePrefab = node.IsBlocked ? Walls[Random.Range(0, Walls.Count)] : Hole;
+    //        GameObject nodePrefab = node.IsBlocked ? Walls[Random.Range(0, Walls.Count)] : Hole;
 
-            float currentNodeOffset = nodeOffset * nodeIndex;
-            var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
-                currentHeight + PlaceOn(nodePrefab.transform, placedSection.transform),
-                placedSection.transform.position.z);
+    //        float currentNodeOffset = nodeOffset * nodeIndex;
+    //        var newNodePosition = new Vector3(SectionSpawnPoint.transform.position.x + currentNodeOffset,
+    //            currentHeight + PlaceOn(nodePrefab.transform, placedSection.transform),
+    //            placedSection.transform.position.z);
 
-            GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
+    //        GameObject createdNode = Instantiate(nodePrefab, newNodePosition, nodePrefab.transform.rotation);
 
-            createdNode.transform.parent = placedSection.transform;
-            createdNode.name = node.ToString();
-        }        
-    }
+    //        createdNode.transform.parent = placedSection.transform;
+    //        createdNode.name = node.ToString();
+    //    }        
+    //}
 
     void Start()
     {
