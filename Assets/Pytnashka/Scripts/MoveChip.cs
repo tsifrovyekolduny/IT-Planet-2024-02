@@ -12,13 +12,17 @@ using UnityEngine.UIElements;
 
 public class MoveChip : MonoBehaviour
 {
-    public interface IStrategy
+    public interface IStrategyMove
     {
         bool Move(MoveChip chip);
     }
-    class MoveLeft : IStrategy
+    public interface IStrategyChipMove
+    {
+        IStrategyMove GetStrategyMove(MoveChip chip);
+    }
+    class MoveLeft : IStrategyMove
     { 
-        bool IStrategy.Move(MoveChip chip)
+        bool IStrategyMove.Move(MoveChip chip)
         {
             if (Global.Get.board[chip._rowPosition , chip._colPosition - 1] == 0)
             {
@@ -34,9 +38,9 @@ public class MoveChip : MonoBehaviour
         }
     }
 
-    class MoveUp : IStrategy
+    class MoveUp : IStrategyMove
     {
-        bool IStrategy.Move(MoveChip chip)
+        bool IStrategyMove.Move(MoveChip chip)
         {
             if (Global.Get.board[chip._rowPosition - 1, chip._colPosition] == 0)
             {
@@ -52,9 +56,9 @@ public class MoveChip : MonoBehaviour
         }
     }
 
-    class MoveRight : IStrategy
+    class MoveRight : IStrategyMove
     {
-        bool IStrategy.Move(MoveChip chip)
+        bool IStrategyMove.Move(MoveChip chip)
         {
             if (Global.Get.board[chip._rowPosition, chip._colPosition + 1] == 0)
             {
@@ -69,15 +73,22 @@ public class MoveChip : MonoBehaviour
             return false;
         }
     }
-
-    class MoveDown : IStrategy
+    class MoveFailed : IStrategyMove
     {
-        bool IStrategy.Move(MoveChip chip)
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            return false;
+        }
+    }
+
+    class MoveDown : IStrategyMove
+    {
+        bool IStrategyMove.Move(MoveChip chip)
         {
             if (Global.Get.board[chip._rowPosition + 1, chip._colPosition] == 0)
             {
-                chip.empty_position = new Vector3(chip.transform.position.x - Global.Get.x_offset_f, 0, chip.transform.position.z);
-                chip._newRow = chip._rowPosition - 1;
+                chip.empty_position = new Vector3(chip.transform.position.x + Global.Get.x_offset_f, 0, chip.transform.position.z);
+                chip._newRow = chip._rowPosition + 1;
                 chip._newCol = chip._colPosition;
                 chip.PlaySound();
                 chip.SwitchStateMoving();
@@ -87,34 +98,44 @@ public class MoveChip : MonoBehaviour
             return false;
         }
     }
-
-    public class UnCertainDirection : IStrategy
+  
+    public class ChipMoveUnCertainDirection: IStrategyChipMove
     {
+        bool IsPlaceEmpty(int row, int column, MoveChip chip)
+        {
+            bool result = false;
+            if (
+                row >= 0 && row < Global.Get.board.GetLength(0) &&
+                column >= 0 && column < Global.Get.board.GetLength(1))
+            {
+                result = (Global.Get.board[row, column] == 0);
+            }
+            return result;
+        }
         List<PreferredMove> GetListAvailablesMoves(MoveChip chip)
         {
             List<PreferredMove> retValue = new List<PreferredMove>();
-            if (Global.Get.board[chip._rowPosition, chip._colPosition - 1] == 0)
+            if (IsPlaceEmpty(chip._rowPosition, chip._colPosition - 1,chip))
             {
                 retValue.Add(PreferredMove.Left);
             }
-            if (Global.Get.board[chip._rowPosition - 1, chip._colPosition] == 0)
+            if (IsPlaceEmpty(chip._rowPosition - 1, chip._colPosition, chip))
             {
                 retValue.Add(PreferredMove.Up);
             }
-            if (Global.Get.board[chip._rowPosition, chip._colPosition + 1] == 0)
+            if (IsPlaceEmpty(chip._rowPosition, chip._colPosition + 1, chip))
             {
                 retValue.Add(PreferredMove.Right);
             }
-            if (Global.Get.board[chip._rowPosition + 1, chip._colPosition] == 0)
+            if (IsPlaceEmpty(chip._rowPosition + 1, chip._colPosition, chip))
             {
                 retValue.Add(PreferredMove.Down);
             }
             return retValue;
         }
-        public bool Move(MoveChip chip)
+        IStrategyMove IStrategyChipMove.GetStrategyMove(MoveChip chip)
         {
-            bool retValue = false;
-            IStrategy strategy = null;
+            IStrategyMove strategy = null;
             List<PreferredMove> listAvailableMoves = GetListAvailablesMoves(chip);
 
             if(listAvailableMoves.Count > 0)
@@ -141,23 +162,19 @@ public class MoveChip : MonoBehaviour
                     strategy = new MoveRight();
                     break;
                 case PreferredMove.None:
-                    return false;
+                    strategy = new MoveFailed();
+                    break;
+
             }
-            retValue = strategy.Move(chip);
-            return retValue;
+            return strategy;
         }
-
     }
-    
 
-    public class CertainDirection : IStrategy
+    public class ChipMoveCertainDirection : IStrategyChipMove
     {
-
-        public bool Move(MoveChip chip)
+        IStrategyMove IStrategyChipMove.GetStrategyMove(MoveChip chip)
         {    
-            bool retValue = false;
-            
-            IStrategy strategy = null;
+            IStrategyMove strategy = null;
             switch (chip.preferredMove)
             {
                 case PreferredMove.Up:
@@ -173,10 +190,10 @@ public class MoveChip : MonoBehaviour
                     strategy = new MoveRight();
                     break;
                 case PreferredMove.None:
-                    return false;
+                    strategy = new MoveFailed();
+                    break;
             }
-            retValue = strategy.Move(chip);
-            return retValue;
+            return strategy;
         }
     }
     enum PreferredMove
@@ -222,8 +239,6 @@ public class MoveChip : MonoBehaviour
     {
         _speed = 2;
         _numberChip = int.Parse(gameObject.name);
-        //ui_motion = GameObject.Find("Motion");
-        //ui_completed = GameObject.Find("Completed");
     }
     void Update()
     {
@@ -378,7 +393,23 @@ public class MoveChip : MonoBehaviour
             preferredMove = GetPreferredMove();
         }
         catch { }
-        
+        IStrategyChipMove strategyChipMove;
+        IStrategyMove strategyMove;
+        if(preferredMove != PreferredMove.None)
+        {
+            strategyChipMove = new ChipMoveCertainDirection();
+        }
+        else
+        {
+            strategyChipMove = new ChipMoveUnCertainDirection();
+        }
+        strategyMove = strategyChipMove.GetStrategyMove(this);
+        try
+        {
+            strategyMove.Move(this);
+        }
+        catch { }
+        /*
         try
         {
             //left
@@ -458,6 +489,7 @@ public class MoveChip : MonoBehaviour
             }
         }
         catch { }
+        */
 
     }
     void FindOnBoard()
