@@ -155,12 +155,6 @@ public class GameManager : Singletone<GameManager>
         LifeCounter = 0;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void CompleteLevel(string name, float timeAfterEnd = 5f, bool isWin = true)
     {
         LevelState levelState = isWin ? LevelState.Won : LevelState.Defeat;

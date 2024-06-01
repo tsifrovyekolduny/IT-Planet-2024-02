@@ -12,9 +12,9 @@ public class BulletScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Damage")
+        if (collision.gameObject.tag == "Damage" && !collision.gameObject.GetComponent<DamageScript>().isDamaged)
         {
-            collision.gameObject.GetComponent<DamageScript>().BeingHit();
+            EventManager.ObjectBeignDestroyed(collision.gameObject.GetInstanceID());
             StartCoroutine(DestroyBullet(0.4f));
         }
     }

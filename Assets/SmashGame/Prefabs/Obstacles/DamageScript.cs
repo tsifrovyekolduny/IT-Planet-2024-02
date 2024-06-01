@@ -6,6 +6,7 @@ using UnityEngine;
 public class DamageScript : MonoBehaviour
 {
     [SerializeField] protected AudioClip[] _hitSoundClips;
+    [SerializeField] private int points = 10;
 
     public bool isDamaged;
     public Material brokenStateMaterial;
@@ -27,28 +28,43 @@ public class DamageScript : MonoBehaviour
         }
     }
 
-    public void BeingHit()
+    private void OnEnable()
     {
-        if (_rb.isKinematic == false)
-        {
-            SoundManager.Instance.PlayAudioClip(_hitSoundClips, transform, 1f);
+        EventManager.OnObjectDestroy += HandleBeingHit;
+    }
 
-            isDamaged = true;
-            if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
+    private void OnDisable()
+    {
+        EventManager.OnObjectDestroy -= HandleBeingHit;
+    }
+
+    public void HandleBeingHit(int hittedObjectID)
+    {
+        if (!isDamaged && hittedObjectID == gameObject.GetInstanceID())
+        {
+            if (_rb.isKinematic == false)
             {
-                Destroy(_boxCollider);
-                Destroy(_rb);
-            }
-            
-            foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
-            {
-                if (child.GetComponent<Rigidbody>() == null) {                                         
-                    MeshRenderer renderer = child.GetComponent<MeshRenderer>();
-                    if (renderer != null && brokenStateMaterial != null)
+                //SoundManager.Instance.PlayAudioClip(_hitSoundClips, transform, 1f);
+
+                isDamaged = true;
+                EventManager.RaiseAddPoints(points);
+                if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
+                {
+                    Destroy(_boxCollider);
+                    Destroy(_rb);
+                }
+
+                foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
+                {
+                    if (child.GetComponent<Rigidbody>() == null)
                     {
-                        renderer.material = brokenStateMaterial;
+                        MeshRenderer renderer = child.GetComponent<MeshRenderer>();
+                        if (renderer != null && brokenStateMaterial != null)
+                        {
+                            renderer.material = brokenStateMaterial;
+                        }
+                        child.AddComponent<Rigidbody>();
                     }
-                    child.AddComponent<Rigidbody>();
                 }
             }
         }
