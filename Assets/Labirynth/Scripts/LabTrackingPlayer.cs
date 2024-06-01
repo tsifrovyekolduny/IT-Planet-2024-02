@@ -20,7 +20,7 @@ public class LabTrackingPlayer : MonoBehaviour
         _startPosition = transform.position;
     }
 
-    
+
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
@@ -37,7 +37,7 @@ public class LabTrackingPlayer : MonoBehaviour
         {
             Transform trackingObject;
 
-            if (rightMouseButtonOnHold || GameManager.Instance.CompletedLevels.Maze != LevelState.NotStarted)
+            if (rightMouseButtonOnHold || GameManager.Instance.CompletedLevels.Maze == LevelState.Won)
             {
                 trackingObject = Heart;
             }

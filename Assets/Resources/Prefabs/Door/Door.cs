@@ -13,8 +13,7 @@ public class Door : MonoBehaviour
 
     protected bool _focused;
     protected bool _hovered = false;
-    public bool isOpenable = true;
-    public bool fourthDoor = false;
+    public bool isOpenable = true;    
     public bool finalDoor = false;    
 
     [SerializeField] protected AudioClip _openSoundClip;
@@ -36,11 +35,7 @@ public class Door : MonoBehaviour
     }    
 
     public void OnMouseOver()
-    {
-        if (fourthDoor && GameManager.Instance.GetNumberOfLevels() > 0)
-        {
-            isOpenable = true;
-        }
+    {        
         if (!EventSystem.current.IsPointerOverGameObject() && isOpenable && !finalDoor)
         {
           

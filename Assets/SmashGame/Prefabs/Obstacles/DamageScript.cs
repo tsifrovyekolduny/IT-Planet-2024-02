@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DamageScript : MonoBehaviour
 {
+    [SerializeField] protected AudioClip[] _hitSoundClips;
+
     public bool isDamaged;
     public Material brokenStateMaterial;
     private BoxCollider _boxCollider;
@@ -23,14 +25,14 @@ public class DamageScript : MonoBehaviour
         {
             Debug.Log(_rb.isKinematic);
         }
-
     }
 
     public void BeingHit()
     {
         if (_rb.isKinematic == false)
         {
-            Debug.Log(gameObject.name);
+            SoundManager.Instance.PlayAudioClip(_hitSoundClips, transform, 1f);
+
             isDamaged = true;
             if (gameObject.GetComponentsInChildren<Transform>().Length > 1)
             {
@@ -40,17 +42,14 @@ public class DamageScript : MonoBehaviour
             
             foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
             {
-                if (child.GetComponent<Rigidbody>() == null) { 
-                    child.AddComponent<Rigidbody>();
-                    child.AddComponent<MeshCollider>().convex = true;
-                    MeshCollider MC = GetComponent<MeshCollider>();
+                if (child.GetComponent<Rigidbody>() == null) {                                         
                     MeshRenderer renderer = child.GetComponent<MeshRenderer>();
                     if (renderer != null && brokenStateMaterial != null)
                     {
                         renderer.material = brokenStateMaterial;
                     }
+                    child.AddComponent<Rigidbody>();
                 }
-                
             }
         }
     }

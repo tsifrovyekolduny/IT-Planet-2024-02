@@ -289,6 +289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de81c86148c0f442986a69e1fc2a851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _getDamageSoundClip:
+  - {fileID: 8300000, guid: a2b0156b4fd094e4da52c06bef6222e0, type: 3}
+  - {fileID: 8300000, guid: f52989c985c2c054188c8574e82cf03f, type: 3}
   speed: 20
   pushForce: 150
   time: 0

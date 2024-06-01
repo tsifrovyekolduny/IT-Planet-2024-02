@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360618a5491c4c24bad6b000c55cc561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeInTemplate: {fileID: 2395136151317254080, guid: e5af522859d23e04282ee10b50f660ad, type: 3}
+  FadeOutTemplate: {fileID: 2395136151317254080, guid: 5ac08f90d6693ab40858902d392b72b0, type: 3}
+  LifeCounter: 0
+  CompletedLevels:
+    Maze: 0
+    TicTacToe: 0
+    TagGame: 0

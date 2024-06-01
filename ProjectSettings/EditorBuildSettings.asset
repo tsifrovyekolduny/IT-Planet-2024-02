@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Hub/Scenes/HubScene.unity
     guid: f036d2de03c854547a8ebb96f9a2a47f
   - enabled: 1
-    path: Assets/Labirynth/LabLevel.unity
+    path: Assets/Labirynth/Scenes/LabLevel.unity
     guid: b4ef6297a99c8ac40b629ee284ddec28
   - enabled: 1
     path: Assets/TicTacToe/Scenes/TicTacToeLevel.unity

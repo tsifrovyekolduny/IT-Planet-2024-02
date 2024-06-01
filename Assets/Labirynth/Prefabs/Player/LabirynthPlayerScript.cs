@@ -19,9 +19,18 @@ public class LabirynthPlayerScript : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
-
     static bool IsObstacleOnWay(Transform player, Vector3 destination)
     {
+        var playerCollider = player.GetComponent<BoxCollider>();
+        float minY = player.position.y - (playerCollider.bounds.size.y / 2);
+        float maxY = player.position.y + (playerCollider.bounds.size.y / 2);
+
+        if (destination.y > maxY || destination.y < minY)
+        {
+            Debug.Log($"Cannot move here: out of boundaries");
+            return true;
+        }
+
         float distance = Mathf.Abs((destination - player.transform.position).x);
 
         RaycastHit[] hits = Physics.RaycastAll(player.transform.position, player.transform.right, distance);
@@ -30,6 +39,7 @@ public class LabirynthPlayerScript : MonoBehaviour
             Debug.Log("hitted: " + hit.transform.gameObject.name);
             if (hit.transform.tag == "Wall")
             {
+                Debug.Log($"Cannot move here: wall on the line");
                 return true;
             }
         }
@@ -62,7 +72,6 @@ public class LabirynthPlayerScript : MonoBehaviour
         while (transform.position.x != point.x)
         {
             transform.position = Vector3.MoveTowards(transform.position, newPosition, Speed * Time.deltaTime);
-
             yield return null;
         }
 
@@ -75,6 +84,11 @@ public class LabirynthPlayerScript : MonoBehaviour
         {
             TurnToDirection(RightNode.transform.position);
         }
+    }
+
+    public void StartMoving(Vector3 point, string nameOfDestinationGameObject = "")
+    {
+        StartCoroutine(MoveSelf(point, nameOfDestinationGameObject));
     }
 
     void Update()
@@ -91,19 +105,17 @@ public class LabirynthPlayerScript : MonoBehaviour
                     if (hittedObject.tag == "Section" || hittedObject.tag == "Hole")
                     {
                         TurnToDirection(hit.point);
-                        if (!IsObstacleOnWay(transform, hit.point))
-                        {
-                            StopAllCoroutines();
+                        StopAllCoroutines();
+                        StateWalkAnimation(false);
 
-                            StartCoroutine(MoveSelf(hit.point, hit.transform.gameObject.name));
+                        if (!IsObstacleOnWay(transform, hit.point))
+                        {                            
+                            Debug.Log($"Moving to {hit.transform.name}");
+                            StartMoving(hit.point, hit.transform.gameObject.name);                            
                         }
 
-                        _directionToHole = false;
-                    }
-                    if (hittedObject.tag == "Hole")
-                    {
-                        _directionToHole = true;
-                    }
+                        _directionToHole = hittedObject.tag == "Hole";
+                    }                    
                 }
             }
         }        

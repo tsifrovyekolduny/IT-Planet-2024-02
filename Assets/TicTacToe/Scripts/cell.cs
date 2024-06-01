@@ -9,23 +9,26 @@ public class Cell : MonoBehaviour
     private int id;
 
     [SerializeField]
-    private Main main;
+    private Main main;    
 
     private void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            if (main.CheckFinishCondition() == 0)
+        if (!EventSystem.current.IsPointerOverGameObject() && !main.PlayerMovementBlocked)
+        {           
+            if (main.GameResult == 0)
             {
-                main.SetGreen(id);
+                main.SetGreen(id);                
             }
 
-            if (main.CheckFinishCondition() == 0)
+            if (main.GameResult == 0)
             {
-                main.SetRed();
+                Invoke("MakeEnemyMove", main.MovingSpeed);
             }
         }
+    }
 
-        
+    private void MakeEnemyMove()
+    {
+        main.SetRed();
     }
 }

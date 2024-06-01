@@ -10,10 +10,12 @@ public class LastCompletedLevel
 }
 
 public class GameManager : Singletone<GameManager>
-{    
+{
+    private Dictionary<string, bool> _scenesLoaded = new Dictionary<string, bool>();
     public GameObject FadeInTemplate;
     public GameObject FadeOutTemplate;
 
+    public int LifeCounter;
     public LastCompletedLevel LastLevel;
 
     [System.Serializable]
@@ -22,17 +24,31 @@ public class GameManager : Singletone<GameManager>
         public LevelState Maze;
         public LevelState TicTacToe;
         public LevelState TagGame;
-        public LevelState SmashGame;
-        
-        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame, LevelState smashHit)
+
+        public LevelsComleted(LevelState maze, LevelState ticTacToe, LevelState tagGame)
         {
             Maze = maze;
             TicTacToe = ticTacToe;
             TagGame = tagGame;
-            SmashGame = smashHit;
         }
-     }
-    public LevelsComleted CompletedLevels;    
+    }
+    public LevelsComleted CompletedLevels;
+
+    public bool IsFirstTimeOfScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (!_scenesLoaded.ContainsKey(sceneName))
+        {
+            return true;
+        }
+        return !_scenesLoaded[sceneName];
+    }
+
+    private void MarkSceneAsLoaded()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        _scenesLoaded[sceneName] = true;
+    }
 
     public void MakeFade(Color color, bool fadeIn)
     {
@@ -49,7 +65,7 @@ public class GameManager : Singletone<GameManager>
 
         fader.BackgroundColor = color;
         fader.StartFade();
-    }    
+    }
 
     public void BlockCursor()
     {
@@ -58,10 +74,9 @@ public class GameManager : Singletone<GameManager>
     }
 
     private void Awake()
-    {
-        // InitializeManager();
+    {        
         MakeFade(Color.black, false);
-        BlockCursor();
+        BlockCursor();        
     }
 
     private void OnLevelWasLoaded(int level)
@@ -69,11 +84,11 @@ public class GameManager : Singletone<GameManager>
         if (level < (SceneManager.sceneCountInBuildSettings - 1) && level > 0)
         {
             UnblockCursor();
-            MakeFade(Color.white, false);            
-        }        
+            MakeFade(Color.white, false);
+        }
         else
         {
-            BlockCursor();            
+            BlockCursor();
             if (LastLevel != null)
             {
                 if (LastLevel.State == LevelState.Defeat)
@@ -88,11 +103,11 @@ public class GameManager : Singletone<GameManager>
         }
     }
 
-    
+
 
     public void UnblockCursor()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
@@ -113,10 +128,6 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashGame != levelState)
-            {
-                ++counter;
-            }
         }
         else
         {
@@ -132,25 +143,22 @@ public class GameManager : Singletone<GameManager>
             {
                 ++counter;
             }
-            if (CompletedLevels.SmashGame == levelState)
-            {
-                ++counter;
-            }
         }
-        
+
 
         return counter;
     }
-    
-    private void InitializeManager()
+
+    public void InitializeManager()
     {
-        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);        
-    }    
+        CompletedLevels = new LevelsComleted(LevelState.NotStarted, LevelState.NotStarted, LevelState.NotStarted);
+        LifeCounter = 0;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void CompleteLevel(string name, float timeAfterEnd = 5f, bool isWin = true)
@@ -170,50 +178,56 @@ public class GameManager : Singletone<GameManager>
         if (name == "Game")
         {
             CompletedLevels.TagGame = levelState;
-        }                
-        if(name == "SmashGame")
-        {
-            CompletedLevels.SmashGame = levelState;
-        }
+        }        
 
-        if (isWin)
+        if(timeAfterEnd > 0f)
         {
-            MakeFade(Color.white, true);
-        }
-        else
-        {
-            MakeFade(Color.black, true);
-        }
+            if (isWin)
+            {
+                MakeFade(Color.white, true);
+            }
+            else
+            {
+                MakeFade(Color.black, true);
+            }
+        }        
 
         LastLevel = new LastCompletedLevel();
         LastLevel.LevelName = name;
         LastLevel.State = levelState;
 
-        if(name == "SmashGame")
-        {
+        if (name == "SmashGame")
+        {            
             Invoke("ToEnding", timeAfterEnd);
         }
         else
-        {
+        {            
             Invoke("BackToHub", timeAfterEnd);
         }
-        
+
     }
 
-    void BackToHub()
+    public void BackToHub()
     {
+        MarkSceneAsLoaded();
         BlockCursor();
         SceneManager.LoadScene("HubScene");
     }
 
     void ToEnding()
     {
+        MarkSceneAsLoaded();
         SceneManager.LoadScene("Ending");
     }
 
     public void PickLevel(string name)
-    {        
-        SceneManager.LoadScene(name);        
+    {
+        MarkSceneAsLoaded();
+        if(name == "SmashGame")
+        {
+            LifeCounter = GetNumberOfLevels(LevelState.Won, false);
+        }
+        SceneManager.LoadScene(name);
     }
 }
 

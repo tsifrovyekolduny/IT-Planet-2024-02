@@ -11,6 +11,7 @@ public class HubCameraMovement : MonoBehaviour
     public float StartTimeForBlockingCamera = 10f;
     public float Speed = 1f;
     public UnityEvent EventOnMovingToEnd = new UnityEvent();
+    public UnityEvent EventOnUnblockingAfterTime = new UnityEvent();
 
     public Vector3 MaxRotation;
     public Vector3 MinRotaton;
@@ -28,13 +29,14 @@ public class HubCameraMovement : MonoBehaviour
 
         Debug.Log("Camera unblocked");
         _isBlocked = false;
-        // TODO make a hint
+        EventOnUnblockingAfterTime.Invoke();
     }
 
     private void Start()
     {
         if (StartTimeForBlockingCamera > 0)
         {
+            Cursor.visible = false;
             _isBlocked = true;
             StartCoroutine(UnblockCameraAfterTime());
         }
@@ -66,7 +68,7 @@ public class HubCameraMovement : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lTargetDir), SpeedOfLookAt);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!_isBlocked)
         {

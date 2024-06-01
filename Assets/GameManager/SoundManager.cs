@@ -4,9 +4,9 @@ using UnityEngine.Audio;
 
 public class SoundManager : Singletone<SoundManager>
 {    
-    private AudioMixer _mixer;
+    //private AudioMixer _mixer;
 
-    [SerializeField] private AudioSource soundObject;    
+    public AudioSource soundObject;    
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class SoundManager : Singletone<SoundManager>
     {
         AudioSource audioSource = Instantiate(soundObject, spawnTransform.position, Quaternion.identity);
 
-        int rand = Random.Range(0, audioClip.Length - 1);
+        int rand = Random.Range(0, audioClip.Length);
 
         audioSource.clip = audioClip[rand];
 

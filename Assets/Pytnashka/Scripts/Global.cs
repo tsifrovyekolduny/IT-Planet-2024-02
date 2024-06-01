@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class Global {
@@ -28,7 +29,7 @@ public class Global {
     public GameObject ramka = null, kartinka = null, oboi = null, comod = null, camera = null;
     public bool test = false;
     public int max_count_steps = 111;
-    public Text count_steps;
+    public TextMeshProUGUI count_steps;
     public bool is_game_over = false;
 
     // Start is called before the first frame update

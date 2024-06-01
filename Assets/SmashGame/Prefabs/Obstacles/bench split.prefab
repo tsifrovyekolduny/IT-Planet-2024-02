@@ -125,10 +125,10 @@ PrefabInstance:
       addedObject: {fileID: 8475715235952775126}
     - targetCorrespondingSourceObject: {fileID: -4961760167521817935, guid: bd47e9325c1afb4419634be53c2d48b1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6252596694927535189}
+      addedObject: {fileID: 9017947353778320207}
     - targetCorrespondingSourceObject: {fileID: -8343950684263482636, guid: bd47e9325c1afb4419634be53c2d48b1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7620510524472867289}
+      addedObject: {fileID: 137280185033529798}
   m_SourcePrefab: {fileID: 100100000, guid: bd47e9325c1afb4419634be53c2d48b1, type: 3}
 --- !u!23 &963754406415720190 stripped
 MeshRenderer:
@@ -140,7 +140,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -8343950684263482636, guid: bd47e9325c1afb4419634be53c2d48b1, type: 3}
   m_PrefabInstance: {fileID: 1186183513503941926}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &7620510524472867289
+--- !u!64 &137280185033529798
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,6 +248,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384a2c3d9ca446d4bba891daa9ac91c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitSoundClips:
+  - {fileID: 8300000, guid: 8c040c54d4f77ed45848c65cb6e7f4de, type: 3}
+  - {fileID: 8300000, guid: 1a0d462552a187743963d56ff043f267, type: 3}
   isDamaged: 0
   brokenStateMaterial: {fileID: 0}
 --- !u!23 &8475715235952775126
@@ -296,7 +299,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -4961760167521817935, guid: bd47e9325c1afb4419634be53c2d48b1, type: 3}
   m_PrefabInstance: {fileID: 1186183513503941926}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &6252596694927535189
+--- !u!64 &9017947353778320207
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

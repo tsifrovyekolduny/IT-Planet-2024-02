@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CreateBoard : MonoBehaviour
@@ -20,7 +21,7 @@ public class CreateBoard : MonoBehaviour
 
     public Vector3 board_position = new Vector3(-2f, -10f, -2f);
     public GameObject ramka, kartinka, oboi, comode, kamera;
-    public Text count_steps;
+    public TextMeshProUGUI count_steps;
     
     //private static int SP_Alpha_Value = Shader.PropertyToID("_CustomAlphaValue");
 

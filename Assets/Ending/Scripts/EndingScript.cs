@@ -1,19 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class EndingScript : MonoBehaviour
-{
+{    
+    [SerializeField] private AudioClip _badBell;    
+
     public GameObject[] GoodObjects;
     public GameObject[] SoSoObjects;
-    public GameObject[] BadObjects;    
+    public GameObject[] BadObjects;
+
+    public VideoPlayer CardioVideo;
+    public VideoClip BadCardioVariant;
 
     public Animator DeathAnimator;
     public Animator GirlAnimator;
 
-    public Canvas EndCanvas;
+    public EndUI EndCanvas;
 
     public float TimeBeforeActing = 5f;
     public float TimeBeforeEnd = 15f;
@@ -33,7 +40,7 @@ public class EndingScript : MonoBehaviour
 
     void InitBadEnding()
     {
-        _endingText = "Мужчина в возрасте 42 лет скончался от сердечного приступа. Причина: алкоголизм";
+        _endingText = "EKKL. 7:17";
         ChangeActiveToObjects(BadObjects, true);
         RenderSettings.fog = enabled;
         RenderSettings.fogColor = Color.black;
@@ -42,65 +49,69 @@ public class EndingScript : MonoBehaviour
         _actor = DeathAnimator;
     }
 
+    void InitSoSoEnding()
+    {
+        _endingText = "PS. 24:16";                
+
+        ChangeActiveToObjects(SoSoObjects, true);
+    }
+
+    void InitGoodEnding()
+    {
+        _actor = GirlAnimator;
+        _endingText = "FES. 5:16";                
+
+        ChangeActiveToObjects(GoodObjects, true);
+        TimeBeforeActing = 5f;
+        TimeBeforeEnd = 10f;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        _counterOfWonnedGames = GameManager.Instance.GetNumberOfLevels(LevelState.Won, false);
-        if(_counterOfWonnedGames < 1)
+        _counterOfWonnedGames = GameManager.Instance.LifeCounter;
+        if (_counterOfWonnedGames <= 0)
         {
             InitBadEnding();
         }
-        else if (_counterOfWonnedGames < 4)
+        else if (_counterOfWonnedGames <= 2)
         {
-            _endingText = "Мужчина в возрасте 45 лет застрелился. Причина: затяжная депрессия";
-            ChangeActiveToObjects(SoSoObjects, true);
+            InitSoSoEnding();
+            
         }
         else
         {
-            _endingText = "Мужчина жив, здоров. Дочь пошла поступила в колледж. Жена вернулась. Работа восстановилась...";
-            ChangeActiveToObjects(GoodObjects, true);
+            InitGoodEnding();            
         }
-
         Invoke("MakeActorsPlay", TimeBeforeActing);
     }
 
     void EndGame()
     {
         EndCanvas.gameObject.SetActive(true);
-        StartCoroutine("ShowUI");
-    }
-
-    IEnumerator ShowUI()
-    {
-        Image image = EndCanvas.GetComponentInChildren<Image>();
-        Color color;
-
-        while(image.color.a < 1)
-        {
-            Debug.Log(image.color.a);
-            color = image.color;
-            color.a += 0.01f;
-            image.color = color;
-            yield return null;
-        }
-
-        TextMeshProUGUI textMesh = EndCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        textMesh.text = _endingText;
-        while(textMesh.color.a < 1)
-        {
-            color = textMesh.color;
-            color.a += 0.01f;
-            textMesh.color = color;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-    }
+        EndCanvas.ShowUI(_endingText);        
+    }    
 
     void MakeActorsPlay()
     {
         if (_actor != null)
         {
+            if (_counterOfWonnedGames == 0)
+            {
+                CardioVideo.clip = BadCardioVariant;
+                SoundManager.Instance.PlayAudioClip(_badBell, transform, 1f);
+                // bad ending
+                Debug.Log(2);
+            }
+            else
+            {
+                GameObject.Find("Crying").SetActive(false);
+                CardioVideo.GetComponent<AudioSource>().enabled = false;
+                // good ending
+                Debug.Log(3);
+            }
             _actor.SetBool("NextAction", true);
+            
             Debug.Log("Actor playing");
         }
         Invoke("EndGame", TimeBeforeEnd);
@@ -108,7 +119,7 @@ public class EndingScript : MonoBehaviour
 
     void ChangeActiveToObjects(GameObject[] gameObjects, bool isActive)
     {
-        foreach(GameObject gameObject in gameObjects)
+        foreach (GameObject gameObject in gameObjects)
         {
             gameObject.SetActive(isActive);
         }
@@ -119,6 +130,4 @@ public class EndingScript : MonoBehaviour
     {
 
     }
-
-
 }
