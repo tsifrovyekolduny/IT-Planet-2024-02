@@ -1,31 +1,228 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
+
 public class MoveChip : MonoBehaviour
 {
+    public interface IStrategyMove
+    {
+        bool Move(MoveChip chip);
+    }
+    public interface IStrategyChipMove
+    {
+        IStrategyMove GetStrategyMove(MoveChip chip);
+    }
+    class MoveLeft : IStrategyMove
+    { 
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            if (Global.Get.board[chip._rowPosition , chip._colPosition - 1] == 0)
+            {
+                chip.empty_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z - Global.Get.z_offset_f);
+                chip._newRow = chip._rowPosition;
+                chip._newCol = chip._colPosition - 1;
+                chip.PlaySound();
+                chip.SwitchStateMoving();
+                chip.old_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z);
+                return true;
+            }
+            return false;
+        }
+    }
 
+    class MoveUp : IStrategyMove
+    {
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            if (Global.Get.board[chip._rowPosition - 1, chip._colPosition] == 0)
+            {
+                chip.empty_position = new Vector3(chip.transform.position.x - Global.Get.x_offset_f, 0, chip.transform.position.z);
+                chip._newRow = chip._rowPosition - 1;
+                chip._newCol = chip._colPosition;
+                chip.PlaySound();
+                //_state = ChipState.Moving;
+                chip.SwitchStateMoving();
+                chip.old_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z);
+            }
+            return false;
+        }
+    }
+
+    class MoveRight : IStrategyMove
+    {
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            if (Global.Get.board[chip._rowPosition, chip._colPosition + 1] == 0)
+            {
+                chip.empty_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z + Global.Get.z_offset_f);
+                chip._newRow = chip._rowPosition;
+                chip._newCol = chip._colPosition + 1;
+                chip.PlaySound();
+                chip.SwitchStateMoving();
+                chip.old_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z);
+                return true;
+            }
+            return false;
+        }
+    }
+    class MoveFailed : IStrategyMove
+    {
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            return false;
+        }
+    }
+
+    class MoveDown : IStrategyMove
+    {
+        bool IStrategyMove.Move(MoveChip chip)
+        {
+            if (Global.Get.board[chip._rowPosition + 1, chip._colPosition] == 0)
+            {
+                chip.empty_position = new Vector3(chip.transform.position.x + Global.Get.x_offset_f, 0, chip.transform.position.z);
+                chip._newRow = chip._rowPosition + 1;
+                chip._newCol = chip._colPosition;
+                chip.PlaySound();
+                chip.SwitchStateMoving();
+                chip.old_position = new Vector3(chip.transform.position.x, 0, chip.transform.position.z);
+                return true;
+            }
+            return false;
+        }
+    }
+  
+    public class ChipMoveUnCertainDirection: IStrategyChipMove
+    {
+        bool IsPlaceEmpty(int row, int column, MoveChip chip)
+        {
+            bool result = false;
+            if (
+                row >= 0 && row < Global.Get.board.GetLength(0) &&
+                column >= 0 && column < Global.Get.board.GetLength(1))
+            {
+                result = (Global.Get.board[row, column] == 0);
+            }
+            return result;
+        }
+        List<PreferredMove> GetListAvailablesMoves(MoveChip chip)
+        {
+            List<PreferredMove> retValue = new List<PreferredMove>();
+            if (IsPlaceEmpty(chip._rowPosition, chip._colPosition - 1,chip))
+            {
+                retValue.Add(PreferredMove.Left);
+            }
+            if (IsPlaceEmpty(chip._rowPosition - 1, chip._colPosition, chip))
+            {
+                retValue.Add(PreferredMove.Up);
+            }
+            if (IsPlaceEmpty(chip._rowPosition, chip._colPosition + 1, chip))
+            {
+                retValue.Add(PreferredMove.Right);
+            }
+            if (IsPlaceEmpty(chip._rowPosition + 1, chip._colPosition, chip))
+            {
+                retValue.Add(PreferredMove.Down);
+            }
+            return retValue;
+        }
+        IStrategyMove IStrategyChipMove.GetStrategyMove(MoveChip chip)
+        {
+            IStrategyMove strategy = null;
+            List<PreferredMove> listAvailableMoves = GetListAvailablesMoves(chip);
+
+            if(listAvailableMoves.Count > 0)
+            {
+                chip.preferredMove = listAvailableMoves.First();
+            }
+            else
+            {
+                chip.preferredMove = PreferredMove.None;
+            }
+
+            switch (chip.preferredMove)
+            {
+                case PreferredMove.Up:
+                    strategy = new MoveUp();
+                    break;
+                case PreferredMove.Down:
+                    strategy = new MoveDown();
+                    break;
+                case PreferredMove.Left:
+                    strategy = new MoveLeft();
+                    break;
+                case PreferredMove.Right:
+                    strategy = new MoveRight();
+                    break;
+                case PreferredMove.None:
+                    strategy = new MoveFailed();
+                    break;
+
+            }
+            return strategy;
+        }
+    }
+
+    public class ChipMoveCertainDirection : IStrategyChipMove
+    {
+        IStrategyMove IStrategyChipMove.GetStrategyMove(MoveChip chip)
+        {    
+            IStrategyMove strategy = null;
+            switch (chip.preferredMove)
+            {
+                case PreferredMove.Up:
+                    strategy = new MoveUp();
+                    break;
+                case PreferredMove.Down:
+                    strategy = new MoveDown();
+                    break;
+                case PreferredMove.Left:
+                    strategy = new MoveLeft();
+                    break;
+                case PreferredMove.Right:
+                    strategy = new MoveRight();
+                    break;
+                case PreferredMove.None:
+                    strategy = new MoveFailed();
+                    break;
+            }
+            return strategy;
+        }
+    }
     enum PreferredMove
     {
         Up, Down, Left, Right, None
     };
+
     private PreferredMove preferredMove;
 
-    private int number_chip;
-    private int row_position;
-    private int col_position;
-    private int speed;
+    private int _numberChip;
+    private int _rowPosition;
+    private int _colPosition;
+    private int _speed;
     private Vector3 empty_position = new Vector3(0, 0, 0);
     private Vector3 old_position = new Vector3(-10, -10, -10);
-    int new_row, new_col;
+    int _newRow, _newCol;
 
-    private GameObject ui_motion;
-    private GameObject ui_completed;
+    private enum ChipState
+    {
+        Standing,
+        Moving
+    };
 
-    private bool can_move;
+    ChipState _state = ChipState.Standing;
+    void SwitchStateMoving()
+    {
+        _state = ChipState.Moving;
+    }
+    void SwitchStateStanding()
+    {
+        _state = ChipState.Standing;
+    }
 
     private Vector3 initialMousePos;
     private Vector3 finalMousePos;
@@ -33,14 +230,12 @@ public class MoveChip : MonoBehaviour
 
     void Start()
     {
-        speed = 2;
-        number_chip = int.Parse(gameObject.name);
-        ui_motion = GameObject.Find("Motion");
-        ui_completed = GameObject.Find("Completed");
+        _speed = 2;
+        _numberChip = int.Parse(gameObject.name);
     }
     void Update()
     {
-        if (can_move)
+        if (_state == ChipState.Moving)
         {
             MoveChipOnBoard();
         }
@@ -59,14 +254,14 @@ public class MoveChip : MonoBehaviour
     {
         if (Global.Get.game_finished == false)
         {
-            if (!can_move)
+            if (_state == ChipState.Standing)
             {
                 finalMousePos = Input.mousePosition;
                 FindOnBoard();
                 CalculateDirection();
-                if (can_move)
+                if (_state == ChipState.Moving)
                 {
-                    Global.Get.board[new_row, new_col] = number_chip;
+                    Global.Get.board[_newRow, _newCol] = _numberChip;
                 }
             }
         }
@@ -79,26 +274,25 @@ public class MoveChip : MonoBehaviour
     {
         ++Global.Get.count;
         Global.Get.UpdateText();
-        if(Global.Get.count == Global.Get.max_count_steps)
+        if (Global.Get.count == Global.Get.max_count_steps)
         {
             Global.Get.is_game_over = true;
             Completed();
         }
-        //ui_motion.GetComponent<Text>().text = "КОЛИЧЕСТВО ХОДОВ\n\n " + Global.Get.count.ToString();
     }
     void MoveChipOnBoard()
     {
         if (transform.position != empty_position)
         {
-            transform.position = Vector3.MoveTowards(transform.position, empty_position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, empty_position, _speed * Time.deltaTime);
         }
         else
         {
-            Global.Get.board[row_position, col_position] = 0;
-            Global.Get.board[new_row, new_col] = number_chip;
-            can_move = false;
-            row_position = new_row;
-            col_position = new_col;
+            Global.Get.board[_rowPosition, _colPosition] = 0;
+            Global.Get.board[_newRow, _newCol] = _numberChip;
+            SwitchStateStanding();
+             _rowPosition = _newRow;
+            _colPosition = _newCol;
             MotionCountPlus();
             CheckOnComplete();
         }
@@ -139,144 +333,71 @@ public class MoveChip : MonoBehaviour
             Global.Get.oboi.GetComponent<MeshRenderer>().enabled = true;
         GameManager.Instance.CompleteLevel(SceneManager.GetActiveScene().name, 8, !Global.Get.is_game_over);
     }
+    PreferredMove GetPreferredMove()
+    {
+        PreferredMove preferredMove = PreferredMove.None;
+        mouseDelta = finalMousePos - initialMousePos;
+        if (Math.Abs(mouseDelta.x) > Math.Abs(mouseDelta.y))
+        {
+            if (Math.Abs(mouseDelta.x) < 10)
+            {
+                preferredMove = PreferredMove.None;
+            }
+            else
+            {
+                if (mouseDelta.x > 0)
+                {
+                    preferredMove = PreferredMove.Right;
+                }
+                else
+                {
+                    preferredMove = PreferredMove.Left;
+                }
+            }
+        }
+        else
+        {
+            if (Math.Abs(mouseDelta.y) < 10)
+            {
+                preferredMove = PreferredMove.None;
+            }
+            else
+            {
+                if (mouseDelta.y > 0)
+                {
+                    preferredMove = PreferredMove.Up;
+                }
+                else
+                {
+                    preferredMove = PreferredMove.Down;
+                }
+            }
+        }
+        return preferredMove;
+    }
+
     void CalculateDirection()
     {
         try
         {
             // Вычисляем предпочтительное
-            mouseDelta = finalMousePos - initialMousePos;
-            if (Math.Abs(mouseDelta.x) > Math.Abs(mouseDelta.y))
-            {
-                if (Math.Abs(mouseDelta.x) < 10)
-                {
-                    preferredMove = PreferredMove.None;
-                }
-                else
-                {
-                    if (mouseDelta.x > 0)
-                    {
-                        preferredMove = PreferredMove.Right;
-                    }
-                    else
-                    {
-                        preferredMove = PreferredMove.Left;
-                    }
-                }
-            }
-            else
-            {
-                if (Math.Abs(mouseDelta.y) < 10)
-                {
-                    preferredMove = PreferredMove.None;
-                }
-                else
-                {
-                    if (mouseDelta.y > 0)
-                    {
-                        preferredMove = PreferredMove.Up;
-                    }
-                    else
-                    {
-                        preferredMove = PreferredMove.Down;
-                    }
-                }
-            }
-
-
+            preferredMove = GetPreferredMove();
         }
         catch { }
-        try
+        IStrategyChipMove strategyChipMove;
+        IStrategyMove strategyMove;
+        if(preferredMove != PreferredMove.None)
         {
-            //left
-            if (Global.Get.board[row_position, col_position - 1] == 0)
-            {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z - Global.Get.z_offset_f);
-                new_row = row_position;
-                new_col = col_position - 1;
-                PlaySound();
-                can_move = true;
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                if (preferredMove == PreferredMove.Left)
-                {
-                    return;
-                }
-            }
+            strategyChipMove = new ChipMoveCertainDirection();
         }
-        catch { }
-
-        //up
-        try
+        else
         {
-            if (Global.Get.board[row_position - 1, col_position] == 0)
-            {
-                empty_position = new Vector3(transform.position.x - Global.Get.x_offset_f, 0, transform.position.z);
-                new_row = row_position - 1;
-                new_col = col_position;
-                PlaySound();
-                can_move = true;
-                //if (empty_position != old_position)
-                //{
-                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                //    return;
-                //}
-
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-
-                if (preferredMove == PreferredMove.Up)
-                {
-                    return;
-                }
-            }
+            strategyChipMove = new ChipMoveUnCertainDirection();
         }
-        catch { }
-
-        //right
+        strategyMove = strategyChipMove.GetStrategyMove(this);
         try
         {
-            if (Global.Get.board[row_position, col_position + 1] == 0)
-            {
-                empty_position = new Vector3(transform.position.x, 0, transform.position.z + Global.Get.z_offset_f);
-                new_row = row_position;
-                new_col = col_position + 1;
-                PlaySound();
-                can_move = true;
-                //if (empty_position != old_position)
-                //{
-                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                //    return;
-                //}
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-
-                if (preferredMove == PreferredMove.Right)
-                {
-                    return;
-                }
-            }
-        }
-        catch { }
-
-        //down
-        try
-        {
-            if (Global.Get.board[row_position + 1, col_position] == 0)
-            {
-                empty_position = new Vector3(transform.position.x + Global.Get.x_offset_f, 0, transform.position.z);
-                new_row = row_position + 1;
-                new_col = col_position;
-                PlaySound();
-                can_move = true;
-                //if (empty_position != old_position)
-                //{
-                //    old_position = new Vector3(transform.position.x, 0, transform.position.z);
-                //    return;
-                //}
-                old_position = new Vector3(transform.position.x, 0, transform.position.z);
-
-                if (preferredMove == PreferredMove.Down)
-                {
-                    return;
-                }
-            }
+            strategyMove.Move(this);
         }
         catch { }
 
@@ -287,10 +408,10 @@ public class MoveChip : MonoBehaviour
         {
             for (int col = 0; col < Global.y_size; col++)
             {
-                if (Global.Get.board[row, col] == number_chip)
+                if (Global.Get.board[row, col] == _numberChip)
                 {
-                    row_position = row;
-                    col_position = col;
+                    _rowPosition = row;
+                    _colPosition = col;
                 }
             }
         }
